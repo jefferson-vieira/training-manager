@@ -1,0 +1,7 @@
+{
+  "name": "training-manager",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}
