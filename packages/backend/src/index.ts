@@ -2,7 +2,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 
 import cors from '@fastify/cors';
 import fastifySwagger from '@fastify/swagger';
-import fastifySwaggerUI from '@fastify/swagger-ui';
+import scalar from '@scalar/fastify-api-reference';
 import Fastify from 'fastify';
 import {
   jsonSchemaTransform,
@@ -37,8 +37,22 @@ app.register(fastifySwagger, {
   transform: jsonSchemaTransform,
 });
 
-app.register(fastifySwaggerUI, {
-  routePrefix: '/documentation',
+app.register(scalar, {
+  configuration: {
+    sources: [
+      {
+        slug: 'API',
+        title: 'API',
+        url: '/openapi.json',
+      },
+      {
+        slug: 'auth-api',
+        title: 'Auth',
+        url: '/api/auth/open-api/generate-schema',
+      },
+    ],
+  },
+  routePrefix: '/docs',
 });
 
 app.register(cors, {
@@ -98,6 +112,10 @@ app.after(() => {
       },
     },
     url: '/',
+  });
+
+  app.get('/openapi.json', async () => {
+    return app.swagger();
   });
 });
 
