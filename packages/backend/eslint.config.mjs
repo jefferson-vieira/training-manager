@@ -24,8 +24,13 @@ export default defineConfig([
       '@stylistic': stylistic,
     },
     rules: {
-      '@stylistic/padding-line-between-statements': ['error', { blankLine: 'always', next: ['const', 'let', 'var', 'return'], prev: '*' }],
+      '@stylistic/padding-line-between-statements': ['error', { blankLine: 'always', next: ['const', 'let', 'var', 'return', 'export'], prev: '*' }],
     },
   },
   perfectionist.configs['recommended-alphabetical'],
+  {
+    rules: {
+      '@typescript-eslint/consistent-type-imports': 'error',
+    },
+  },
 ]);
