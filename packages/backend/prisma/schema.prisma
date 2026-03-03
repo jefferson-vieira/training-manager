@@ -8,9 +8,18 @@ datasource db {
 }
 
 model User {
-  id           String        @id
-  workoutPlans WorkoutPlan[]
+  id            String        @id
+  workoutPlans  WorkoutPlan[]
+  name          String
+  email         String
+  emailVerified Boolean       @default(false) @map("email_verified")
+  image         String?
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  sessions      Session[]
+  accounts      Account[]
 
+  @@unique([email])
   @@map("user")
 }
 
@@ -30,8 +39,8 @@ model WorkoutPlan {
   userId      String       @map("user_id")
   user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   isActive    Boolean      @default(true) @map("is_active")
-  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz()
-  updatedAt   DateTime     @updatedAt @map("updated_at") @db.Timestamptz()
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime     @updatedAt @map("updated_at") @db.Timestamptz
   workoutDays WorkoutDay[]
 
   @@map("workout_plan")
@@ -47,8 +56,8 @@ model WorkoutDay {
   exercises                  WorkoutExercise[]
   estimatedDurationInSeconds Int               @map("estimated_duration_in_seconds")
   coverImageUrl              String?           @map("cover_image_url")
-  createdAt                  DateTime          @default(now()) @map("created_at") @db.Timestamptz()
-  updatedAt                  DateTime          @updatedAt @map("updated_at") @db.Timestamptz()
+  createdAt                  DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt                  DateTime          @updatedAt @map("updated_at") @db.Timestamptz
 
   @@map("workout_day")
 }
@@ -62,8 +71,56 @@ model WorkoutExercise {
   sets              Int
   reps              Int
   restTimeInSeconds Int        @map("rest_time_in_seconds")
-  createdAt         DateTime   @default(now()) @map("created_at") @db.Timestamptz()
-  updatedAt         DateTime   @updatedAt @map("updated_at") @db.Timestamptz()
+  createdAt         DateTime   @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime   @updatedAt @map("updated_at") @db.Timestamptz
 
   @@map("workout_exercise")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime @map("expires_at")
+  token     String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String    @map("account_id")
+  providerId            String    @map("provider_id")
+  userId                String    @map("user_id")
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?   @map("access_token")
+  refreshToken          String?   @map("refresh_token")
+  idToken               String?   @map("id_token")
+  accessTokenExpiresAt  DateTime? @map("access_token_expires_at")
+  refreshTokenExpiresAt DateTime? @map("refresh_token_expires_at")
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime @map("expires_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@index([identifier])
+  @@map("verification")
 }

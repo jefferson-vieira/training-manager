@@ -1,17 +1,18 @@
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 
+import cors from '@fastify/cors';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUI from '@fastify/swagger-ui';
 import Fastify from 'fastify';
 import {
-  createJsonSchemaTransform,
   jsonSchemaTransform,
   serializerCompiler,
   validatorCompiler,
 } from 'fastify-type-provider-zod';
 import { z } from 'zod/v4';
 
-import { env } from './config/env.ts';
+import { env } from './config/env.js';
+import { auth } from './lib/auth.js';
 
 const app = Fastify({
   logger: true,
@@ -40,7 +41,49 @@ app.register(fastifySwaggerUI, {
   routePrefix: '/documentation',
 });
 
+app.register(cors, {
+  credentials: true,
+  origin: `http://localhost:${env.PORT}`,
+});
+
 app.after(() => {
+  app.route({
+    async handler(request, reply) {
+      try {
+        const url = new URL(request.url, `http://${request.headers.host}`);
+
+        const headers = new Headers();
+
+        Object.entries(request.headers).forEach(([key, value]) => {
+          if (value) headers.append(key, value.toString());
+        });
+
+        const req = new Request(url.toString(), {
+          headers,
+          method: request.method,
+          ...(request.body ? { body: JSON.stringify(request.body) } : {}),
+        });
+
+        const response = await auth.handler(req);
+
+        reply.status(response.status);
+
+        response.headers.forEach((value, key) => reply.header(key, value));
+
+        reply.send(response.body ? await response.text() : null);
+      } catch (error) {
+        app.log.error('Authentication Error:', error);
+
+        reply.status(500).send({
+          code: 'AUTH_FAILURE',
+          error: 'Internal authentication error',
+        });
+      }
+    },
+    method: ['GET', 'POST'],
+    url: '/api/auth/*',
+  });
+
   app.withTypeProvider<ZodTypeProvider>().route({
     handler: (req, res) => {
       res.send(req.query.name);
