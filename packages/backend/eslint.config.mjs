@@ -31,6 +31,7 @@ export default defineConfig([
   perfectionist.configs['recommended-alphabetical'],
   {
     rules: {
+      '@typescript-eslint/consistent-type-definitions': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
     },
   },

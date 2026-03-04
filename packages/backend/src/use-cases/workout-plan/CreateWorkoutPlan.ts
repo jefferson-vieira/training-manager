@@ -1,10 +1,14 @@
-import type { ICreateWorkoutPlanRequest } from '../../dtos/CreateWorkoutPlanRequest.js';
+import type z from 'zod';
+
+import type { CreateWorkoutPlanRequest } from '../../dtos/CreateWorkoutPlanRequest.js';
 
 import { NotFoundError } from '../../errors/NotFoundError.js';
 import { prisma } from '../../lib/db.js';
 
+type InputDto = z.infer<typeof CreateWorkoutPlanRequest>;
+
 export class CreateWorkoutPlan {
-  async execute(dto: ICreateWorkoutPlanRequest) {
+  async execute(dto: InputDto) {
     const currentWorkoutPlan = await prisma.workoutPlan.findFirst({
       where: {
         isActive: true,

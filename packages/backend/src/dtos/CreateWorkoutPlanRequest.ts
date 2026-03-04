@@ -9,7 +9,3 @@ export const CreateWorkoutPlanRequest = WorkoutPlanSchema.omit({
   userId: z.string(),
   workoutDays: z.array(CreateWorkoutDayRequest),
 });
-
-export type ICreateWorkoutPlanRequest = z.infer<
-  typeof CreateWorkoutPlanRequest
->;
