@@ -24,6 +24,7 @@ export default defineConfig([
       '@stylistic': stylistic,
     },
     rules: {
+      '@stylistic/arrow-parens': ['error', 'always'],
       '@stylistic/padding-line-between-statements': ['error', { blankLine: 'always', next: ['const', 'let', 'var', 'return', 'export'], prev: '*' }],
     },
   },

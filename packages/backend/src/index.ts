@@ -1,25 +1,17 @@
-import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-
 import cors from '@fastify/cors';
 import fastifySwagger from '@fastify/swagger';
 import scalar from '@scalar/fastify-api-reference';
-import Fastify from 'fastify';
-import {
-  jsonSchemaTransform,
-  serializerCompiler,
-  validatorCompiler,
-} from 'fastify-type-provider-zod';
-import { z } from 'zod/v4';
+import { jsonSchemaTransform } from 'fastify-type-provider-zod';
 
 import { env } from './config/env.js';
 import { auth } from './lib/auth.js';
+import { buildApp } from './lib/fastify.js';
+import { routes } from './routes/index.js';
+import { registerErrorHandler } from './utils/error-handler.js';
 
-const app = Fastify({
-  logger: true,
-});
+const app = buildApp();
 
-app.setValidatorCompiler(validatorCompiler);
-app.setSerializerCompiler(serializerCompiler);
+registerErrorHandler(app);
 
 app.register(fastifySwagger, {
   openapi: {
@@ -60,6 +52,8 @@ app.register(cors, {
   origin: `http://localhost:${env.PORT}`,
 });
 
+app.register(routes);
+
 app.after(() => {
   app.route({
     async handler(request, reply) {
@@ -96,22 +90,6 @@ app.after(() => {
     },
     method: ['GET', 'POST'],
     url: '/api/auth/*',
-  });
-
-  app.withTypeProvider<ZodTypeProvider>().route({
-    handler: (req, res) => {
-      res.send(req.query.name);
-    },
-    method: 'GET',
-    schema: {
-      querystring: z.object({
-        name: z.string().min(4),
-      }),
-      response: {
-        200: z.string(),
-      },
-    },
-    url: '/',
   });
 
   app.get('/openapi.json', async () => {
