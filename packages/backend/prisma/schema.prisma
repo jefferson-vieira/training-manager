@@ -58,6 +58,7 @@ model WorkoutDay {
   coverImageUrl              String?           @map("cover_image_url")
   createdAt                  DateTime          @default(now()) @map("created_at") @db.Timestamptz
   updatedAt                  DateTime          @updatedAt @map("updated_at") @db.Timestamptz
+  sessions                   WorkoutSession[]
 
   @@map("workout_day")
 }
@@ -75,6 +76,18 @@ model WorkoutExercise {
   updatedAt         DateTime   @updatedAt @map("updated_at") @db.Timestamptz
 
   @@map("workout_exercise")
+}
+
+model WorkoutSession {
+  id           String     @id @default(uuid())
+  workoutDayId String     @map("workout_day_id")
+  workoutDay   WorkoutDay @relation(fields: [workoutDayId], references: [id], onDelete: Cascade)
+  startedAt    DateTime   @map("started_at") @db.Timestamptz()
+  completedAt  DateTime?  @map("completed_at") @db.Timestamptz()
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt    DateTime   @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("workout_session")
 }
 
 model Session {
