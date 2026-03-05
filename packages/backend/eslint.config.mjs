@@ -1,12 +1,13 @@
 import js from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
-import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import perfectionist from 'eslint-plugin-perfectionist';
-import { defineConfig } from 'eslint/config';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import { defineConfig, globalIgnores } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig([
+  globalIgnores(['dist', 'src/generated/prisma']),
   {
     extends: ['js/recommended'],
     files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
@@ -14,20 +15,23 @@ export default defineConfig([
     plugins: { js },
   },
   tseslint.configs.recommended,
-  eslintConfigPrettier,
-  stylistic.configs.customize({
-    braceStyle: '1tbs',
-    semi: true,
-  }),
+  stylistic.configs.recommended,
   {
     plugins: {
       '@stylistic': stylistic,
     },
     rules: {
-      '@stylistic/arrow-parens': ['error', 'always'],
-      '@stylistic/padding-line-between-statements': ['error', { blankLine: 'always', next: ['const', 'let', 'var', 'return', 'export'], prev: '*' }],
+      '@stylistic/padding-line-between-statements': [
+        'error',
+        {
+          blankLine: 'always',
+          next: ['const', 'let', 'var', 'return', 'export'],
+          prev: '*',
+        },
+      ],
     },
   },
+  eslintPluginPrettierRecommended,
   perfectionist.configs['recommended-alphabetical'],
   {
     rules: {
