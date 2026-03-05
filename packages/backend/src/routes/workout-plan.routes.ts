@@ -2,6 +2,7 @@ import z from 'zod';
 
 import type { App } from '../lib/fastify.js';
 
+import { GetWorkoutPlanResponse } from '../dtos/GetWorkoutPlanResponse.js';
 import { SessionAlreadyStartedError } from '../errors/SessionAlreadyStartedError.js';
 import { getSession } from '../lib/auth.js';
 import { ErrorSchema } from '../schemas/ErrorSchema.js';
@@ -9,10 +10,39 @@ import { WorkoutPlanSchema } from '../schemas/WorkoutPlanSchema.js';
 import { WorkoutSessionSchema } from '../schemas/WorkoutSessionSchema.js';
 import { CompleteWorkoutSession } from '../use-cases/workout-plan/CompleteWorkoutSession.js';
 import { CreateWorkoutPlan } from '../use-cases/workout-plan/CreateWorkoutPlan.js';
+import { GetWorkoutPlan } from '../use-cases/workout-plan/GetWorkoutPlan.js';
 import { StartWorkoutSession } from '../use-cases/workout-plan/StartWorkoutSession.js';
 import { CreateWorkoutPlanRequest } from './../dtos/CreateWorkoutPlanRequest.js';
 
 export const workoutPlanRoutes = async (app: App) => {
+  app.get('/:workoutPlanId', {
+    handler: async (request, reply) => {
+      const session = await getSession(request, reply);
+
+      const getWorkoutPlan = new GetWorkoutPlan();
+
+      const result = await getWorkoutPlan.execute({
+        userId: session.user.id,
+        workoutPlanId: request.params.workoutPlanId,
+      });
+
+      return reply.status(200).send(result);
+    },
+    schema: {
+      params: z.object({
+        workoutPlanId: z.uuid(),
+      }),
+      response: {
+        200: GetWorkoutPlanResponse,
+        401: ErrorSchema,
+        404: ErrorSchema,
+        500: ErrorSchema,
+      },
+      summary: 'Get a workout plan',
+      tags: ['Workout Plan'],
+    },
+  });
+
   app.post('/', {
     handler: async (request, reply) => {
       const session = await getSession(request, reply);
