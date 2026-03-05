@@ -52,7 +52,7 @@ app.register(cors, {
   origin: `http://localhost:${env.PORT}`,
 });
 
-app.register(routes);
+app.register(routes, { prefix: '/api' });
 
 app.after(() => {
   app.route({
