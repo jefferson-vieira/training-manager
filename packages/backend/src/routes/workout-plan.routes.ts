@@ -7,6 +7,7 @@ import { getSession } from '../lib/auth.js';
 import { ErrorSchema } from '../schemas/ErrorSchema.js';
 import { WorkoutPlanSchema } from '../schemas/WorkoutPlanSchema.js';
 import { WorkoutSessionSchema } from '../schemas/WorkoutSessionSchema.js';
+import { CompleteWorkoutSession } from '../use-cases/workout-plan/CompleteWorkoutSession.js';
 import { CreateWorkoutPlan } from '../use-cases/workout-plan/CreateWorkoutPlan.js';
 import { StartWorkoutSession } from '../use-cases/workout-plan/StartWorkoutSession.js';
 import { CreateWorkoutPlanRequest } from './../dtos/CreateWorkoutPlanRequest.js';
@@ -72,7 +73,7 @@ export const workoutPlanRoutes = async (app: App) => {
         workoutPlanId: z.uuid(),
       }),
       response: {
-        201: WorkoutSessionSchema,
+        201: WorkoutSessionSchema.pick({ id: true }),
         401: ErrorSchema,
         404: ErrorSchema,
         409: ErrorSchema,
@@ -80,6 +81,38 @@ export const workoutPlanRoutes = async (app: App) => {
         500: ErrorSchema,
       },
       summary: 'Start a workout session',
+      tags: ['Workout Plan'],
+    },
+  });
+
+  app.patch('/:workoutPlanId/days/:workoutDayId/sessions/:sessionId/complete', {
+    handler: async (request, reply) => {
+      const session = await getSession(request, reply);
+
+      const updateWorkoutSession = new CompleteWorkoutSession();
+
+      const result = await updateWorkoutSession.execute({
+        sessionId: request.params.sessionId,
+        userId: session.user.id,
+        workoutDayId: request.params.workoutDayId,
+        workoutPlanId: request.params.workoutPlanId,
+      });
+
+      return reply.status(200).send(result);
+    },
+    schema: {
+      params: z.object({
+        sessionId: z.uuid(),
+        workoutDayId: z.uuid(),
+        workoutPlanId: z.uuid(),
+      }),
+      response: {
+        200: WorkoutSessionSchema,
+        401: ErrorSchema,
+        404: ErrorSchema,
+        500: ErrorSchema,
+      },
+      summary: 'Complete a workout session',
       tags: ['Workout Plan'],
     },
   });
