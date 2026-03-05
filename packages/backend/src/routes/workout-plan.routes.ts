@@ -6,10 +6,12 @@ import { GetWorkoutPlanResponse } from '../dtos/GetWorkoutPlanResponse.js';
 import { SessionAlreadyStartedError } from '../errors/SessionAlreadyStartedError.js';
 import { getSession } from '../lib/auth.js';
 import { ErrorSchema } from '../schemas/ErrorSchema.js';
+import { WorkoutDaySchema } from '../schemas/WorkoutDaySchema.js';
 import { WorkoutPlanSchema } from '../schemas/WorkoutPlanSchema.js';
 import { WorkoutSessionSchema } from '../schemas/WorkoutSessionSchema.js';
 import { CompleteWorkoutSession } from '../use-cases/workout-plan/CompleteWorkoutSession.js';
 import { CreateWorkoutPlan } from '../use-cases/workout-plan/CreateWorkoutPlan.js';
+import { GetWorkoutDay } from '../use-cases/workout-plan/GetWorkoutDay.js';
 import { GetWorkoutPlan } from '../use-cases/workout-plan/GetWorkoutPlan.js';
 import { StartWorkoutSession } from '../use-cases/workout-plan/StartWorkoutSession.js';
 import { CreateWorkoutPlanRequest } from './../dtos/CreateWorkoutPlanRequest.js';
@@ -66,6 +68,36 @@ export const workoutPlanRoutes = async (app: App) => {
         500: ErrorSchema,
       },
       summary: 'Create a workout plan',
+      tags: ['Workout Plan'],
+    },
+  });
+
+  app.get('/:workoutPlanId/days/:workoutDayId', {
+    handler: async (request, reply) => {
+      const session = await getSession(request, reply);
+
+      const getWorkoutDay = new GetWorkoutDay();
+
+      const result = await getWorkoutDay.execute({
+        userId: session.user.id,
+        workoutDayId: request.params.workoutDayId,
+        workoutPlanId: request.params.workoutPlanId,
+      });
+
+      return reply.status(200).send(result);
+    },
+    schema: {
+      params: z.object({
+        workoutDayId: z.uuid(),
+        workoutPlanId: z.uuid(),
+      }),
+      response: {
+        200: WorkoutDaySchema,
+        401: ErrorSchema,
+        404: ErrorSchema,
+        500: ErrorSchema,
+      },
+      summary: 'Get a workout day',
       tags: ['Workout Plan'],
     },
   });
