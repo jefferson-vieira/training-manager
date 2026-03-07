@@ -7,12 +7,10 @@ import type { Prisma } from '../generated/prisma/client.js';
 import { WeekDay } from '../models/enums/WeekDay.js';
 
 interface InputDto {
-  completedWorkoutSessions: Prisma.WorkoutSessionGetPayload<{
-    select: { startedAt: true };
-  }>[];
+  completedWorkoutSessions: Pick<Prisma.WorkoutSessionModel, 'startedAt'>[];
   fromDate: Dayjs;
   toDate: Dayjs;
-  workoutDays: Prisma.WorkoutDayGetPayload<{ select: { weekDay: true } }>[];
+  workoutDays: Pick<Prisma.WorkoutDayModel, 'weekDay'>[];
 }
 
 export class CalcWorkoutStreak {
