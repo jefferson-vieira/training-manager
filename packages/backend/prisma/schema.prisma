@@ -9,7 +9,6 @@ datasource db {
 
 model User {
   id            String        @id
-  workoutPlans  WorkoutPlan[]
   name          String
   email         String
   emailVerified Boolean       @default(false) @map("email_verified")
@@ -18,9 +17,23 @@ model User {
   updatedAt     DateTime      @updatedAt @map("updated_at")
   sessions      Session[]
   accounts      Account[]
+  profile       UserProfile?
+  workoutPlans  WorkoutPlan[]
 
   @@unique([email])
   @@map("user")
+}
+
+model UserProfile {
+  id                  String   @id @default(uuid())
+  birthdate           DateTime @db.Date
+  bodyFatPercentage   Int      @map("body_fat_percentage")
+  heightInCentimeters Int      @map("height_in_centimeters")
+  weightInGrams       Int      @map("weight_in_grams")
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String   @unique @map("user_id")
+
+  @@map("user_profile")
 }
 
 enum WeekDay {
