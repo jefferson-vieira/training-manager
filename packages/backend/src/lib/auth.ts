@@ -9,6 +9,7 @@ import { env } from '../config/env.js';
 import { prisma } from './db.js';
 
 export const auth = betterAuth({
+  baseURL: env.BETTER_AUTH_URL,
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
   }),
@@ -16,7 +17,13 @@ export const auth = betterAuth({
     enabled: true,
   },
   plugins: [openAPI()],
-  trustedOrigins: [env.BETTER_AUTH_URL],
+  socialProviders: {
+    google: {
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    },
+  },
+  trustedOrigins: [env.CLIENT_ORIGIN],
 });
 
 export const getSession = async (
