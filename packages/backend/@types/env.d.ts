@@ -3,5 +3,6 @@ declare namespace NodeJS {
     BETTER_AUTH_URL: string;
     DATABASE_URL: string;
     PORT: string;
+    SYSTEM_PROMPT: string;
   }
 }

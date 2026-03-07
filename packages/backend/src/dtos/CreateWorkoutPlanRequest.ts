@@ -7,5 +7,7 @@ export const CreateWorkoutPlanRequest = WorkoutPlanSchema.omit({
   id: true,
 }).extend({
   userId: z.string(),
-  workoutDays: z.array(CreateWorkoutDayRequest),
+  workoutDays: z.array(CreateWorkoutDayRequest).meta({
+    ...WorkoutPlanSchema.shape.workoutDays.meta(),
+  }),
 });
