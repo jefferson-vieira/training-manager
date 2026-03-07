@@ -25,7 +25,15 @@ export default defineConfig([
         'error',
         {
           blankLine: 'always',
-          next: ['const', 'let', 'var', 'return', 'export'],
+          next: [
+            'const',
+            'let',
+            'var',
+            'return',
+            'export',
+            'continue',
+            'break',
+          ],
           prev: '*',
         },
       ],
