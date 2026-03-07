@@ -13,10 +13,38 @@ import { CompleteWorkoutSession } from '../use-cases/workout-plan/CompleteWorkou
 import { CreateWorkoutPlan } from '../use-cases/workout-plan/CreateWorkoutPlan.js';
 import { GetWorkoutDay } from '../use-cases/workout-plan/GetWorkoutDay.js';
 import { GetWorkoutPlan } from '../use-cases/workout-plan/GetWorkoutPlan.js';
+import { ListWorkoutPlans } from '../use-cases/workout-plan/ListWorkoutPlans.js';
 import { StartWorkoutSession } from '../use-cases/workout-plan/StartWorkoutSession.js';
 import { CreateWorkoutPlanRequest } from './../dtos/CreateWorkoutPlanRequest.js';
 
 export const workoutPlanRoutes = async (app: App) => {
+  app.get('/', {
+    handler: async (request, reply) => {
+      const session = await getSession(request, reply);
+
+      const listWorkoutPlans = new ListWorkoutPlans();
+
+      const result = await listWorkoutPlans.execute({
+        isActive: request.query.isActive,
+        userId: session.user.id,
+      });
+
+      return reply.status(200).send(result);
+    },
+    schema: {
+      querystring: z.object({
+        isActive: z.boolean().optional(),
+      }),
+      response: {
+        200: z.array(WorkoutPlanSchema),
+        401: ErrorSchema,
+        500: ErrorSchema,
+      },
+      summary: 'List workout plans',
+      tags: ['Workout Plan'],
+    },
+  });
+
   app.get('/:workoutPlanId', {
     handler: async (request, reply) => {
       const session = await getSession(request, reply);
