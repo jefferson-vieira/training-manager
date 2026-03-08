@@ -13,7 +13,7 @@ import { CompleteWorkoutSession } from '../use-cases/workout-plan/CompleteWorkou
 import { CreateWorkoutPlan } from '../use-cases/workout-plan/CreateWorkoutPlan.js';
 import { GetWorkoutDay } from '../use-cases/workout-plan/GetWorkoutDay.js';
 import { GetWorkoutPlan } from '../use-cases/workout-plan/GetWorkoutPlan.js';
-import { ListWorkoutPlans } from '../use-cases/workout-plan/ListWorkoutPlans.js';
+import { GetWorkoutPlans } from '../use-cases/workout-plan/GetWorkoutPlans.js';
 import { StartWorkoutSession } from '../use-cases/workout-plan/StartWorkoutSession.js';
 import { CreateWorkoutPlanRequest } from './../dtos/CreateWorkoutPlanRequest.js';
 
@@ -22,9 +22,9 @@ export const workoutPlanRoutes = async (app: App) => {
     handler: async (request, reply) => {
       const session = await getSession(request, reply);
 
-      const listWorkoutPlans = new ListWorkoutPlans();
+      const getWorkoutPlans = new GetWorkoutPlans();
 
-      const result = await listWorkoutPlans.execute({
+      const result = await getWorkoutPlans.execute({
         isActive: request.query.isActive,
         userId: session.user.id,
       });
@@ -32,6 +32,7 @@ export const workoutPlanRoutes = async (app: App) => {
       return reply.status(200).send(result);
     },
     schema: {
+      operationId: 'getWorkoutPlans',
       querystring: z.object({
         isActive: z.boolean().optional(),
       }),
@@ -59,6 +60,7 @@ export const workoutPlanRoutes = async (app: App) => {
       return reply.status(200).send(result);
     },
     schema: {
+      operationId: 'getWorkoutPlan',
       params: z.object({
         workoutPlanId: z.uuid(),
       }),
@@ -88,6 +90,7 @@ export const workoutPlanRoutes = async (app: App) => {
     },
     schema: {
       body: CreateWorkoutPlanRequest,
+      operationId: 'createWorkoutPlan',
       response: {
         201: WorkoutPlanSchema,
         400: ErrorSchema,
@@ -115,6 +118,7 @@ export const workoutPlanRoutes = async (app: App) => {
       return reply.status(200).send(result);
     },
     schema: {
+      operationId: 'getWorkoutDay',
       params: z.object({
         workoutDayId: z.uuid(),
         workoutPlanId: z.uuid(),
@@ -158,6 +162,7 @@ export const workoutPlanRoutes = async (app: App) => {
       }
     },
     schema: {
+      operationId: 'startWorkoutSession',
       params: z.object({
         workoutDayId: z.uuid(),
         workoutPlanId: z.uuid(),
@@ -179,9 +184,9 @@ export const workoutPlanRoutes = async (app: App) => {
     handler: async (request, reply) => {
       const session = await getSession(request, reply);
 
-      const updateWorkoutSession = new CompleteWorkoutSession();
+      const completeWorkoutSession = new CompleteWorkoutSession();
 
-      const result = await updateWorkoutSession.execute({
+      const result = await completeWorkoutSession.execute({
         sessionId: request.params.sessionId,
         userId: session.user.id,
         workoutDayId: request.params.workoutDayId,
@@ -191,6 +196,7 @@ export const workoutPlanRoutes = async (app: App) => {
       return reply.status(200).send(result);
     },
     schema: {
+      operationId: 'completeWorkoutSession',
       params: z.object({
         sessionId: z.uuid(),
         workoutDayId: z.uuid(),

@@ -19,6 +19,7 @@ export const meRoutes = async (app: App) => {
       return reply.status(200).send(result);
     },
     schema: {
+      operationId: 'getUser',
       response: {
         200: UserSchema,
         401: ErrorSchema,

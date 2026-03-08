@@ -89,11 +89,19 @@ app.after(() => {
       }
     },
     method: ['GET', 'POST'],
+    schema: {
+      hide: true,
+    },
     url: '/api/auth/*',
   });
 
-  app.get('/openapi.json', async () => {
-    return app.swagger();
+  app.get('/openapi.json', {
+    handler: () => {
+      return app.swagger();
+    },
+    schema: {
+      hide: true,
+    },
   });
 });
 

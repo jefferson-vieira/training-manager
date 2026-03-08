@@ -30,6 +30,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "17.3.1",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "eslint-config-prettier": "10.1.8",
@@ -37,6 +38,7 @@
     "eslint-plugin-prettier": "5.5.5",
     "husky": "9.1.7",
     "lint-staged": "16.3.2",
+    "orval": "8.5.3",
     "prettier-plugin-tailwindcss": "0.7.2",
     "tailwindcss": "^4",
     "typescript": "^5"

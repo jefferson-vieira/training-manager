@@ -36,7 +36,13 @@ const eslintConfig = defineConfig([
   },
   eslintPluginPrettierRecommended,
   perfectionist.configs['recommended-alphabetical'],
-  globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts']),
+  globalIgnores([
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+    'src/lib/api/fetch-generated/index.ts',
+  ]),
 ]);
 
 export default eslintConfig;

@@ -19,6 +19,7 @@ export const homeRoutes = (app: App) => {
       return reply.status(200).send(result);
     },
     schema: {
+      operationId: 'getHomeData',
       response: {
         200: HomeSchema,
         401: ErrorSchema,

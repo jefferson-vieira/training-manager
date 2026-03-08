@@ -6,7 +6,7 @@ interface InputDto extends Partial<Prisma.WorkoutPlanModel> {
   userId: string;
 }
 
-export class ListWorkoutPlans {
+export class GetWorkoutPlans {
   async execute(dto: InputDto) {
     const workoutPlans = await prisma.workoutPlan.findMany({
       include: {

@@ -13,7 +13,7 @@ import { getSession } from '../lib/auth.js';
 import { GetUser } from '../use-cases/user/GetUser.js';
 import { UpsertUserProfile } from '../use-cases/user/UpsertUserProfile.js';
 import { CreateWorkoutPlan } from '../use-cases/workout-plan/CreateWorkoutPlan.js';
-import { ListWorkoutPlans } from '../use-cases/workout-plan/ListWorkoutPlans.js';
+import { GetWorkoutPlans } from '../use-cases/workout-plan/GetWorkoutPlans.js';
 
 export const aiRoutes = async (app: App) => {
   app.post('/', {
@@ -59,7 +59,7 @@ export const aiRoutes = async (app: App) => {
             description:
               'Lista todos os planos de treino do usuário autenticado.',
             execute: async () => {
-              const listWorkoutPlans = new ListWorkoutPlans();
+              const listWorkoutPlans = new GetWorkoutPlans();
 
               return listWorkoutPlans.execute({
                 userId,
@@ -91,6 +91,7 @@ export const aiRoutes = async (app: App) => {
       return reply.send(response.body);
     },
     schema: {
+      operationId: 'ai',
       summary: 'Chat with AI personal trainer',
       tags: ['AI'],
     },

@@ -1,0 +1,21 @@
+import { cookies } from 'next/headers';
+
+import { env } from '@/config/env';
+
+export const customFetch = async <T>(url: string, options: RequestInit) => {
+  const response = await fetch(`${env.NEXT_PUBLIC_API_URL}${url}`, {
+    ...options,
+    credentials: 'include',
+    headers: {
+      ...options.headers,
+      cookie: (await cookies()).toString(),
+    },
+  });
+
+  const data = await response.json();
+
+  return {
+    data,
+    headers: response.headers,
+  } as T;
+};
