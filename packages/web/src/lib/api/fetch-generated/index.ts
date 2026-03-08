@@ -262,7 +262,7 @@ export type GetWorkoutPlans200ItemWorkoutDaysItem = {
   coverImageUrl: null | string;
   /**
    * Duração estimada em segundos (0 para dias de descanso)
-   * @minimum 1
+   * @minimum 0
    */
   estimatedDurationInSeconds: number;
   /** Lista de exercícios do dia (vazia para dias de descanso) */
@@ -342,7 +342,6 @@ export type CreateWorkoutPlanBody = {
    * @minLength 1
    */
   name: string;
-  userId: string;
   /** Lista com exatamente 7 dias de treino (segunda a domingo) */
   workoutDays: CreateWorkoutPlanBodyWorkoutDaysItem[];
 };
@@ -355,7 +354,7 @@ export type CreateWorkoutPlanBodyWorkoutDaysItem = {
   coverImageUrl?: null | string;
   /**
    * Duração estimada em segundos (0 para dias de descanso)
-   * @minimum 1
+   * @minimum 0
    */
   estimatedDurationInSeconds: number;
   /** Lista de exercícios do dia (vazia para dias de descanso) */
@@ -401,7 +400,7 @@ export type CreateWorkoutPlan201WorkoutDaysItem = {
   coverImageUrl: null | string;
   /**
    * Duração estimada em segundos (0 para dias de descanso)
-   * @minimum 1
+   * @minimum 0
    */
   estimatedDurationInSeconds: number;
   /** Lista de exercícios do dia (vazia para dias de descanso) */
@@ -511,7 +510,7 @@ export type GetWorkoutPlan200WorkoutDaysItem = {
   coverImageUrl: null | string;
   /**
    * Duração estimada em segundos (0 para dias de descanso)
-   * @minimum 1
+   * @minimum 0
    */
   estimatedDurationInSeconds: number;
   exercisesCount: number;
@@ -597,7 +596,7 @@ export type GetWorkoutDay200 = {
   coverImageUrl: null | string;
   /**
    * Duração estimada em segundos (0 para dias de descanso)
-   * @minimum 1
+   * @minimum 0
    */
   estimatedDurationInSeconds: number;
   /** Lista de exercícios do dia (vazia para dias de descanso) */

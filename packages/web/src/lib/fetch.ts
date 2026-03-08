@@ -12,10 +12,15 @@ export const customFetch = async <T>(url: string, options: RequestInit) => {
     },
   });
 
-  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = (await response.json()) as T;
 
   return {
     data,
     headers: response.headers,
+    status: response.status,
   } as T;
 };
