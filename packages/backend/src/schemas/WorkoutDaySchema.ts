@@ -8,7 +8,7 @@ export const WorkoutDaySchema = z.object({
     description:
       'URL da imagem de capa do dia de treino. Usar as URLs de superior ou inferior conforme o foco muscular do dia.',
   }),
-  estimatedDurationInSeconds: z.number().min(1).meta({
+  estimatedDurationInSeconds: z.number().min(0).meta({
     description: 'Duração estimada em segundos (0 para dias de descanso)',
   }),
   exercises: z.array(WorkoutExerciseSchema).meta({

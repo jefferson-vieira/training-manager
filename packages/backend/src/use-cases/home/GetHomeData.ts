@@ -25,9 +25,6 @@ export class GetHomeData {
               },
             },
           },
-          select: {
-            weekDay: true,
-          },
         },
       },
       where: {
