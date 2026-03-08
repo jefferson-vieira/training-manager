@@ -49,7 +49,7 @@ app.register(scalar, {
 
 app.register(cors, {
   credentials: true,
-  origin: `http://localhost:${env.PORT}`,
+  origin: [env.BETTER_AUTH_URL, env.CLIENT_ORIGIN],
 });
 
 app.register(routes, { prefix: '/api' });
