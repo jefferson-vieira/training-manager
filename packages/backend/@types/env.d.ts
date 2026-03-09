@@ -6,6 +6,7 @@ declare namespace NodeJS {
     GOOGLE_CLIENT_ID?: string;
     GOOGLE_CLIENT_SECRET?: string;
     GOOGLE_GENERATIVE_AI_API_KEY?: string;
+    NODE_ENV?: string;
     PORT?: string;
     SYSTEM_PROMPT?: string;
   }

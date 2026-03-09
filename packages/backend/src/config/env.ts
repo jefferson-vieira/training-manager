@@ -8,6 +8,7 @@ const envSchema = z.object({
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
   GOOGLE_GENERATIVE_AI_API_KEY: z.string(),
+  NODE_ENV: z.enum(['development', 'production', 'test']),
   PORT: z.coerce.number(),
   SYSTEM_PROMPT: z.string(),
 });
