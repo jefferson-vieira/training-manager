@@ -7,10 +7,13 @@ export const UpsertUserProfileRequest = UserSchema.pick({
   heightInCentimeters: true,
   weightInGrams: true,
 }).extend({
-  birthdate: z.coerce.date().meta({
-    description:
-      'Data de nascimento do usuário no formato YYYY-MM-DD. Ex.: 1998-02-25',
-  }),
+  birthdate: z.iso
+    .date()
+    .transform((d) => new Date(d))
+    .meta({
+      description:
+        'Data de nascimento do usuário no formato YYYY-MM-DD. Ex.: 1998-02-25',
+    }),
 });
 
 export type UpsertUserProfileRequest = z.infer<typeof UpsertUserProfileRequest>;

@@ -5,47 +5,27 @@
  * OpenAPI spec version: 1.0.0
  */
 import { customFetch } from '../../fetch';
+export type GetHomeData200ConsistencyByDay = {[key: string]: {
+  workoutDayCompleted: boolean;
+  workoutDayStarted: boolean;
+}};
 
-export type GetApiStats200 = {
-  completedWorkoutsCount: number;
-  conclusionRate: number;
-  consistencyByDay: GetApiStats200ConsistencyByDay;
-  totalTimeInSeconds: number;
-  workoutStreak: number;
-};
-
-export type GetApiStats200ConsistencyByDay = {
-  [key: string]: {
-    workoutDayCompleted: boolean;
-    workoutDayStarted: boolean;
-  };
-};
-
-export type GetApiStats401 = {
-  code: string;
-  error: string;
-};
-
-export type GetApiStats404 = {
-  code: string;
-  error: string;
-};
-
-export type GetApiStats500 = {
-  code: string;
-  error: string;
-};
-
-export type GetApiStatsParams = {
-  /**
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$
-   */
-  from: string;
-  /**
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$
-   */
-  to: string;
-};
+/**
+ * @nullable
+ */
+export type GetHomeData200TodayWorkoutDay = {
+  /** @nullable */
+  coverImageUrl?: string | null;
+  estimatedDurationInSeconds: number;
+  exercisesCount: number;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  isRest: boolean;
+  name: string;
+  weekDay: 'SUNDAY' | 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY';
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  workoutPlanId: string;
+} | null;
 
 export type GetHomeData200 = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
@@ -55,37 +35,6 @@ export type GetHomeData200 = {
   todayWorkoutDay?: GetHomeData200TodayWorkoutDay;
   workoutStreak: number;
 };
-
-export type GetHomeData200ConsistencyByDay = {
-  [key: string]: {
-    workoutDayCompleted: boolean;
-    workoutDayStarted: boolean;
-  };
-};
-
-/**
- * @nullable
- */
-export type GetHomeData200TodayWorkoutDay = {
-  /** @nullable */
-  coverImageUrl?: null | string;
-  estimatedDurationInSeconds: number;
-  exercisesCount: number;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  isRest: boolean;
-  name: string;
-  weekDay:
-    | 'FRIDAY'
-    | 'MONDAY'
-    | 'SATURDAY'
-    | 'SUNDAY'
-    | 'THURSDAY'
-    | 'TUESDAY'
-    | 'WEDNESDAY';
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  workoutPlanId: string;
-} | null;
 
 export type GetHomeData401 = {
   code: string;
@@ -129,7 +78,7 @@ export type GetUser200 = {
    * Link da foto de perfil do usuário
    * @nullable
    */
-  image: null | string;
+  image: string | null;
   /**
    * None do usuário
    * @minLength 1
@@ -156,6 +105,49 @@ export type GetUser404 = {
 export type GetUser500 = {
   code: string;
   error: string;
+};
+
+export type GetApiStatsParams = {
+/**
+ * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$
+ */
+from: string;
+/**
+ * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$
+ */
+to: string;
+};
+
+export type GetApiStats200ConsistencyByDay = {[key: string]: {
+  workoutDayCompleted: boolean;
+  workoutDayStarted: boolean;
+}};
+
+export type GetApiStats200 = {
+  completedWorkoutsCount: number;
+  conclusionRate: number;
+  consistencyByDay: GetApiStats200ConsistencyByDay;
+  totalTimeInSeconds: number;
+  workoutStreak: number;
+};
+
+export type GetApiStats401 = {
+  code: string;
+  error: string;
+};
+
+export type GetApiStats404 = {
+  code: string;
+  error: string;
+};
+
+export type GetApiStats500 = {
+  code: string;
+  error: string;
+};
+
+export type GetWorkoutPlansParams = {
+isActive?: boolean;
 };
 
 export type GetWorkoutPlans200ItemWorkoutDaysItemExercisesItem = {
@@ -191,22 +183,66 @@ export type GetWorkoutPlans200ItemWorkoutDaysItemExercisesItem = {
 /**
  * Dia da semana
  */
-export type GetWorkoutPlans200ItemWorkoutDaysItemWeekDay =
-  (typeof GetWorkoutPlans200ItemWorkoutDaysItemWeekDay)[keyof typeof GetWorkoutPlans200ItemWorkoutDaysItemWeekDay];
+export type GetWorkoutPlans200ItemWorkoutDaysItemWeekDay = typeof GetWorkoutPlans200ItemWorkoutDaysItemWeekDay[keyof typeof GetWorkoutPlans200ItemWorkoutDaysItemWeekDay];
 
-export type GetWorkoutPlansParams = {
-  isActive?: boolean;
-};
 
 export const GetWorkoutPlans200ItemWorkoutDaysItemWeekDay = {
-  FRIDAY: 'FRIDAY',
-  MONDAY: 'MONDAY',
-  SATURDAY: 'SATURDAY',
   SUNDAY: 'SUNDAY',
-  THURSDAY: 'THURSDAY',
+  MONDAY: 'MONDAY',
   TUESDAY: 'TUESDAY',
   WEDNESDAY: 'WEDNESDAY',
+  THURSDAY: 'THURSDAY',
+  FRIDAY: 'FRIDAY',
+  SATURDAY: 'SATURDAY',
 } as const;
+
+export type GetWorkoutPlans200ItemWorkoutDaysItem = {
+  /**
+   * URL da imagem de capa do dia de treino. Usar as URLs de superior ou inferior conforme o foco muscular do dia.
+   * @nullable
+   */
+  coverImageUrl: string | null;
+  /**
+   * Duração estimada em segundos (0 para dias de descanso)
+   * @minimum 0
+   */
+  estimatedDurationInSeconds: number;
+  /** Lista de exercícios do dia (vazia para dias de descanso) */
+  exercises: GetWorkoutPlans200ItemWorkoutDaysItemExercisesItem[];
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** Se é dia de descanso (true) ou treino (false) */
+  isRest: boolean;
+  /**
+   * Nome do dia (ex.: Peito e Tríceps, Costas e Bíceps, Descanso)
+   * @minLength 1
+   */
+  name: string;
+  /** Dia da semana */
+  weekDay: GetWorkoutPlans200ItemWorkoutDaysItemWeekDay;
+};
+
+export type GetWorkoutPlans200Item = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * Nome do plano de treino
+   * @minLength 1
+   */
+  name: string;
+  /** Lista com exatamente 7 dias de treino (segunda a domingo) */
+  workoutDays: GetWorkoutPlans200ItemWorkoutDaysItem[];
+};
+
+export type GetWorkoutPlans401 = {
+  code: string;
+  error: string;
+};
+
+export type GetWorkoutPlans500 = {
+  code: string;
+  error: string;
+};
 
 export type CreateWorkoutPlanBodyWorkoutDaysItemExercisesItem = {
   /**
@@ -239,66 +275,52 @@ export type CreateWorkoutPlanBodyWorkoutDaysItemExercisesItem = {
 /**
  * Dia da semana
  */
-export type CreateWorkoutPlanBodyWorkoutDaysItemWeekDay =
-  (typeof CreateWorkoutPlanBodyWorkoutDaysItemWeekDay)[keyof typeof CreateWorkoutPlanBodyWorkoutDaysItemWeekDay];
+export type CreateWorkoutPlanBodyWorkoutDaysItemWeekDay = typeof CreateWorkoutPlanBodyWorkoutDaysItemWeekDay[keyof typeof CreateWorkoutPlanBodyWorkoutDaysItemWeekDay];
 
-export type GetWorkoutPlans200Item = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  /**
-   * Nome do plano de treino
-   * @minLength 1
-   */
-  name: string;
-  /** Lista com exatamente 7 dias de treino (segunda a domingo) */
-  workoutDays: GetWorkoutPlans200ItemWorkoutDaysItem[];
-};
 
-export type GetWorkoutPlans200ItemWorkoutDaysItem = {
+export const CreateWorkoutPlanBodyWorkoutDaysItemWeekDay = {
+  SUNDAY: 'SUNDAY',
+  MONDAY: 'MONDAY',
+  TUESDAY: 'TUESDAY',
+  WEDNESDAY: 'WEDNESDAY',
+  THURSDAY: 'THURSDAY',
+  FRIDAY: 'FRIDAY',
+  SATURDAY: 'SATURDAY',
+} as const;
+
+export type CreateWorkoutPlanBodyWorkoutDaysItem = {
   /**
    * URL da imagem de capa do dia de treino. Usar as URLs de superior ou inferior conforme o foco muscular do dia.
    * @nullable
    */
-  coverImageUrl: null | string;
+  coverImageUrl?: string | null;
   /**
    * Duração estimada em segundos (0 para dias de descanso)
    * @minimum 0
    */
   estimatedDurationInSeconds: number;
   /** Lista de exercícios do dia (vazia para dias de descanso) */
-  exercises: GetWorkoutPlans200ItemWorkoutDaysItemExercisesItem[];
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
+  exercises: CreateWorkoutPlanBodyWorkoutDaysItemExercisesItem[];
   /** Se é dia de descanso (true) ou treino (false) */
-  isRest: boolean;
+  isRest?: boolean;
   /**
    * Nome do dia (ex.: Peito e Tríceps, Costas e Bíceps, Descanso)
    * @minLength 1
    */
   name: string;
   /** Dia da semana */
-  weekDay: GetWorkoutPlans200ItemWorkoutDaysItemWeekDay;
+  weekDay: CreateWorkoutPlanBodyWorkoutDaysItemWeekDay;
 };
 
-export type GetWorkoutPlans401 = {
-  code: string;
-  error: string;
+export type CreateWorkoutPlanBody = {
+  /**
+   * Nome do plano de treino
+   * @minLength 1
+   */
+  name: string;
+  /** Lista com exatamente 7 dias de treino (segunda a domingo) */
+  workoutDays: CreateWorkoutPlanBodyWorkoutDaysItem[];
 };
-
-export type GetWorkoutPlans500 = {
-  code: string;
-  error: string;
-};
-
-export const CreateWorkoutPlanBodyWorkoutDaysItemWeekDay = {
-  FRIDAY: 'FRIDAY',
-  MONDAY: 'MONDAY',
-  SATURDAY: 'SATURDAY',
-  SUNDAY: 'SUNDAY',
-  THURSDAY: 'THURSDAY',
-  TUESDAY: 'TUESDAY',
-  WEDNESDAY: 'WEDNESDAY',
-} as const;
 
 export type CreateWorkoutPlan201WorkoutDaysItemExercisesItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
@@ -333,71 +355,25 @@ export type CreateWorkoutPlan201WorkoutDaysItemExercisesItem = {
 /**
  * Dia da semana
  */
-export type CreateWorkoutPlan201WorkoutDaysItemWeekDay =
-  (typeof CreateWorkoutPlan201WorkoutDaysItemWeekDay)[keyof typeof CreateWorkoutPlan201WorkoutDaysItemWeekDay];
+export type CreateWorkoutPlan201WorkoutDaysItemWeekDay = typeof CreateWorkoutPlan201WorkoutDaysItemWeekDay[keyof typeof CreateWorkoutPlan201WorkoutDaysItemWeekDay];
 
-export type CreateWorkoutPlanBody = {
-  /**
-   * Nome do plano de treino
-   * @minLength 1
-   */
-  name: string;
-  /** Lista com exatamente 7 dias de treino (segunda a domingo) */
-  workoutDays: CreateWorkoutPlanBodyWorkoutDaysItem[];
-};
-
-export type CreateWorkoutPlanBodyWorkoutDaysItem = {
-  /**
-   * URL da imagem de capa do dia de treino. Usar as URLs de superior ou inferior conforme o foco muscular do dia.
-   * @nullable
-   */
-  coverImageUrl?: null | string;
-  /**
-   * Duração estimada em segundos (0 para dias de descanso)
-   * @minimum 0
-   */
-  estimatedDurationInSeconds: number;
-  /** Lista de exercícios do dia (vazia para dias de descanso) */
-  exercises: CreateWorkoutPlanBodyWorkoutDaysItemExercisesItem[];
-  /** Se é dia de descanso (true) ou treino (false) */
-  isRest?: boolean;
-  /**
-   * Nome do dia (ex.: Peito e Tríceps, Costas e Bíceps, Descanso)
-   * @minLength 1
-   */
-  name: string;
-  /** Dia da semana */
-  weekDay: CreateWorkoutPlanBodyWorkoutDaysItemWeekDay;
-};
 
 export const CreateWorkoutPlan201WorkoutDaysItemWeekDay = {
-  FRIDAY: 'FRIDAY',
-  MONDAY: 'MONDAY',
-  SATURDAY: 'SATURDAY',
   SUNDAY: 'SUNDAY',
-  THURSDAY: 'THURSDAY',
+  MONDAY: 'MONDAY',
   TUESDAY: 'TUESDAY',
   WEDNESDAY: 'WEDNESDAY',
+  THURSDAY: 'THURSDAY',
+  FRIDAY: 'FRIDAY',
+  SATURDAY: 'SATURDAY',
 } as const;
-
-export type CreateWorkoutPlan201 = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  /**
-   * Nome do plano de treino
-   * @minLength 1
-   */
-  name: string;
-  /** Lista com exatamente 7 dias de treino (segunda a domingo) */
-  workoutDays: CreateWorkoutPlan201WorkoutDaysItem[];
-};
 
 export type CreateWorkoutPlan201WorkoutDaysItem = {
   /**
    * URL da imagem de capa do dia de treino. Usar as URLs de superior ou inferior conforme o foco muscular do dia.
    * @nullable
    */
-  coverImageUrl: null | string;
+  coverImageUrl: string | null;
   /**
    * Duração estimada em segundos (0 para dias de descanso)
    * @minimum 0
@@ -416,6 +392,18 @@ export type CreateWorkoutPlan201WorkoutDaysItem = {
   name: string;
   /** Dia da semana */
   weekDay: CreateWorkoutPlan201WorkoutDaysItemWeekDay;
+};
+
+export type CreateWorkoutPlan201 = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * Nome do plano de treino
+   * @minLength 1
+   */
+  name: string;
+  /** Lista com exatamente 7 dias de treino (segunda a domingo) */
+  workoutDays: CreateWorkoutPlan201WorkoutDaysItem[];
 };
 
 export type CreateWorkoutPlan400 = {
@@ -441,18 +429,70 @@ export type CreateWorkoutPlan500 = {
 /**
  * Dia da semana
  */
-export type GetWorkoutPlan200WorkoutDaysItemWeekDay =
-  (typeof GetWorkoutPlan200WorkoutDaysItemWeekDay)[keyof typeof GetWorkoutPlan200WorkoutDaysItemWeekDay];
+export type GetWorkoutPlan200WorkoutDaysItemWeekDay = typeof GetWorkoutPlan200WorkoutDaysItemWeekDay[keyof typeof GetWorkoutPlan200WorkoutDaysItemWeekDay];
+
 
 export const GetWorkoutPlan200WorkoutDaysItemWeekDay = {
-  FRIDAY: 'FRIDAY',
-  MONDAY: 'MONDAY',
-  SATURDAY: 'SATURDAY',
   SUNDAY: 'SUNDAY',
-  THURSDAY: 'THURSDAY',
+  MONDAY: 'MONDAY',
   TUESDAY: 'TUESDAY',
   WEDNESDAY: 'WEDNESDAY',
+  THURSDAY: 'THURSDAY',
+  FRIDAY: 'FRIDAY',
+  SATURDAY: 'SATURDAY',
 } as const;
+
+export type GetWorkoutPlan200WorkoutDaysItem = {
+  /**
+   * URL da imagem de capa do dia de treino. Usar as URLs de superior ou inferior conforme o foco muscular do dia.
+   * @nullable
+   */
+  coverImageUrl: string | null;
+  /**
+   * Duração estimada em segundos (0 para dias de descanso)
+   * @minimum 0
+   */
+  estimatedDurationInSeconds: number;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** Se é dia de descanso (true) ou treino (false) */
+  isRest: boolean;
+  /**
+   * Nome do dia (ex.: Peito e Tríceps, Costas e Bíceps, Descanso)
+   * @minLength 1
+   */
+  name: string;
+  /** Dia da semana */
+  weekDay: GetWorkoutPlan200WorkoutDaysItemWeekDay;
+  exercisesCount: number;
+};
+
+export type GetWorkoutPlan200 = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * Nome do plano de treino
+   * @minLength 1
+   */
+  name: string;
+  workoutDays: GetWorkoutPlan200WorkoutDaysItem[];
+  userId: string;
+};
+
+export type GetWorkoutPlan401 = {
+  code: string;
+  error: string;
+};
+
+export type GetWorkoutPlan404 = {
+  code: string;
+  error: string;
+};
+
+export type GetWorkoutPlan500 = {
+  code: string;
+  error: string;
+};
 
 export type GetWorkoutDay200ExercisesItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
@@ -487,113 +527,25 @@ export type GetWorkoutDay200ExercisesItem = {
 /**
  * Dia da semana
  */
-export type GetWorkoutDay200WeekDay =
-  (typeof GetWorkoutDay200WeekDay)[keyof typeof GetWorkoutDay200WeekDay];
+export type GetWorkoutDay200WeekDay = typeof GetWorkoutDay200WeekDay[keyof typeof GetWorkoutDay200WeekDay];
 
-export type GetWorkoutPlan200 = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  /**
-   * Nome do plano de treino
-   * @minLength 1
-   */
-  name: string;
-  userId: string;
-  workoutDays: GetWorkoutPlan200WorkoutDaysItem[];
-};
-
-export type GetWorkoutPlan200WorkoutDaysItem = {
-  /**
-   * URL da imagem de capa do dia de treino. Usar as URLs de superior ou inferior conforme o foco muscular do dia.
-   * @nullable
-   */
-  coverImageUrl: null | string;
-  /**
-   * Duração estimada em segundos (0 para dias de descanso)
-   * @minimum 0
-   */
-  estimatedDurationInSeconds: number;
-  exercisesCount: number;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  /** Se é dia de descanso (true) ou treino (false) */
-  isRest: boolean;
-  /**
-   * Nome do dia (ex.: Peito e Tríceps, Costas e Bíceps, Descanso)
-   * @minLength 1
-   */
-  name: string;
-  /** Dia da semana */
-  weekDay: GetWorkoutPlan200WorkoutDaysItemWeekDay;
-};
-
-export type GetWorkoutPlan401 = {
-  code: string;
-  error: string;
-};
-
-export type GetWorkoutPlan404 = {
-  code: string;
-  error: string;
-};
-
-export type GetWorkoutPlan500 = {
-  code: string;
-  error: string;
-};
 
 export const GetWorkoutDay200WeekDay = {
-  FRIDAY: 'FRIDAY',
-  MONDAY: 'MONDAY',
-  SATURDAY: 'SATURDAY',
   SUNDAY: 'SUNDAY',
-  THURSDAY: 'THURSDAY',
+  MONDAY: 'MONDAY',
   TUESDAY: 'TUESDAY',
   WEDNESDAY: 'WEDNESDAY',
+  THURSDAY: 'THURSDAY',
+  FRIDAY: 'FRIDAY',
+  SATURDAY: 'SATURDAY',
 } as const;
-
-export type aiResponse = aiResponseSuccess;
-
-/**
- * @summary Chat with AI personal trainer
- */
-export type aiResponse200 = {
-  data: void;
-  status: 200;
-};
-
-export type aiResponseSuccess = {
-  headers: Headers;
-} & aiResponse200;
-
-export type CompleteWorkoutSession200 = {
-  completedAt: string;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  startedAt: string;
-};
-
-export type CompleteWorkoutSession401 = {
-  code: string;
-  error: string;
-};
-
-export type CompleteWorkoutSession404 = {
-  code: string;
-  error: string;
-};
-
-export type CompleteWorkoutSession500 = {
-  code: string;
-  error: string;
-};
 
 export type GetWorkoutDay200 = {
   /**
    * URL da imagem de capa do dia de treino. Usar as URLs de superior ou inferior conforme o foco muscular do dia.
    * @nullable
    */
-  coverImageUrl: null | string;
+  coverImageUrl: string | null;
   /**
    * Duração estimada em segundos (0 para dias de descanso)
    * @minimum 0
@@ -653,531 +605,576 @@ export type StartWorkoutSession422 = {
   code: string;
   error: string;
 };
+
 export type StartWorkoutSession500 = {
   code: string;
   error: string;
 };
 
+export type CompleteWorkoutSession200 = {
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$ */
+  completedAt: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$ */
+  startedAt: string;
+};
+
+export type CompleteWorkoutSession401 = {
+  code: string;
+  error: string;
+};
+
+export type CompleteWorkoutSession404 = {
+  code: string;
+  error: string;
+};
+
+export type CompleteWorkoutSession500 = {
+  code: string;
+  error: string;
+};
+
+/**
+ * @summary Chat with AI personal trainer
+ */
+export type aiResponse200 = {
+  data: void
+  status: 200
+}
+
+export type aiResponseSuccess = (aiResponse200) & {
+  headers: Headers;
+};
+;
+
+export type aiResponse = (aiResponseSuccess)
+
 export const getAiUrl = () => {
-  return `/api/ai/`;
-};
 
-export const ai = async (options?: RequestInit): Promise<aiResponse> => {
-  return customFetch<aiResponse>(getAiUrl(), {
+
+  
+
+  return `/api/ai/`
+}
+
+export const ai = async ( options?: RequestInit): Promise<aiResponse> => {
+  
+  return customFetch<aiResponse>(getAiUrl(),
+  {      
     ...options,
-    method: 'POST',
-  });
-};
+    method: 'POST'
+    
+    
+  }
+);}
+  
 
-export type getHomeDataResponse =
-  | getHomeDataResponseError
-  | getHomeDataResponseSuccess;
 
 /**
  * @summary Get home page data
  */
 export type getHomeDataResponse200 = {
-  data: GetHomeData200;
-  status: 200;
-};
+  data: GetHomeData200
+  status: 200
+}
 
 export type getHomeDataResponse401 = {
-  data: GetHomeData401;
-  status: 401;
-};
+  data: GetHomeData401
+  status: 401
+}
 
 export type getHomeDataResponse404 = {
-  data: GetHomeData404;
-  status: 404;
-};
+  data: GetHomeData404
+  status: 404
+}
 
 export type getHomeDataResponse500 = {
-  data: GetHomeData500;
-  status: 500;
-};
-export type getHomeDataResponseError = {
-  headers: Headers;
-} & (getHomeDataResponse401 | getHomeDataResponse404 | getHomeDataResponse500);
+  data: GetHomeData500
+  status: 500
+}
 
-export type getHomeDataResponseSuccess = {
+export type getHomeDataResponseSuccess = (getHomeDataResponse200) & {
   headers: Headers;
-} & getHomeDataResponse200;
+};
+export type getHomeDataResponseError = (getHomeDataResponse401 | getHomeDataResponse404 | getHomeDataResponse500) & {
+  headers: Headers;
+};
+
+export type getHomeDataResponse = (getHomeDataResponseSuccess | getHomeDataResponseError)
 
 export const getGetHomeDataUrl = () => {
-  return `/api/home/`;
-};
 
-export const getHomeData = async (
-  options?: RequestInit,
-): Promise<getHomeDataResponse> => {
-  return customFetch<getHomeDataResponse>(getGetHomeDataUrl(), {
+
+  
+
+  return `/api/home/`
+}
+
+export const getHomeData = async ( options?: RequestInit): Promise<getHomeDataResponse> => {
+  
+  return customFetch<getHomeDataResponse>(getGetHomeDataUrl(),
+  {      
     ...options,
-    method: 'GET',
-  });
-};
+    method: 'GET'
+    
+    
+  }
+);}
+  
 
-export type getUserResponse = getUserResponseError | getUserResponseSuccess;
 
 /**
  * @summary Get user
  */
 export type getUserResponse200 = {
-  data: GetUser200;
-  status: 200;
-};
+  data: GetUser200
+  status: 200
+}
 
 export type getUserResponse401 = {
-  data: GetUser401;
-  status: 401;
-};
+  data: GetUser401
+  status: 401
+}
 
 export type getUserResponse404 = {
-  data: GetUser404;
-  status: 404;
-};
+  data: GetUser404
+  status: 404
+}
 
 export type getUserResponse500 = {
-  data: GetUser500;
-  status: 500;
-};
-export type getUserResponseError = {
-  headers: Headers;
-} & (getUserResponse401 | getUserResponse404 | getUserResponse500);
+  data: GetUser500
+  status: 500
+}
 
-export type getUserResponseSuccess = {
+export type getUserResponseSuccess = (getUserResponse200) & {
   headers: Headers;
-} & getUserResponse200;
+};
+export type getUserResponseError = (getUserResponse401 | getUserResponse404 | getUserResponse500) & {
+  headers: Headers;
+};
+
+export type getUserResponse = (getUserResponseSuccess | getUserResponseError)
 
 export const getGetUserUrl = () => {
-  return `/api/me/`;
-};
 
-export const getUser = async (
-  options?: RequestInit,
-): Promise<getUserResponse> => {
-  return customFetch<getUserResponse>(getGetUserUrl(), {
+
+  
+
+  return `/api/me/`
+}
+
+export const getUser = async ( options?: RequestInit): Promise<getUserResponse> => {
+  
+  return customFetch<getUserResponse>(getGetUserUrl(),
+  {      
     ...options,
-    method: 'GET',
-  });
-};
+    method: 'GET'
+    
+    
+  }
+);}
+  
 
-export type getApiStatsResponse =
-  | getApiStatsResponseError
-  | getApiStatsResponseSuccess;
 
 /**
  * @summary Get user workout stats
  */
 export type getApiStatsResponse200 = {
-  data: GetApiStats200;
-  status: 200;
-};
+  data: GetApiStats200
+  status: 200
+}
 
 export type getApiStatsResponse401 = {
-  data: GetApiStats401;
-  status: 401;
-};
+  data: GetApiStats401
+  status: 401
+}
 
 export type getApiStatsResponse404 = {
-  data: GetApiStats404;
-  status: 404;
-};
+  data: GetApiStats404
+  status: 404
+}
 
 export type getApiStatsResponse500 = {
-  data: GetApiStats500;
-  status: 500;
+  data: GetApiStats500
+  status: 500
+}
+
+export type getApiStatsResponseSuccess = (getApiStatsResponse200) & {
+  headers: Headers;
 };
-export type getApiStatsResponseError = {
+export type getApiStatsResponseError = (getApiStatsResponse401 | getApiStatsResponse404 | getApiStatsResponse500) & {
   headers: Headers;
-} & (getApiStatsResponse401 | getApiStatsResponse404 | getApiStatsResponse500);
+};
 
-export type getApiStatsResponseSuccess = {
-  headers: Headers;
-} & getApiStatsResponse200;
+export type getApiStatsResponse = (getApiStatsResponseSuccess | getApiStatsResponseError)
 
-export const getGetApiStatsUrl = (params: GetApiStatsParams) => {
+export const getGetApiStatsUrl = (params: GetApiStatsParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString());
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/stats/?${stringifiedParams}`
-    : `/api/stats/`;
-};
+  return stringifiedParams.length > 0 ? `/api/stats/?${stringifiedParams}` : `/api/stats/`
+}
 
-export const getApiStats = async (
-  params: GetApiStatsParams,
-  options?: RequestInit,
-): Promise<getApiStatsResponse> => {
-  return customFetch<getApiStatsResponse>(getGetApiStatsUrl(params), {
+export const getApiStats = async (params: GetApiStatsParams, options?: RequestInit): Promise<getApiStatsResponse> => {
+  
+  return customFetch<getApiStatsResponse>(getGetApiStatsUrl(params),
+  {      
     ...options,
-    method: 'GET',
-  });
-};
+    method: 'GET'
+    
+    
+  }
+);}
+  
 
-export type getWorkoutPlansResponse =
-  | getWorkoutPlansResponseError
-  | getWorkoutPlansResponseSuccess;
 
 /**
  * @summary List workout plans
  */
 export type getWorkoutPlansResponse200 = {
-  data: GetWorkoutPlans200Item[];
-  status: 200;
-};
+  data: GetWorkoutPlans200Item[]
+  status: 200
+}
 
 export type getWorkoutPlansResponse401 = {
-  data: GetWorkoutPlans401;
-  status: 401;
-};
+  data: GetWorkoutPlans401
+  status: 401
+}
 
 export type getWorkoutPlansResponse500 = {
-  data: GetWorkoutPlans500;
-  status: 500;
+  data: GetWorkoutPlans500
+  status: 500
+}
+
+export type getWorkoutPlansResponseSuccess = (getWorkoutPlansResponse200) & {
+  headers: Headers;
 };
-export type getWorkoutPlansResponseError = {
+export type getWorkoutPlansResponseError = (getWorkoutPlansResponse401 | getWorkoutPlansResponse500) & {
   headers: Headers;
-} & (getWorkoutPlansResponse401 | getWorkoutPlansResponse500);
+};
 
-export type getWorkoutPlansResponseSuccess = {
-  headers: Headers;
-} & getWorkoutPlansResponse200;
+export type getWorkoutPlansResponse = (getWorkoutPlansResponseSuccess | getWorkoutPlansResponseError)
 
-export const getGetWorkoutPlansUrl = (params?: GetWorkoutPlansParams) => {
+export const getGetWorkoutPlansUrl = (params?: GetWorkoutPlansParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString());
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/workout-plans/?${stringifiedParams}`
-    : `/api/workout-plans/`;
-};
+  return stringifiedParams.length > 0 ? `/api/workout-plans/?${stringifiedParams}` : `/api/workout-plans/`
+}
 
-export const getWorkoutPlans = async (
-  params?: GetWorkoutPlansParams,
-  options?: RequestInit,
-): Promise<getWorkoutPlansResponse> => {
-  return customFetch<getWorkoutPlansResponse>(getGetWorkoutPlansUrl(params), {
+export const getWorkoutPlans = async (params?: GetWorkoutPlansParams, options?: RequestInit): Promise<getWorkoutPlansResponse> => {
+  
+  return customFetch<getWorkoutPlansResponse>(getGetWorkoutPlansUrl(params),
+  {      
     ...options,
-    method: 'GET',
-  });
-};
+    method: 'GET'
+    
+    
+  }
+);}
+  
 
-export type createWorkoutPlanResponse =
-  | createWorkoutPlanResponseError
-  | createWorkoutPlanResponseSuccess;
 
 /**
  * @summary Create a workout plan
  */
 export type createWorkoutPlanResponse201 = {
-  data: CreateWorkoutPlan201;
-  status: 201;
-};
+  data: CreateWorkoutPlan201
+  status: 201
+}
 
 export type createWorkoutPlanResponse400 = {
-  data: CreateWorkoutPlan400;
-  status: 400;
-};
+  data: CreateWorkoutPlan400
+  status: 400
+}
 
 export type createWorkoutPlanResponse401 = {
-  data: CreateWorkoutPlan401;
-  status: 401;
-};
+  data: CreateWorkoutPlan401
+  status: 401
+}
 
 export type createWorkoutPlanResponse404 = {
-  data: CreateWorkoutPlan404;
-  status: 404;
-};
+  data: CreateWorkoutPlan404
+  status: 404
+}
 
 export type createWorkoutPlanResponse500 = {
-  data: CreateWorkoutPlan500;
-  status: 500;
-};
-export type createWorkoutPlanResponseError = {
-  headers: Headers;
-} & (
-  | createWorkoutPlanResponse400
-  | createWorkoutPlanResponse401
-  | createWorkoutPlanResponse404
-  | createWorkoutPlanResponse500
-);
+  data: CreateWorkoutPlan500
+  status: 500
+}
 
-export type createWorkoutPlanResponseSuccess = {
+export type createWorkoutPlanResponseSuccess = (createWorkoutPlanResponse201) & {
   headers: Headers;
-} & createWorkoutPlanResponse201;
+};
+export type createWorkoutPlanResponseError = (createWorkoutPlanResponse400 | createWorkoutPlanResponse401 | createWorkoutPlanResponse404 | createWorkoutPlanResponse500) & {
+  headers: Headers;
+};
+
+export type createWorkoutPlanResponse = (createWorkoutPlanResponseSuccess | createWorkoutPlanResponseError)
 
 export const getCreateWorkoutPlanUrl = () => {
-  return `/api/workout-plans/`;
-};
 
-export const createWorkoutPlan = async (
-  createWorkoutPlanBody: CreateWorkoutPlanBody,
-  options?: RequestInit,
-): Promise<createWorkoutPlanResponse> => {
-  return customFetch<createWorkoutPlanResponse>(getCreateWorkoutPlanUrl(), {
+
+  
+
+  return `/api/workout-plans/`
+}
+
+export const createWorkoutPlan = async (createWorkoutPlanBody: CreateWorkoutPlanBody, options?: RequestInit): Promise<createWorkoutPlanResponse> => {
+  
+  return customFetch<createWorkoutPlanResponse>(getCreateWorkoutPlanUrl(),
+  {      
     ...options,
-    body: JSON.stringify(createWorkoutPlanBody),
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
     method: 'POST',
-  });
-};
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      createWorkoutPlanBody,)
+  }
+);}
+  
 
-export type getWorkoutPlanResponse =
-  | getWorkoutPlanResponseError
-  | getWorkoutPlanResponseSuccess;
 
 /**
  * @summary Get a workout plan
  */
 export type getWorkoutPlanResponse200 = {
-  data: GetWorkoutPlan200;
-  status: 200;
-};
+  data: GetWorkoutPlan200
+  status: 200
+}
 
 export type getWorkoutPlanResponse401 = {
-  data: GetWorkoutPlan401;
-  status: 401;
-};
+  data: GetWorkoutPlan401
+  status: 401
+}
 
 export type getWorkoutPlanResponse404 = {
-  data: GetWorkoutPlan404;
-  status: 404;
-};
+  data: GetWorkoutPlan404
+  status: 404
+}
 
 export type getWorkoutPlanResponse500 = {
-  data: GetWorkoutPlan500;
-  status: 500;
-};
-export type getWorkoutPlanResponseError = {
+  data: GetWorkoutPlan500
+  status: 500
+}
+
+export type getWorkoutPlanResponseSuccess = (getWorkoutPlanResponse200) & {
   headers: Headers;
-} & (
-  | getWorkoutPlanResponse401
-  | getWorkoutPlanResponse404
-  | getWorkoutPlanResponse500
-);
-
-export type getWorkoutPlanResponseSuccess = {
+};
+export type getWorkoutPlanResponseError = (getWorkoutPlanResponse401 | getWorkoutPlanResponse404 | getWorkoutPlanResponse500) & {
   headers: Headers;
-} & getWorkoutPlanResponse200;
-
-export const getGetWorkoutPlanUrl = (workoutPlanId: string) => {
-  return `/api/workout-plans/${workoutPlanId}`;
 };
 
-export const getWorkoutPlan = async (
-  workoutPlanId: string,
-  options?: RequestInit,
-): Promise<getWorkoutPlanResponse> => {
-  return customFetch<getWorkoutPlanResponse>(
-    getGetWorkoutPlanUrl(workoutPlanId),
-    {
-      ...options,
-      method: 'GET',
-    },
-  );
-};
+export type getWorkoutPlanResponse = (getWorkoutPlanResponseSuccess | getWorkoutPlanResponseError)
 
-export type getWorkoutDayResponse =
-  | getWorkoutDayResponseError
-  | getWorkoutDayResponseSuccess;
+export const getGetWorkoutPlanUrl = (workoutPlanId: string,) => {
+
+
+  
+
+  return `/api/workout-plans/${workoutPlanId}`
+}
+
+export const getWorkoutPlan = async (workoutPlanId: string, options?: RequestInit): Promise<getWorkoutPlanResponse> => {
+  
+  return customFetch<getWorkoutPlanResponse>(getGetWorkoutPlanUrl(workoutPlanId),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
 
 /**
  * @summary Get a workout day
  */
 export type getWorkoutDayResponse200 = {
-  data: GetWorkoutDay200;
-  status: 200;
-};
+  data: GetWorkoutDay200
+  status: 200
+}
 
 export type getWorkoutDayResponse401 = {
-  data: GetWorkoutDay401;
-  status: 401;
-};
+  data: GetWorkoutDay401
+  status: 401
+}
 
 export type getWorkoutDayResponse404 = {
-  data: GetWorkoutDay404;
-  status: 404;
-};
+  data: GetWorkoutDay404
+  status: 404
+}
 
 export type getWorkoutDayResponse500 = {
-  data: GetWorkoutDay500;
-  status: 500;
-};
-export type getWorkoutDayResponseError = {
+  data: GetWorkoutDay500
+  status: 500
+}
+
+export type getWorkoutDayResponseSuccess = (getWorkoutDayResponse200) & {
   headers: Headers;
-} & (
-  | getWorkoutDayResponse401
-  | getWorkoutDayResponse404
-  | getWorkoutDayResponse500
-);
-
-export type getWorkoutDayResponseSuccess = {
+};
+export type getWorkoutDayResponseError = (getWorkoutDayResponse401 | getWorkoutDayResponse404 | getWorkoutDayResponse500) & {
   headers: Headers;
-} & getWorkoutDayResponse200;
-
-export const getGetWorkoutDayUrl = (
-  workoutPlanId: string,
-  workoutDayId: string,
-) => {
-  return `/api/workout-plans/${workoutPlanId}/days/${workoutDayId}`;
 };
 
-export const getWorkoutDay = async (
-  workoutPlanId: string,
-  workoutDayId: string,
-  options?: RequestInit,
-): Promise<getWorkoutDayResponse> => {
-  return customFetch<getWorkoutDayResponse>(
-    getGetWorkoutDayUrl(workoutPlanId, workoutDayId),
-    {
-      ...options,
-      method: 'GET',
-    },
-  );
-};
+export type getWorkoutDayResponse = (getWorkoutDayResponseSuccess | getWorkoutDayResponseError)
 
-export type startWorkoutSessionResponse =
-  | startWorkoutSessionResponseError
-  | startWorkoutSessionResponseSuccess;
+export const getGetWorkoutDayUrl = (workoutPlanId: string,
+    workoutDayId: string,) => {
+
+
+  
+
+  return `/api/workout-plans/${workoutPlanId}/days/${workoutDayId}`
+}
+
+export const getWorkoutDay = async (workoutPlanId: string,
+    workoutDayId: string, options?: RequestInit): Promise<getWorkoutDayResponse> => {
+  
+  return customFetch<getWorkoutDayResponse>(getGetWorkoutDayUrl(workoutPlanId,workoutDayId),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
 
 /**
  * @summary Start a workout session
  */
 export type startWorkoutSessionResponse201 = {
-  data: StartWorkoutSession201;
-  status: 201;
-};
+  data: StartWorkoutSession201
+  status: 201
+}
 
 export type startWorkoutSessionResponse401 = {
-  data: StartWorkoutSession401;
-  status: 401;
-};
+  data: StartWorkoutSession401
+  status: 401
+}
 
 export type startWorkoutSessionResponse404 = {
-  data: StartWorkoutSession404;
-  status: 404;
-};
+  data: StartWorkoutSession404
+  status: 404
+}
 
 export type startWorkoutSessionResponse409 = {
-  data: StartWorkoutSession409;
-  status: 409;
-};
+  data: StartWorkoutSession409
+  status: 409
+}
 
 export type startWorkoutSessionResponse422 = {
-  data: StartWorkoutSession422;
-  status: 422;
-};
+  data: StartWorkoutSession422
+  status: 422
+}
 
 export type startWorkoutSessionResponse500 = {
-  data: StartWorkoutSession500;
-  status: 500;
-};
-export type startWorkoutSessionResponseError = {
+  data: StartWorkoutSession500
+  status: 500
+}
+
+export type startWorkoutSessionResponseSuccess = (startWorkoutSessionResponse201) & {
   headers: Headers;
-} & (
-  | startWorkoutSessionResponse401
-  | startWorkoutSessionResponse404
-  | startWorkoutSessionResponse409
-  | startWorkoutSessionResponse422
-  | startWorkoutSessionResponse500
-);
-
-export type startWorkoutSessionResponseSuccess = {
+};
+export type startWorkoutSessionResponseError = (startWorkoutSessionResponse401 | startWorkoutSessionResponse404 | startWorkoutSessionResponse409 | startWorkoutSessionResponse422 | startWorkoutSessionResponse500) & {
   headers: Headers;
-} & startWorkoutSessionResponse201;
-
-export const getStartWorkoutSessionUrl = (
-  workoutPlanId: string,
-  workoutDayId: string,
-) => {
-  return `/api/workout-plans/${workoutPlanId}/days/${workoutDayId}/sessions`;
 };
 
-export const startWorkoutSession = async (
-  workoutPlanId: string,
-  workoutDayId: string,
-  options?: RequestInit,
-): Promise<startWorkoutSessionResponse> => {
-  return customFetch<startWorkoutSessionResponse>(
-    getStartWorkoutSessionUrl(workoutPlanId, workoutDayId),
-    {
-      ...options,
-      method: 'POST',
-    },
-  );
-};
+export type startWorkoutSessionResponse = (startWorkoutSessionResponseSuccess | startWorkoutSessionResponseError)
 
-export type completeWorkoutSessionResponse =
-  | completeWorkoutSessionResponseError
-  | completeWorkoutSessionResponseSuccess;
+export const getStartWorkoutSessionUrl = (workoutPlanId: string,
+    workoutDayId: string,) => {
+
+
+  
+
+  return `/api/workout-plans/${workoutPlanId}/days/${workoutDayId}/sessions`
+}
+
+export const startWorkoutSession = async (workoutPlanId: string,
+    workoutDayId: string, options?: RequestInit): Promise<startWorkoutSessionResponse> => {
+  
+  return customFetch<startWorkoutSessionResponse>(getStartWorkoutSessionUrl(workoutPlanId,workoutDayId),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+);}
+  
+
 
 /**
  * @summary Complete a workout session
  */
 export type completeWorkoutSessionResponse200 = {
-  data: CompleteWorkoutSession200;
-  status: 200;
-};
+  data: CompleteWorkoutSession200
+  status: 200
+}
 
 export type completeWorkoutSessionResponse401 = {
-  data: CompleteWorkoutSession401;
-  status: 401;
-};
+  data: CompleteWorkoutSession401
+  status: 401
+}
 
 export type completeWorkoutSessionResponse404 = {
-  data: CompleteWorkoutSession404;
-  status: 404;
-};
+  data: CompleteWorkoutSession404
+  status: 404
+}
 
 export type completeWorkoutSessionResponse500 = {
-  data: CompleteWorkoutSession500;
-  status: 500;
-};
-export type completeWorkoutSessionResponseError = {
+  data: CompleteWorkoutSession500
+  status: 500
+}
+
+export type completeWorkoutSessionResponseSuccess = (completeWorkoutSessionResponse200) & {
   headers: Headers;
-} & (
-  | completeWorkoutSessionResponse401
-  | completeWorkoutSessionResponse404
-  | completeWorkoutSessionResponse500
-);
-
-export type completeWorkoutSessionResponseSuccess = {
+};
+export type completeWorkoutSessionResponseError = (completeWorkoutSessionResponse401 | completeWorkoutSessionResponse404 | completeWorkoutSessionResponse500) & {
   headers: Headers;
-} & completeWorkoutSessionResponse200;
-
-export const getCompleteWorkoutSessionUrl = (
-  workoutPlanId: string,
-  workoutDayId: string,
-  sessionId: string,
-) => {
-  return `/api/workout-plans/${workoutPlanId}/days/${workoutDayId}/sessions/${sessionId}/complete`;
 };
 
-export const completeWorkoutSession = async (
-  workoutPlanId: string,
-  workoutDayId: string,
-  sessionId: string,
-  options?: RequestInit,
-): Promise<completeWorkoutSessionResponse> => {
-  return customFetch<completeWorkoutSessionResponse>(
-    getCompleteWorkoutSessionUrl(workoutPlanId, workoutDayId, sessionId),
-    {
-      ...options,
-      method: 'PATCH',
-    },
-  );
-};
+export type completeWorkoutSessionResponse = (completeWorkoutSessionResponseSuccess | completeWorkoutSessionResponseError)
+
+export const getCompleteWorkoutSessionUrl = (workoutPlanId: string,
+    workoutDayId: string,
+    sessionId: string,) => {
+
+
+  
+
+  return `/api/workout-plans/${workoutPlanId}/days/${workoutDayId}/sessions/${sessionId}/complete`
+}
+
+export const completeWorkoutSession = async (workoutPlanId: string,
+    workoutDayId: string,
+    sessionId: string, options?: RequestInit): Promise<completeWorkoutSessionResponse> => {
+  
+  return customFetch<completeWorkoutSessionResponse>(getCompleteWorkoutSessionUrl(workoutPlanId,workoutDayId,sessionId),
+  {      
+    ...options,
+    method: 'PATCH'
+    
+    
+  }
+);}

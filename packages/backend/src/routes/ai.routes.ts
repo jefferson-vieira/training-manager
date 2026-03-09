@@ -1,6 +1,6 @@
 import type { UIMessage } from 'ai';
 
-import { openai } from '@ai-sdk/openai';
+import { google } from '@ai-sdk/google';
 import { convertToModelMessages, stepCountIs, streamText, tool } from 'ai';
 import z from 'zod';
 
@@ -26,7 +26,7 @@ export const aiRoutes = async (app: App) => {
 
       const result = streamText({
         messages: await convertToModelMessages(messages),
-        model: openai('gpt-4o-mini'),
+        model: google('gemini-2.5-flash'),
         stopWhen: stepCountIs(10),
         system: env.SYSTEM_PROMPT,
         tools: {
@@ -53,7 +53,7 @@ export const aiRoutes = async (app: App) => {
                 userId,
               });
             },
-            inputSchema: z.undefined(),
+            inputSchema: z.strictObject({}),
           }),
           getWorkoutPlans: tool({
             description:
@@ -65,7 +65,7 @@ export const aiRoutes = async (app: App) => {
                 userId,
               });
             },
-            inputSchema: z.undefined(),
+            inputSchema: z.strictObject({}),
           }),
           upsertUserProfile: tool({
             description: 'Atualiza os dados de perfil do usuário autenticado.',

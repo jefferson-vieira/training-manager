@@ -1,7 +1,7 @@
 import z from 'zod';
 
 export const WorkoutSessionSchema = z.object({
-  completedAt: z.date(),
+  completedAt: z.iso.date(),
   id: z.uuid(),
-  startedAt: z.date(),
+  startedAt: z.iso.date(),
 });
