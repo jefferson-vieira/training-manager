@@ -60,7 +60,8 @@ export class CompleteWorkoutSession {
 
     return {
       ...updatedWorkoutSession,
-      completedAt: updatedWorkoutSession.completedAt!,
+      completedAt: updatedWorkoutSession.completedAt!.toISOString(),
+      startedAt: updatedWorkoutSession.startedAt.toISOString(),
     };
   }
 }

@@ -80,7 +80,7 @@ app.after(() => {
 
         reply.send(response.body ? await response.text() : null);
       } catch (error) {
-        app.log.error('Authentication Error:', error);
+        app.log.error('Authentication Error: ' + error);
 
         reply.status(500).send({
           code: 'AUTH_FAILURE',

@@ -5,7 +5,9 @@ import type { CreateWorkoutPlanRequest } from '../../dtos/CreateWorkoutPlanReque
 import { NotFoundError } from '../../errors/NotFoundError.js';
 import { prisma } from '../../lib/db.js';
 
-type InputDto = z.infer<typeof CreateWorkoutPlanRequest>;
+interface InputDto extends z.infer<typeof CreateWorkoutPlanRequest> {
+  userId: string;
+}
 
 export class CreateWorkoutPlan {
   async execute(dto: InputDto) {
