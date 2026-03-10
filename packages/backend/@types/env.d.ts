@@ -3,6 +3,7 @@ declare namespace NodeJS {
     BETTER_AUTH_URL?: string;
     CLIENT_ORIGIN?: string;
     DATABASE_URL?: string;
+    DOMAIN?: string;
     GOOGLE_CLIENT_ID?: string;
     GOOGLE_CLIENT_SECRET?: string;
     GOOGLE_GENERATIVE_AI_API_KEY?: string;

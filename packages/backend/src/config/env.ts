@@ -5,6 +5,7 @@ const envSchema = z.object({
   BETTER_AUTH_URL: z.url(),
   CLIENT_ORIGIN: z.url(),
   DATABASE_URL: z.string(),
+  DOMAIN: z.string(),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
   GOOGLE_GENERATIVE_AI_API_KEY: z.string(),

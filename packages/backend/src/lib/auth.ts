@@ -9,6 +9,13 @@ import { env } from '../config/env.js';
 import { prisma } from './db.js';
 
 export const auth = betterAuth({
+  advanced: {
+    cookiePrefix: 'training-manager',
+    crossSubDomainCookies: {
+      domain: env.DOMAIN,
+      enabled: env.NODE_ENV === 'production',
+    },
+  },
   baseURL: env.BETTER_AUTH_URL,
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
