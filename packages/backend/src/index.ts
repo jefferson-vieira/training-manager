@@ -108,7 +108,10 @@ app.after(() => {
 try {
   await app.ready();
 
-  await app.listen({ port: env.PORT });
+  await app.listen({
+    host: env.HOST,
+    port: env.PORT,
+  });
 } catch (err) {
   app.log.error(err);
   process.exit(1);
