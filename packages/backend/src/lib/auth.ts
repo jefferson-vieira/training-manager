@@ -43,6 +43,7 @@ export const getSession = async (
 
   if (!session) {
     return reply.status(401).send({
+      code: 'UNAUTHORIZED',
       error: 'Unauthorized',
     });
   }
