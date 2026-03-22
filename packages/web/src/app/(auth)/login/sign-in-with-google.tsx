@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 
+import googleIcon from '@/assets/icons/google.svg';
 import { Button } from '@/components/ui/button';
 import { env } from '@/config/env';
 import { authClient } from '@/lib/auth';
@@ -16,17 +17,12 @@ export const SignInWithGoogle = () => {
 
   return (
     <Button
-      className="h-9.5 rounded-full bg-white px-6 text-black hover:bg-white/90"
+      className="rounded-full bg-white text-black hover:bg-white/80"
+      data-icon="inline-start"
       onClick={handleGoogleLogin}
     >
-      <Image
-        alt=""
-        className="shrink-0"
-        height={16}
-        src="/google-icon.svg"
-        width={16}
-      />
-      Fazer login com Google
+      <Image alt="Google logo" height={20} src={googleIcon} width={20} />
+      Fazer login com o Google
     </Button>
   );
 };
