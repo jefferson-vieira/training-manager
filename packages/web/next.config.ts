@@ -9,6 +9,13 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+      hmrRefreshes: true,
+    },
+  },
+  typedRoutes: true,
 };
 
 export default nextConfig;

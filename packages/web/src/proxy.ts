@@ -1,14 +1,16 @@
 import { getSessionCookie } from 'better-auth/cookies';
 import { NextRequest, NextResponse } from 'next/server';
 
-const publicRoutes = ['/login'];
+const publicRoutes = new Set(['/login']);
 
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
-  const isPublicRoute = publicRoutes.includes(path);
+  const isPublicRoute = publicRoutes.has(path);
 
-  const sessionCookie = getSessionCookie(request);
+  const sessionCookie = getSessionCookie(request, {
+    cookiePrefix: 'training-manager',
+  });
 
   if (!isPublicRoute && !sessionCookie) {
     return NextResponse.redirect(new URL('/login', request.url));
@@ -23,6 +25,6 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|(?:svg|png|jpg|jpeg|gif|webp)$).*))',
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };

@@ -19,23 +19,48 @@ const eslintConfig = defineConfig([
         {
           blankLine: 'always',
           next: '*',
-          prev: ['const', 'let', 'var', 'directive', 'import'],
+          prev: ['const', 'let', 'var', 'import'],
         },
         {
           blankLine: 'always',
-          next: ['if', 'for', 'while', 'switch', 'try', 'return'],
+          next: ['if', 'for', 'while', 'switch', 'try', 'return', 'export'],
           prev: '*',
         },
         {
           blankLine: 'any',
-          next: ['const', 'let', 'var', 'import'],
-          prev: ['const', 'let', 'var', 'import'],
+          next: ['import'],
+          prev: ['import'],
+        },
+        {
+          blankLine: 'any',
+          next: ['export'],
+          prev: ['export'],
         },
       ],
     },
   },
   eslintPluginPrettierRecommended,
-  perfectionist.configs['recommended-alphabetical'],
+  perfectionist.configs['recommended-natural'],
+  {
+    rules: {
+      'perfectionist/sort-jsx-props': [
+        'error',
+        {
+          customGroups: [
+            {
+              elementNamePattern: '^key$',
+              groupName: 'react',
+            },
+            {
+              elementNamePattern: '^on.',
+              groupName: 'callback',
+            },
+          ],
+          groups: ['react', 'unknown', 'callback'],
+        },
+      ],
+    },
+  },
   globalIgnores([
     '.next/**',
     'out/**',

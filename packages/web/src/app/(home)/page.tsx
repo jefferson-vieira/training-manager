@@ -15,7 +15,7 @@ export default async function HomePage() {
   const [user, homeData] = await Promise.all([getUser(), getHomeData()]);
 
   if (homeData.status !== 200) {
-    redirect('/login');
+    redirect('/onboarding');
   }
 
   const today = dayjs();

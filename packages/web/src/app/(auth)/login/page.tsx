@@ -5,9 +5,9 @@ import logo from '@/assets/imgs/logo.svg';
 
 import { SignInWithGoogle } from './sign-in-with-google';
 
-export default async function LoginPage() {
+export default function LoginPage() {
   return (
-    <main className="flex min-h-screen flex-col bg-[url(/teste5.png)] bg-cover bg-center">
+    <main className="flex min-h-screen flex-col bg-[url(/login-bg.png)] bg-cover bg-center">
       <div className="relative flex justify-center p-12">
         <Image alt="FIT.AI" src={logo} />
       </div>
