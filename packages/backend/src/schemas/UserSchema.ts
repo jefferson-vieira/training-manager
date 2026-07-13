@@ -11,7 +11,7 @@ export const UserSchema = z.object({
   heightInCentimeters: z.number().int().min(1).meta({
     description: 'Altura do usuário em centímetros. Ex.: 1.70m = 170',
   }),
-  id: z.uuid().meta({
+  id: z.string().meta({
     description: 'ID do usuário',
   }),
   image: z.string().nullable().meta({

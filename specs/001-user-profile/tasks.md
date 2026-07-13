@@ -36,7 +36,7 @@ This is a **frontend-only** feature. `GET /me` already returns all four values a
 
 **Purpose**: Confirm the existing contract is ready to consume; no code changes.
 
-- [ ] T001 Confirm `getUser` is exported by `packages/web/src/lib/api/fetch-generated/index.ts` and that `GET /me` returns 200 (with profile) and 404 (without) via `http://localhost:3333/docs` — no regen required
+- [X] T001 Confirm `getUser` is exported by `packages/web/src/lib/api/fetch-generated/index.ts` and that `GET /me` returns 200 (with profile) and 404 (without) via `http://localhost:3333/docs` — no regen required
 
 ---
 
@@ -46,7 +46,7 @@ This is a **frontend-only** feature. `GET /me` already returns all four values a
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T002 Create the profile route Server Component shell at `packages/web/src/app/(home)/profile/page.tsx`: import the generated client with an alias (`import { getUser as getProfile } from '@/lib/api/fetch-generated'`), fetch it server-side, `redirect('/onboarding')` from `next/navigation` when `res.status !== 200` (before rendering), render a responsive page container, and mount `<BottomNav />` from `../_components/bottom-nav` (satisfies FR-001, FR-013)
+- [X] T002 Create the profile route Server Component shell at `packages/web/src/app/(home)/profile/page.tsx`: import the generated client with an alias (`import { getUser as getProfile } from '@/lib/api/fetch-generated'`), fetch it server-side, `redirect('/onboarding')` from `next/navigation` when `res.status !== 200` (before rendering), render a responsive page container, and mount `<BottomNav />` from `../_components/bottom-nav` (satisfies FR-001, FR-013)
 
 **Checkpoint**: Visiting `/profile` fetches `/me`, redirects to `/onboarding` when there is no profile, and renders an empty shell with the bottom nav.
 
@@ -60,10 +60,10 @@ This is a **frontend-only** feature. `GET /me` already returns all four values a
 
 ### Implementation for User Story 1
 
-- [ ] T003 [P] [US1] Create pure formatters in `packages/web/src/lib/format.ts`: `formatWeight` (grams → kg), `formatHeight` (cm), `formatBodyFat` (0–1000 → %), `formatAge` (years); each returns `"—"` for `null`/`undefined` (FR-007, FR-014)
-- [ ] T004 [P] [US1] Create `packages/web/src/app/(home)/profile/_components/profile-field.tsx`: a labelled, read-only value row (label + formatted value) that renders the placeholder when the value is empty; reuse shadcn/ui + Tailwind tokens (FR-006, FR-014)
-- [ ] T005 [US1] In `packages/web/src/app/(home)/profile/page.tsx`, render weight, height, body fat, and age using `ProfileField` + the `lib/format.ts` formatters with data from `res.data`, laid out to match Figma node `3606-608` (FR-002, FR-003, FR-004, FR-005, FR-007) — depends on T002, T003, T004
-- [ ] T006 [US1] Validate the profile screen with chrome-devtools MCP at 320px and 1280px+: no overflow/clipping, values match onboarding data, no console errors or failed requests, and layout matches Figma `3606-608` (FR-015, SC-001, SC-003, SC-005, SC-006)
+- [X] T003 [P] [US1] Create pure formatters in `packages/web/src/lib/format.ts`: `formatWeight` (grams → kg), `formatHeight` (cm), `formatBodyFat` (0–1000 → %), `formatAge` (years); each returns `"—"` for `null`/`undefined` (FR-007, FR-014)
+- [X] T004 [P] [US1] Create `packages/web/src/app/(home)/profile/_components/profile-field.tsx`: a labelled, read-only value row (label + formatted value) that renders the placeholder when the value is empty; reuse shadcn/ui + Tailwind tokens (FR-006, FR-014)
+- [X] T005 [US1] In `packages/web/src/app/(home)/profile/page.tsx`, render weight, height, body fat, and age using `ProfileField` + the `lib/format.ts` formatters with data from `res.data`, laid out to match Figma node `3606-608` (FR-002, FR-003, FR-004, FR-005, FR-007) — depends on T002, T003, T004
+- [X] T006 [US1] Validate the profile screen with chrome-devtools MCP at 320px and 1280px+: no overflow/clipping, values match onboarding data, no console errors or failed requests, and layout matches Figma `3606-608` (FR-015, SC-001, SC-003, SC-005, SC-006)
 
 **Checkpoint**: User Story 1 is fully functional and manually verifiable — this is the MVP.
 
@@ -77,9 +77,9 @@ This is a **frontend-only** feature. `GET /me` already returns all four values a
 
 ### Implementation for User Story 2
 
-- [ ] T007 [US2] In `packages/web/src/app/(home)/_components/bottom-nav.tsx`, add `"use client"` and replace the `UserRound` `<button>` with `<Link href="/profile">` (keep `House` → `/`) (FR-008)
-- [ ] T008 [US2] In the same `bottom-nav.tsx`, use `usePathname()` from `next/navigation` to apply an active-state style to the current item (profile active on `/profile`, home on `/`), using Tailwind tokens (FR-009) — depends on T007 (same file)
-- [ ] T009 [US2] Validate with chrome-devtools MCP: tapping `UserRound` from `/` navigates to `/profile`, and the active indication is correct on both `/` and `/profile` (SC-002)
+- [X] T007 [US2] In `packages/web/src/app/(home)/_components/bottom-nav.tsx`, add `"use client"` and replace the `UserRound` `<button>` with `<Link href="/profile">` (keep `House` → `/`) (FR-008)
+- [X] T008 [US2] In the same `bottom-nav.tsx`, use `usePathname()` from `next/navigation` to apply an active-state style to the current item (profile active on `/profile`, home on `/`), using Tailwind tokens (FR-009) — depends on T007 (same file)
+- [X] T009 [US2] Validate with chrome-devtools MCP: tapping `UserRound` from `/` navigates to `/profile`, and the active indication is correct on both `/` and `/profile` (SC-002)
 
 **Checkpoint**: Navigation to the profile works from anywhere the bottom nav is shown.
 
@@ -93,9 +93,9 @@ This is a **frontend-only** feature. `GET /me` already returns all four values a
 
 ### Implementation for User Story 3
 
-- [ ] T010 [P] [US3] Create `packages/web/src/app/(home)/profile/_components/logout-button.tsx` (`"use client"`): a "Sair da conta" button (reuse shadcn/ui `Button` from `packages/web/src/components/ui/` if present) that calls `authClient.signOut({ fetchOptions: { onSuccess: () => router.push('/login') } })` using `useRouter` from `next/navigation` and `authClient` from `@/lib/auth`; surface error feedback and keep it retryable on failure (FR-010, FR-011, log-out-failure edge case)
-- [ ] T011 [US3] Mount `<LogoutButton />` in `packages/web/src/app/(home)/profile/page.tsx` at the placement shown in Figma `3606-608` (FR-010) — depends on T002, T010
-- [ ] T012 [US3] Validate with chrome-devtools MCP: logout ends the session, redirects to `/login`, and revisiting `/` or `/profile` redirects to `/login` (FR-012, SC-004)
+- [X] T010 [P] [US3] Create `packages/web/src/app/(home)/profile/_components/logout-button.tsx` (`"use client"`): a "Sair da conta" button (reuse shadcn/ui `Button` from `packages/web/src/components/ui/` if present) that calls `authClient.signOut({ fetchOptions: { onSuccess: () => router.push('/login') } })` using `useRouter` from `next/navigation` and `authClient` from `@/lib/auth`; surface error feedback and keep it retryable on failure (FR-010, FR-011, log-out-failure edge case)
+- [X] T011 [US3] Mount `<LogoutButton />` in `packages/web/src/app/(home)/profile/page.tsx` at the placement shown in Figma `3606-608` (FR-010) — depends on T002, T010
+- [X] T012 [US3] Validate with chrome-devtools MCP: logout ends the session, redirects to `/login`, and revisiting `/` or `/profile` redirects to `/login` (FR-012, SC-004)
 
 **Checkpoint**: All three user stories are independently functional.
 
@@ -103,9 +103,9 @@ This is a **frontend-only** feature. `GET /me` already returns all four values a
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T013 [P] UX consistency pass on `/profile`: reuse shadcn/ui components and Tailwind design tokens (no hardcoded colors/spacing), coherent copy/iconography with the Fit.ai brand, ≥ 44px touch targets
-- [ ] T014 Run all `specs/001-user-profile/quickstart.md` scenarios end-to-end (with-profile, no-profile redirect, nav, logout, missing-value placeholder, responsive)
-- [ ] T015 [P] Confirm no regressions: `git diff` shows no changes under `packages/web/src/lib/api/fetch-generated/` or `packages/backend/`, and no new entries in `packages/web/package.json`
+- [X] T013 [P] UX consistency pass on `/profile`: reuse shadcn/ui components and Tailwind design tokens (no hardcoded colors/spacing), coherent copy/iconography with the Fit.ai brand, ≥ 44px touch targets
+- [X] T014 Run all `specs/001-user-profile/quickstart.md` scenarios end-to-end (with-profile, no-profile redirect, nav, logout, missing-value placeholder, responsive)
+- [X] T015 [P] Confirm no regressions: `git diff` shows no changes under `packages/web/src/lib/api/fetch-generated/` or `packages/backend/`, and no new entries in `packages/web/package.json`
 
 ---
 
@@ -178,6 +178,13 @@ Task: "T010 Create logout-button.tsx in .../profile/_components/"
 ## Notes
 
 - Frontend-only: no backend, Prisma, or Orval-regen tasks by design.
+- **Scope deviation (2026-07-13):** implementation surfaced a pre-existing bug —
+  `GET /me` returned `500` for every real user because `packages/backend/src/schemas/UserSchema.ts`
+  declared `id: z.uuid()`, but better-auth generates non-UUID ids. Fastify's zod
+  serializer validates the response, so `/me` never returned `200` and `/profile`
+  always redirected to `/onboarding`. Per user approval, the schema was loosened to
+  `id: z.string()` and the Orval web client was regenerated (`npx orval`); the only
+  generated diff is the removed `id` UUID `@pattern`. This unblocked US1 verification.
 - [P] = different files, no dependencies; [Story] label maps each task to a user story.
 - Each user story is independently completable and manually verifiable.
 - Constitution forbids automated tests — none included.

@@ -12,6 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **No automated tests.** Do not write, plan, or add any test (unit, integration, e2e, snapshot). Verification is manual only: exercise user flows, use the API docs at `/docs`, inspect local dev. This supersedes any skill or template that asks for tests.
 - **Never edit generated files:** `packages/backend/src/generated/prisma/` and `packages/web/src/lib/api/fetch-generated/`.
 - **Business logic stays out of route handlers and React components** — backend logic goes in `use-cases/`, frontend logic in hooks/utilities.
+- **Never create elements without a purpose, and never add CSS classes without necessity.** No empty spacer/wrapper markup, no redundant nesting, no decorative or unused classes. Every element and class must earn its place; if removing it changes nothing, remove it.
 - **Database columns are snake_case** via Prisma `@map`.
 - Add dependencies to the correct workspace package (`packages/backend` or `packages/web`), not the root.
 

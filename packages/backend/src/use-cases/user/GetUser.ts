@@ -26,7 +26,7 @@ export class GetUser {
       },
     });
 
-    if (!user || !user.profile) {
+    if (!user?.profile) {
       throw new NotFoundError('User not found');
     }
 
