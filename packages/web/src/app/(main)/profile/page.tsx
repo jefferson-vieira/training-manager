@@ -1,6 +1,7 @@
 import { BicepsFlexed, Ruler, User, Weight } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
+import { Header } from '@/components/header';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getUser as getProfile } from '@/lib/api/fetch-generated';
 import {
@@ -10,7 +11,6 @@ import {
   formatWeight,
 } from '@/lib/format';
 
-import { BottomNav } from '../_components/bottom-nav';
 import { LogoutButton } from './_components/logout-button';
 import { StatCard } from './_components/stat-card';
 
@@ -38,15 +38,8 @@ export default async function ProfilePage() {
     .toUpperCase();
 
   return (
-    <div className="flex min-h-svh flex-col bg-background pb-28">
-      <header className="flex h-14 items-center px-5">
-        <p
-          className="text-[22px] leading-[1.15] text-foreground uppercase"
-          style={{ fontFamily: 'var(--font-anton)' }}
-        >
-          Fit.ai
-        </p>
-      </header>
+    <>
+      <Header />
 
       <div className="flex flex-col items-center gap-5 p-5">
         <div className="flex w-full items-center gap-3">
@@ -85,8 +78,6 @@ export default async function ProfilePage() {
 
         <LogoutButton />
       </div>
-
-      <BottomNav />
-    </div>
+    </>
   );
 }

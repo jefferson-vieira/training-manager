@@ -4,10 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
+import logo from '@/assets/imgs/logo.svg';
 import { getHomeData } from '@/lib/api/fetch-generated';
 import { getUser } from '@/lib/dal';
 
-import { BottomNav } from './_components/bottom-nav';
 import { ConsistencyTracker } from './_components/consistency-tracker';
 import { WorkoutDayCard } from './_components/workout-day-card';
 
@@ -25,8 +25,8 @@ export default async function HomePage() {
   const userName = user.name.split(' ')[0];
 
   return (
-    <div className="flex min-h-svh flex-col bg-background pb-24">
-      <div className="relative flex h-[296px] shrink-0 flex-col items-start justify-between overflow-hidden rounded-b-[20px] px-5 pt-5 pb-10">
+    <>
+      <div className="relative flex h-74 shrink-0 flex-col items-start justify-between overflow-hidden rounded-b-[20px] px-5 pt-5 pb-10">
         <div aria-hidden="true" className="absolute inset-0">
           <Image
             alt=""
@@ -44,12 +44,7 @@ export default async function HomePage() {
           />
         </div>
 
-        <p
-          className="relative text-[22px] leading-[1.15] text-background uppercase"
-          style={{ fontFamily: 'var(--font-anton)' }}
-        >
-          Fit.ai
-        </p>
+        <Image alt="Fit.ai" className="relative" priority src={logo} />
 
         <div className="relative flex w-full items-end justify-between">
           <div className="flex flex-col gap-1.5">
@@ -120,8 +115,6 @@ export default async function HomePage() {
           </Link>
         </div>
       )}
-
-      <BottomNav />
-    </div>
+    </>
   );
 }

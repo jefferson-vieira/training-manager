@@ -16,16 +16,18 @@ export function ConsistencyTracker({
   today,
 }: ConsistencyTrackerProps) {
   const weekDates = getWeekDates(today);
+
   const todayStr = today.format('YYYY-MM-DD');
 
   return (
     <div className="flex items-center justify-between">
       {weekDates.map((date, index) => {
         const dateStr = date.format('YYYY-MM-DD');
+
         const dayData = consistencyByDay[dateStr];
 
         return (
-          <div className="flex flex-col items-center gap-1.5" key={dateStr}>
+          <div key={dateStr} className="flex flex-col items-center gap-1.5">
             <ConsistencySquare
               completed={dayData?.workoutDayCompleted ?? false}
               isToday={dateStr === todayStr}
