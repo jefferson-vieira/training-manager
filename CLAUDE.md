@@ -12,6 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **No automated tests.** Do not write, plan, or add any test (unit, integration, e2e, snapshot). Verification is manual only: exercise user flows, use the API docs at `/docs`, inspect local dev. This supersedes any skill or template that asks for tests.
 - **Never edit generated files:** `packages/backend/src/generated/prisma/` and `packages/web/src/lib/api/fetch-generated/`.
 - **Business logic stays out of route handlers and React components** — backend logic goes in `use-cases/`, frontend logic in hooks/utilities.
+- **Always use the early-return (guard clause) pattern when applicable** — handle edge/error/negative cases first and `return` immediately, instead of `if/else` chains, `else` branches, or nested conditionals/ternaries. The happy path stays last, unindented, at the function's base level.
 - **Never create elements without a purpose, and never add CSS classes without necessity.** No empty spacer/wrapper markup, no redundant nesting, no decorative or unused classes. Every element and class must earn its place; if removing it changes nothing, remove it.
 - **Database columns are snake_case** via Prisma `@map`.
 - Add dependencies to the correct workspace package (`packages/backend` or `packages/web`), not the root.
@@ -66,8 +67,9 @@ The frontend must not invent parallel DTOs. Breaking API changes must update the
 
 ## UI conventions
 
-- Reuse shadcn/ui components in `packages/web/src/components/ui/` before building bespoke controls; use Tailwind tokens, not hardcoded colors/spacing.
+- **Design system first**: Prefer shadcn/ui components (`packages/web/src/components/ui/`) and existing internal components over hand-styling native HTML tags. Instead of a native `<button>` carrying many utility classes, use `Button` and pass only the classes needed to reach the target visual (same for `Badge`, `Card`, inputs, etc.). Use the **shadcn MCP/skill and Context7** to analyze and choose the right component. Only style a native tag when no suitable pre-styled component exists or a component would not make sense (e.g. semantic wrappers). Balance keeping the component's built-in styling against the customization needed for visual consistency; when customization is significant, decide deliberately whether to create a more specific component or override the base component's styles.
 - Mobile-first and responsive (usable at 320px and 1280px+); touch targets ≥ 44×44px. Verify UI manually at both widths.
+- **Do not size elements with a fixed CSS `height`** (`h-*` / `h-[…]`). An element's size must be determined by its own content together with `padding`, `margin`, and `border` — not a hardcoded height. Use `min-h-*`/`max-h-*` for constraints (e.g. the 44px touch target). A fixed `height` is allowed only when strictly necessary to preserve the visual meaning and the design system (e.g. a fixed-ratio media banner that would otherwise collapse or grow unbounded), and the reason must be documented in a comment.
 - Figma-driven work follows `.cursor/rules/figma-mcp.mdc`.
 
 ## UI validation (mandatory)
