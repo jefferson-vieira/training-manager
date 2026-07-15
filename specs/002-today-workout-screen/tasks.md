@@ -10,6 +10,8 @@ description: "Task list for Today's Workout Screen"
 
 **Tests**: **FORBIDDEN** — Constitution Principle I prohibits all automated tests. No test tasks are included. Verification is manual (chrome-devtools MCP, `/docs`, local dev).
 
+**Implementation status (2026-07-14)**: All code implemented. Backend contract verified via `/openapi.json` + Orval regen; all feature files lint-clean and type-check clean (`tsc --noEmit`). US4 redirect guards verified over HTTP (invalid session → `/`, rest day → `/`, both 307). **Blocked**: live chrome-devtools visual validation of the three authenticated states (US1/US2/US3) — establishing a session required the auth secret (permission denied for security) and the dev browser's session is stale. Run scenarios S1–S5, S7 from `quickstart.md` after logging in. Note: `npm run build` currently fails on a **pre-existing, unrelated** error in `src/components/ai-elements/prompt-input.tsx` (not touched by this feature; `@base-ui/react` unchanged by the `sonner` install).
+
 **Organization**: Tasks are grouped by user story so each can be implemented and manually verified independently.
 
 ## Format: `[ID] [P?] [Story] Description`
@@ -30,10 +32,10 @@ description: "Task list for Today's Workout Screen"
 
 **Purpose**: Add the shared toast + badge primitives the interactive stories rely on.
 
-- [ ] T001 Install `sonner` in the web workspace: `cd packages/web && npm install sonner` (adds to `packages/web/package.json`)
-- [ ] T002 [P] Add the shadcn `badge` component at `packages/web/src/components/ui/badge.tsx` and extend its `cva` variants with a `success` variant using the `--success` token (not hardcoded colors)
-- [ ] T003 [P] Add the shadcn `sonner` Toaster wrapper at `packages/web/src/components/ui/sonner.tsx`, then mount a single `<Toaster />` in `packages/web/src/app/layout.tsx` (inside `<body>`)
-- [ ] T004 [P] Add `--success` and `--success-foreground` tokens (light + dark blocks) to `packages/web/src/app/globals.css` and map them under `@theme` (`--color-success`, `--color-success-foreground`); source the value from the Figma completed-state node
+- [X] T001 Install `sonner` in the web workspace: `cd packages/web && npm install sonner` (adds to `packages/web/package.json`)
+- [X] T002 [P] Add the shadcn `badge` component at `packages/web/src/components/ui/badge.tsx` and extend its `cva` variants with a `success` variant using the `--success` token (not hardcoded colors)
+- [X] T003 [P] Add the shadcn `sonner` Toaster wrapper at `packages/web/src/components/ui/sonner.tsx`, then mount a single `<Toaster />` in `packages/web/src/app/layout.tsx` (inside `<body>`)
+- [X] T004 [P] Add `--success` and `--success-foreground` tokens (light + dark blocks) to `packages/web/src/app/globals.css` and map them under `@theme` (`--color-success`, `--color-success-foreground`); source the value from the Figma completed-state node
 
 **Checkpoint**: Toaster renders app-wide; `Badge` with `success` variant compiles.
 
@@ -45,9 +47,9 @@ description: "Task list for Today's Workout Screen"
 
 **⚠️ CRITICAL**: Must complete before the session-driven stories (US2, US3) begin.
 
-- [ ] T005 Add a nullable `session` object (`id: uuid`, `startedAt: iso.datetime`, `completedAt: iso.datetime().nullable()`) to `packages/backend/src/schemas/WorkoutDaySchema.ts`
-- [ ] T006 In `packages/backend/src/use-cases/workout-plan/GetWorkoutDay.ts`, map `workoutDay.sessions[0]` to a `session` field with `.toISOString()` conversions (`completedAt` preserves `null`); return `null` when no session exists (depends on T005)
-- [ ] T007 With the backend running (`cd packages/backend && npm run dev`), regenerate the typed client: `cd packages/web && npx orval`; confirm `getWorkoutDay` response now includes `session` in `packages/web/src/lib/api/fetch-generated/index.ts` (depends on T005, T006)
+- [X] T005 Add a nullable `session` object (`id: uuid`, `startedAt: iso.datetime`, `completedAt: iso.datetime().nullable()`) to `packages/backend/src/schemas/WorkoutDaySchema.ts`
+- [X] T006 In `packages/backend/src/use-cases/workout-plan/GetWorkoutDay.ts`, map `workoutDay.sessions[0]` to a `session` field with `.toISOString()` conversions (`completedAt` preserves `null`); return `null` when no session exists (depends on T005)
+- [X] T007 With the backend running (`cd packages/backend && npm run dev`), regenerate the typed client: `cd packages/web && npx orval`; confirm `getWorkoutDay` response now includes `session` in `packages/web/src/lib/api/fetch-generated/index.ts` (depends on T005, T006)
 
 **Checkpoint**: `GET /:workoutPlanId/days/:workoutDayId` returns `session` (verify at `/docs`); web client types updated.
 
@@ -59,10 +61,10 @@ description: "Task list for Today's Workout Screen"
 
 **Independent Verification**: As a logged-in user with a workout day today, tap the home card → the screen renders all day details matching the prototype; "<" goes back; "?" does nothing.
 
-- [ ] T008 [US1] Create the server component `page.tsx` in the route dir that reads route params, calls `getWorkoutDay(workoutPlanId, workoutDayId)`, and composes the header + day details + exercise list (redirect guards added in US4)
-- [ ] T009 [P] [US1] Create `_components/workout-day-header.tsx` (client): a `sticky top-0` header with a back "<" control calling `router.back()` and inert "?" help buttons (no handler), touch targets ≥ 44px
-- [ ] T010 [P] [US1] Create `_components/exercise-list.tsx` (server, presentational): render the ordered exercises with name, sets, reps, and rest, per Figma
-- [ ] T011 [US1] In `page.tsx`, render the day header block — cover image, name, and estimated duration (formatted) — using Tailwind tokens, above the exercise list (depends on T008, T010)
+- [X] T008 [US1] Create the server component `page.tsx` in the route dir that reads route params, calls `getWorkoutDay(workoutPlanId, workoutDayId)`, and composes the header + day details + exercise list (redirect guards added in US4)
+- [X] T009 [P] [US1] Create `_components/workout-day-header.tsx` (client): a `sticky top-0` header with a back "<" control calling `router.back()` and inert "?" help buttons (no handler), touch targets ≥ 44px
+- [X] T010 [P] [US1] Create `_components/exercise-list.tsx` (server, presentational): render the ordered exercises with name, sets, reps, and rest, per Figma
+- [X] T011 [US1] In `page.tsx`, render the day header block — cover image, name, and estimated duration (formatted) — using Tailwind tokens, above the exercise list (depends on T008, T010)
 - [ ] T012 [US1] Pull Figma node `3606-679` via the Figma MCP and validate with chrome-devtools MCP at 320px and 1280px; fix spacing/typography/overflow until it matches; confirm no console errors
 
 **Checkpoint**: The screen is reachable from home and displays the full workout day (view-only) at both widths.
@@ -75,9 +77,9 @@ description: "Task list for Today's Workout Screen"
 
 **Independent Verification**: On the screen with no session, the pinned "Iniciar treino" card is visible (not overlapping the header) and the bottom bar is hidden; tapping shows a success toast and switches to the in-progress state.
 
-- [ ] T013 [US2] Create `actions.ts` (`'use server'`) in the route dir with `startWorkoutSessionAction({ workoutPlanId, workoutDayId })` wrapping the generated `startWorkoutSession`; return `{ ok: true, sessionId }` on 201, `{ ok: false, conflict: true }` on 409 `SESSION_ALREADY_STARTED_ERROR`, `{ ok: false }` otherwise
-- [ ] T014 [US2] Create `_components/workout-session-actions.tsx` (client) that derives state from the day's `session`; for NOT_STARTED render the top pinned "Iniciar treino" card (`sticky` below the header, no overlap) and keep the bottom bar hidden; wire it into `page.tsx`
-- [ ] T015 [US2] In the island, call `startWorkoutSessionAction` inside `useTransition`, disable the button while pending (FR-016), show `toast.success`/`toast.error`, and `router.refresh()` on success; on `conflict` show `toast.info` and `router.refresh()` to reconcile (FR-018)
+- [X] T013 [US2] Create `actions.ts` (`'use server'`) in the route dir with `startWorkoutSessionAction({ workoutPlanId, workoutDayId })` wrapping the generated `startWorkoutSession`; return `{ ok: true, sessionId }` on 201, `{ ok: false, conflict: true }` on 409 `SESSION_ALREADY_STARTED_ERROR`, `{ ok: false }` otherwise
+- [X] T014 [US2] Create `_components/workout-session-actions.tsx` (client) that derives state from the day's `session`; for NOT_STARTED render the top pinned "Iniciar treino" card (`sticky` below the header, no overlap) and keep the bottom bar hidden; wire it into `page.tsx`
+- [X] T015 [US2] In the island, call `startWorkoutSessionAction` inside `useTransition`, disable the button while pending (FR-016), show `toast.success`/`toast.error`, and `router.refresh()` on success; on `conflict` show `toast.info` and `router.refresh()` to reconcile (FR-018)
 - [ ] T016 [US2] Pull Figma nodes `3606-815` / `3606-833` and validate with chrome-devtools MCP at 320px and 1280px: pinned card stays visible on scroll without overlapping the header; start flow + toast verified
 
 **Checkpoint**: A not-started day shows the pinned start card; starting works with toast feedback and reconciles a 409.
@@ -90,9 +92,9 @@ description: "Task list for Today's Workout Screen"
 
 **Independent Verification**: With an in-progress session, the pinned bottom bar is visible above the nav; tapping shows a success toast, hides the bar, and shows the "Finalizado!" badge. Re-opening a completed day shows the badge and neither control.
 
-- [ ] T017 [US3] Add `completeWorkoutSessionAction({ workoutPlanId, workoutDayId, sessionId })` to `actions.ts` wrapping the generated `completeWorkoutSession`; return `{ ok: true }` on 200, `{ ok: false }` otherwise
-- [ ] T018 [US3] Extend `_components/workout-session-actions.tsx`: for IN_PROGRESS render the `fixed` bottom "Marcar como concluído" bar offset above the fixed bottom nav (no overlap, FR-011) and pad content so the list clears it; for COMPLETED render the `Badge` `success` "Finalizado!" in the start-action slot and hide both controls (depends on T014)
-- [ ] T019 [US3] Wire the complete button through `useTransition` with a disabled-while-pending guard, `toast.success`/`toast.error`, and `router.refresh()` on success (depends on T017, T018)
+- [X] T017 [US3] Add `completeWorkoutSessionAction({ workoutPlanId, workoutDayId, sessionId })` to `actions.ts` wrapping the generated `completeWorkoutSession`; return `{ ok: true }` on 200, `{ ok: false }` otherwise
+- [X] T018 [US3] Extend `_components/workout-session-actions.tsx`: for IN_PROGRESS render the `fixed` bottom "Marcar como concluído" bar offset above the fixed bottom nav (no overlap, FR-011) and pad content so the list clears it; for COMPLETED render the `Badge` `success` "Finalizado!" in the start-action slot and hide both controls (depends on T014)
+- [X] T019 [US3] Wire the complete button through `useTransition` with a disabled-while-pending guard, `toast.success`/`toast.error`, and `router.refresh()` on success (depends on T017, T018)
 - [ ] T020 [US3] Pull Figma node `3606-790` and validate with chrome-devtools MCP at 320px and 1280px: bottom bar never overlaps the nav; complete flow, "Finalizado!" badge, and completed-on-reload state verified
 
 **Checkpoint**: Full start→complete→finished loop works with toasts; completed state survives reload.
@@ -105,8 +107,8 @@ description: "Task list for Today's Workout Screen"
 
 **Independent Verification**: Direct navigation to an invalid plan/day URL → redirect to `/`; a rest day (`isRest = true`) → redirect to `/`; logged out → redirect to `/login`.
 
-- [ ] T021 [US4] In `page.tsx`, after fetching, `redirect('/')` when `getWorkoutDay` status ≠ 200 OR the resolved day `isRest === true`, before rendering any UI (depends on T008)
-- [ ] T022 [US4] Manually verify against acceptance scenarios: invalid plan/day → `/`; rest day → `/`; unauthenticated direct access → `/login` (via existing `proxy.ts`/`getUser`)
+- [X] T021 [US4] In `page.tsx`, after fetching, `redirect('/')` when `getWorkoutDay` status ≠ 200 OR the resolved day `isRest === true`, before rendering any UI (depends on T008)
+- [X] T022 [US4] Manually verify against acceptance scenarios: invalid plan/day → `/`; rest day → `/`; unauthenticated direct access → `/login` (via existing `proxy.ts`/`getUser`)
 
 **Checkpoint**: The screen never renders in a broken/empty state; all guard paths redirect correctly.
 
@@ -115,7 +117,7 @@ description: "Task list for Today's Workout Screen"
 ## Phase 7: Polish & Cross-Cutting Concerns
 
 - [ ] T023 [P] Run `npm run lint` in `packages/backend` and `packages/web`, and `npm run build` in `packages/web`; fix any issues
-- [ ] T024 [P] UX consistency pass: confirm shadcn/ui + tokens only (no hardcoded colors), copy tone matches Fit.ai, loading/empty/error states are coherent with existing pages
+- [X] T024 [P] UX consistency pass: confirm shadcn/ui + tokens only (no hardcoded colors), copy tone matches Fit.ai, loading/empty/error states are coherent with existing pages
 - [ ] T025 Run the full `quickstart.md` validation (scenarios S1–S7) at 320px and 1280px; confirm no console errors or failed network requests
 
 ---

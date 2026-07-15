@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 import { NotFoundError } from '../../errors/NotFoundError.js';
 import { SessionAlreadyStartedError } from '../../errors/SessionAlreadyStartedError.js';
 import { prisma } from '../../lib/db.js';
@@ -33,8 +35,14 @@ export class StartWorkoutSession {
       throw new NotFoundError('Workout day not found');
     }
 
+    const today = dayjs();
+
     const existingWorkoutSession = await prisma.workoutSession.findFirst({
       where: {
+        startedAt: {
+          gte: today.startOf('day').toDate(),
+          lte: today.endOf('day').toDate(),
+        },
         workoutDayId: dto.workoutDayId,
       },
     });

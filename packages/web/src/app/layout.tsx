@@ -8,6 +8,7 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Suspense } from 'react';
 
 import { Chat } from '@/components/chat';
+import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
@@ -44,6 +45,8 @@ export default function RootLayout({
             <Chat />
           </Suspense>
         </NuqsAdapter>
+
+        <Toaster />
       </body>
     </html>
   );

@@ -8,7 +8,7 @@ type HomeLayoutProps = {
 
 export default function HomeLayout({ children }: HomeLayoutProps) {
   return (
-    <div className="flex min-h-svh flex-col bg-background pb-28">
+    <div className="flex min-h-screen flex-col bg-background">
       {children}
 
       <BottomNav />

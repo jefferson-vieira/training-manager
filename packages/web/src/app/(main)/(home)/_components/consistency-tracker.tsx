@@ -8,13 +8,13 @@ const WEEKDAY_SHORT = ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'];
 
 interface ConsistencyTrackerProps {
   consistencyByDay: GetHomeData200ConsistencyByDay;
-  today: dayjs.Dayjs;
 }
 
 export function ConsistencyTracker({
   consistencyByDay,
-  today,
 }: ConsistencyTrackerProps) {
+  const today = dayjs();
+
   const weekDates = getWeekDates(today);
 
   const todayStr = today.format('YYYY-MM-DD');

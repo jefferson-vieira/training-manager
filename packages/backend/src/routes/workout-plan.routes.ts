@@ -2,11 +2,11 @@ import z from 'zod';
 
 import type { App } from '../lib/fastify.js';
 
+import { GetWorkoutDayResponse } from '../dtos/GetWorkoutDayResponse.js';
 import { GetWorkoutPlanResponse } from '../dtos/GetWorkoutPlanResponse.js';
 import { SessionAlreadyStartedError } from '../errors/SessionAlreadyStartedError.js';
 import { getSession } from '../lib/auth.js';
 import { ErrorSchema } from '../schemas/ErrorSchema.js';
-import { WorkoutDaySchema } from '../schemas/WorkoutDaySchema.js';
 import { WorkoutPlanSchema } from '../schemas/WorkoutPlanSchema.js';
 import { WorkoutSessionSchema } from '../schemas/WorkoutSessionSchema.js';
 import { CompleteWorkoutSession } from '../use-cases/workout-plan/CompleteWorkoutSession.js';
@@ -124,7 +124,7 @@ export const workoutPlanRoutes = async (app: App) => {
         workoutPlanId: z.uuid(),
       }),
       response: {
-        200: WorkoutDaySchema,
+        200: GetWorkoutDayResponse,
         401: ErrorSchema,
         404: ErrorSchema,
         500: ErrorSchema,

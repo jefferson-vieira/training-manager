@@ -1,10 +1,7 @@
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc.js';
 
 import { NotFoundError } from '../../errors/NotFoundError.js';
 import { prisma } from '../../lib/db.js';
-
-dayjs.extend(utc);
 
 interface InputDto {
   userId: string;
@@ -25,6 +22,8 @@ export class GetWorkoutDay {
       throw new NotFoundError('Workout plan not found');
     }
 
+    const today = dayjs();
+
     const workoutDay = await prisma.workoutDay.findUnique({
       include: {
         exercises: {
@@ -32,7 +31,18 @@ export class GetWorkoutDay {
             order: 'asc',
           },
         },
-        sessions: true,
+        sessions: {
+          orderBy: {
+            startedAt: 'desc',
+          },
+          take: 1,
+          where: {
+            startedAt: {
+              gte: today.startOf('day').toDate(),
+              lte: today.endOf('day').toDate(),
+            },
+          },
+        },
       },
       where: {
         id: dto.workoutDayId,
@@ -44,6 +54,11 @@ export class GetWorkoutDay {
       throw new NotFoundError('Workout day not found');
     }
 
-    return workoutDay;
+    const [session] = workoutDay.sessions;
+
+    return {
+      ...workoutDay,
+      session: session,
+    };
   }
 }

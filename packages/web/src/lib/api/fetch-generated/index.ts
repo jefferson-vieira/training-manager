@@ -564,11 +564,14 @@ export type aiResponseSuccess = aiResponse200 & {
 };
 
 export type CompleteWorkoutSession200 = {
-  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$ */
-  completedAt: string;
+  /**
+   * Momento de conclusão da sessão (null enquanto em andamento)
+   * @nullable
+   */
+  completedAt: null | string;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
-  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$ */
+  /** Momento de início da sessão */
   startedAt: string;
 };
 
@@ -609,9 +612,30 @@ export type GetWorkoutDay200 = {
    * @minLength 1
    */
   name: string;
+  /**
+   * Sessão atual do dia (null quando não iniciada)
+   * @nullable
+   */
+  session: GetWorkoutDay200Session;
   /** Dia da semana */
   weekDay: GetWorkoutDay200WeekDay;
 };
+
+/**
+ * Sessão atual do dia (null quando não iniciada)
+ * @nullable
+ */
+export type GetWorkoutDay200Session = {
+  /**
+   * Momento de conclusão da sessão (null enquanto em andamento)
+   * @nullable
+   */
+  completedAt: null | string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** Momento de início da sessão */
+  startedAt: string;
+} | null;
 
 export type GetWorkoutDay401 = {
   code: string;
