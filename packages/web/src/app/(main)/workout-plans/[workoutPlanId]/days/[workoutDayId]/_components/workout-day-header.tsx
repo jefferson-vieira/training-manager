@@ -5,7 +5,11 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 
-export function WorkoutDayHeader() {
+type WorkoutDayHeaderProps = {
+  title: string;
+};
+
+export function WorkoutDayHeader({ title }: Readonly<WorkoutDayHeaderProps>) {
   const router = useRouter();
 
   return (
@@ -21,7 +25,7 @@ export function WorkoutDayHeader() {
       </Button>
 
       <h1 className="font-heading mx-auto text-lg font-semibold text-foreground">
-        Treino de Hoje
+        {title}
       </h1>
     </header>
   );

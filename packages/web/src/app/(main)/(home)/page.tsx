@@ -1,10 +1,11 @@
 import { Flame } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import logo from '@/assets/imgs/logo.svg';
+import { HeaderBanner } from '@/components/header-banner';
+import { LinkButton } from '@/components/ui/link';
 import { WorkoutDayCard } from '@/components/workout-day-card';
+import { HOME_ORIGIN } from '@/helpers/workout-day';
 import { getHomeData } from '@/lib/api/fetch-generated';
 import { getUser } from '@/lib/dal';
 
@@ -23,27 +24,8 @@ export default async function HomePage() {
 
   return (
     <>
-      <div className="relative flex h-74 shrink-0 flex-col items-start justify-between overflow-hidden rounded-b-3xl px-5 pt-5 pb-10">
-        <div aria-hidden="true" className="absolute inset-0">
-          <Image
-            alt=""
-            className="object-cover"
-            fill
-            priority
-            src="/home-banner.jpg"
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                'linear-gradient(243deg, rgba(0,0,0,0) 34%, rgb(0,0,0) 100%)',
-            }}
-          />
-        </div>
-
-        <Image alt="Fit.ai" className="relative" priority src={logo} />
-
-        <div className="relative flex w-full items-end justify-between">
+      <HeaderBanner src="/home-banner.jpg">
+        <div className="flex items-end justify-between">
           <div className="flex flex-col gap-1.5">
             <h1 className="font-heading text-2xl leading-[1.05] font-semibold text-background">
               Olá, {userName}
@@ -58,7 +40,7 @@ export default async function HomePage() {
             </span>
           </div>
         </div>
-      </div>
+      </HeaderBanner>
 
       <div className="flex flex-col gap-3 px-5 pt-5">
         <div className="flex items-center justify-between">
@@ -89,13 +71,12 @@ export default async function HomePage() {
             <h2 className="font-heading text-lg font-semibold text-foreground">
               Treino de Hoje
             </h2>
-            <button className="font-heading text-xs text-primary">
-              Ver treinos
-            </button>
+
+            <LinkButton href="/workout-plan">Ver treinos</LinkButton>
           </div>
 
           <Link
-            href={`/workout-plans/${todayWorkoutDay.workoutPlanId}/days/${todayWorkoutDay.id}`}
+            href={`/workout-plans/${todayWorkoutDay.workoutPlanId}/days/${todayWorkoutDay.id}?from=${HOME_ORIGIN}`}
           >
             <WorkoutDayCard workoutDay={todayWorkoutDay} />
           </Link>

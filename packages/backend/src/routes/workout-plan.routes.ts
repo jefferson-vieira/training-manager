@@ -11,6 +11,7 @@ import { WorkoutPlanSchema } from '../schemas/WorkoutPlanSchema.js';
 import { WorkoutSessionSchema } from '../schemas/WorkoutSessionSchema.js';
 import { CompleteWorkoutSession } from '../use-cases/workout-plan/CompleteWorkoutSession.js';
 import { CreateWorkoutPlan } from '../use-cases/workout-plan/CreateWorkoutPlan.js';
+import { GetActiveWorkoutPlan } from '../use-cases/workout-plan/GetActiveWorkoutPlan.js';
 import { GetWorkoutDay } from '../use-cases/workout-plan/GetWorkoutDay.js';
 import { GetWorkoutPlan } from '../use-cases/workout-plan/GetWorkoutPlan.js';
 import { GetWorkoutPlans } from '../use-cases/workout-plan/GetWorkoutPlans.js';
@@ -42,6 +43,31 @@ export const workoutPlanRoutes = async (app: App) => {
         500: ErrorSchema,
       },
       summary: 'List workout plans',
+      tags: ['Workout Plan'],
+    },
+  });
+
+  app.get('/active', {
+    handler: async (request, reply) => {
+      const session = await getSession(request, reply);
+
+      const getActiveWorkoutPlan = new GetActiveWorkoutPlan();
+
+      const result = await getActiveWorkoutPlan.execute({
+        userId: session.user.id,
+      });
+
+      return reply.status(200).send(result);
+    },
+    schema: {
+      operationId: 'getActiveWorkoutPlan',
+      response: {
+        200: GetWorkoutPlanResponse,
+        401: ErrorSchema,
+        404: ErrorSchema,
+        500: ErrorSchema,
+      },
+      summary: 'Get the active workout plan',
       tags: ['Workout Plan'],
     },
   });

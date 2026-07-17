@@ -438,6 +438,74 @@ export type CreateWorkoutPlan500 = {
 /**
  * Dia da semana
  */
+export type GetActiveWorkoutPlan200WorkoutDaysItemWeekDay =
+  (typeof GetActiveWorkoutPlan200WorkoutDaysItemWeekDay)[keyof typeof GetActiveWorkoutPlan200WorkoutDaysItemWeekDay];
+
+export const GetActiveWorkoutPlan200WorkoutDaysItemWeekDay = {
+  FRIDAY: 'FRIDAY',
+  MONDAY: 'MONDAY',
+  SATURDAY: 'SATURDAY',
+  SUNDAY: 'SUNDAY',
+  THURSDAY: 'THURSDAY',
+  TUESDAY: 'TUESDAY',
+  WEDNESDAY: 'WEDNESDAY',
+} as const;
+
+export type GetActiveWorkoutPlan200 = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * Nome do plano de treino
+   * @minLength 1
+   */
+  name: string;
+  userId: string;
+  workoutDays: GetActiveWorkoutPlan200WorkoutDaysItem[];
+};
+
+export type GetActiveWorkoutPlan200WorkoutDaysItem = {
+  /**
+   * URL da imagem de capa do dia de treino. Usar as URLs de superior ou inferior conforme o foco muscular do dia.
+   * @nullable
+   */
+  coverImageUrl: null | string;
+  /**
+   * Duração estimada em segundos (0 para dias de descanso)
+   * @minimum 0
+   */
+  estimatedDurationInSeconds: number;
+  exercisesCount: number;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** Se é dia de descanso (true) ou treino (false) */
+  isRest: boolean;
+  /**
+   * Nome do dia (ex.: Peito e Tríceps, Costas e Bíceps, Descanso)
+   * @minLength 1
+   */
+  name: string;
+  /** Dia da semana */
+  weekDay: GetActiveWorkoutPlan200WorkoutDaysItemWeekDay;
+};
+
+export type GetActiveWorkoutPlan401 = {
+  code: string;
+  error: string;
+};
+
+export type GetActiveWorkoutPlan404 = {
+  code: string;
+  error: string;
+};
+
+export type GetActiveWorkoutPlan500 = {
+  code: string;
+  error: string;
+};
+
+/**
+ * Dia da semana
+ */
 export type GetWorkoutPlan200WorkoutDaysItemWeekDay =
   (typeof GetWorkoutPlan200WorkoutDaysItemWeekDay)[keyof typeof GetWorkoutPlan200WorkoutDaysItemWeekDay];
 
@@ -612,18 +680,14 @@ export type GetWorkoutDay200 = {
    * @minLength 1
    */
   name: string;
-  /**
-   * Sessão atual do dia (null quando não iniciada)
-   * @nullable
-   */
-  session: GetWorkoutDay200Session;
+  /** Sessão atual do dia (null quando não iniciada) */
+  session?: GetWorkoutDay200Session;
   /** Dia da semana */
   weekDay: GetWorkoutDay200WeekDay;
 };
 
 /**
  * Sessão atual do dia (null quando não iniciada)
- * @nullable
  */
 export type GetWorkoutDay200Session = {
   /**
@@ -635,7 +699,7 @@ export type GetWorkoutDay200Session = {
   id: string;
   /** Momento de início da sessão */
   startedAt: string;
-} | null;
+};
 
 export type GetWorkoutDay401 = {
   code: string;
@@ -972,6 +1036,61 @@ export const createWorkoutPlan = async (
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     method: 'POST',
   });
+};
+
+export type getActiveWorkoutPlanResponse =
+  | getActiveWorkoutPlanResponseError
+  | getActiveWorkoutPlanResponseSuccess;
+
+/**
+ * @summary Get the active workout plan
+ */
+export type getActiveWorkoutPlanResponse200 = {
+  data: GetActiveWorkoutPlan200;
+  status: 200;
+};
+
+export type getActiveWorkoutPlanResponse401 = {
+  data: GetActiveWorkoutPlan401;
+  status: 401;
+};
+
+export type getActiveWorkoutPlanResponse404 = {
+  data: GetActiveWorkoutPlan404;
+  status: 404;
+};
+
+export type getActiveWorkoutPlanResponse500 = {
+  data: GetActiveWorkoutPlan500;
+  status: 500;
+};
+export type getActiveWorkoutPlanResponseError = (
+  | getActiveWorkoutPlanResponse401
+  | getActiveWorkoutPlanResponse404
+  | getActiveWorkoutPlanResponse500
+) & {
+  headers: Headers;
+};
+
+export type getActiveWorkoutPlanResponseSuccess =
+  getActiveWorkoutPlanResponse200 & {
+    headers: Headers;
+  };
+
+export const getGetActiveWorkoutPlanUrl = () => {
+  return `/api/workout-plans/active`;
+};
+
+export const getActiveWorkoutPlan = async (
+  options?: RequestInit,
+): Promise<getActiveWorkoutPlanResponse> => {
+  return customFetch<getActiveWorkoutPlanResponse>(
+    getGetActiveWorkoutPlanUrl(),
+    {
+      ...options,
+      method: 'GET',
+    },
+  );
 };
 
 export type getWorkoutPlanResponse =

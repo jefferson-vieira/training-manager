@@ -10,9 +10,7 @@ export function BottomNav() {
   return (
     <nav className="sticky right-0 bottom-0 left-0 z-50 mt-auto flex items-center justify-center gap-6 rounded-t-3xl border border-border bg-background px-6 py-4">
       <NavLink href="/" icon={House} />
-      <button className="p-3">
-        <Calendar className="size-6 text-foreground" />
-      </button>
+      <NavLink href="/workout-plan" icon={Calendar} />
       <ChatOpenButton />
       <button className="p-3">
         <ChartNoAxesColumn className="size-6 text-foreground" />

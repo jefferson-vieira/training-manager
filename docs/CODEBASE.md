@@ -32,6 +32,8 @@ Bootstrap do servidor Fastify:
 | Rota | Arquivo | Função |
 |------|---------|--------|
 | `/` | `packages/web/src/app/(home)/page.tsx` | Home: consistência, streak, treino do dia |
+| `/workout-plan` | `packages/web/src/app/(main)/workout-plan/page.tsx` | Plano de treino ativo: os 7 dias da semana (segunda a domingo) |
+| `/workout-plans/[workoutPlanId]/days/[workoutDayId]` | `packages/web/src/app/(main)/workout-plans/.../page.tsx` | Detalhe do dia: exercícios e sessão. O título do header vem da origem (`?from=home` → "Treino de Hoje"; sem marcador → rótulo do dia) |
 | `/login` | `packages/web/src/app/(auth)/login/page.tsx` | Login com Google |
 | `/onboarding` | `packages/web/src/app/onboarding/page.tsx` | Fluxo inicial com chat (WIP) |
 
@@ -59,7 +61,7 @@ Registradas em `packages/backend/src/routes/index.ts`:
 |---------|---------|------------------|
 | `/home` | `home.routes.ts` | Dados da home (plano ativo, consistência, streak) |
 | `/me` | `me.routes.ts` | Perfil do usuário (peso, altura, idade, etc.) |
-| `/workout-plans` | `workout-plan.routes.ts` | CRUD de planos, dias, sessões de treino |
+| `/workout-plans` | `workout-plan.routes.ts` | CRUD de planos, dias, sessões de treino. `GET /workout-plans/active` devolve o plano **ativo** do usuário (ou 404), já ordenado de segunda a domingo — use-case `GetActiveWorkoutPlan` |
 | `/stats` | `stats.routes.ts` | Estatísticas por período |
 | `/ai` | `ai.routes.ts` | Chat streaming com tools da IA |
 | `/auth/*` | `index.ts` | Sessão, login Google, etc. (better-auth) |
@@ -104,6 +106,11 @@ Comportamento definido em `SYSTEM_PROMPT` no `.env` do backend (`packages/backen
 3. **`dal.ts`** (`packages/web/src/lib/dal.ts`) — helper server-side `getUser()` com redirect para `/login`
 
 Fluxo na home: se `getHomeData()` retorna ≠ 200 → redirect para `/onboarding` (sem plano ativo).
+
+### `lib/` vs `helpers/`
+
+- `packages/web/src/lib/` — **infraestrutura**: client de API (`api/`), auth, `dal.ts`, `fetch.ts`, `utils.ts`.
+- `packages/web/src/helpers/` — **utilitários de regra de negócio/domínio** (ex.: `workout-day.ts` com `WEEKDAY_LABELS` e a regra de título por origem). Lógica de domínio sai de componentes e vai para cá.
 
 ### Chat global
 
@@ -168,9 +175,10 @@ Node: **v24.14.0** (`.nvmrc`).
 1. **Um plano ativo por usuário** — `CreateWorkoutPlan` desativa o anterior automaticamente
 2. **Plano sempre com 7 dias** — regra no `SYSTEM_PROMPT` (segunda a domingo)
 3. **Unidades especiais** — peso em gramas, gordura 0–1000 (40% = 400)
-4. **Rota de treino do dia** — home linka para `/workout-plans/.../days/...` mas a `page.tsx` ainda não existe
-5. **Onboarding em WIP** — `useChat()` sem transport configurado; mensagens são estáticas
-6. **README raiz** — vazio; variáveis documentadas em `.env.example`
+4. **`enum WeekDay` começa no domingo** (`schema.prisma`) — o PostgreSQL ordena enums pela ordem de declaração, então `orderBy: { weekDay: 'asc' }` devolve a semana rotacionada (domingo primeiro). Quem precisa de segunda→domingo deve ordenar explicitamente, como faz `GetActiveWorkoutPlan`
+5. **Rótulos dos dias da semana** — constante única em `packages/web/src/helpers/workout-day.ts` (`WEEKDAY_LABELS`), guardada em *title case* (`Segunda`); o card aplica `uppercase` via CSS e o header do dia usa o valor como está
+6. **Onboarding em WIP** — `useChat()` sem transport configurado; mensagens são estáticas
+7. **README raiz** — vazio; variáveis documentadas em `.env.example`
 
 ## Stack resumida
 

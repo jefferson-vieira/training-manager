@@ -1,8 +1,8 @@
 <!--
 Sync Impact Report
 ==================
-Version change: (template placeholders) → 1.0.0
-Modified principles: N/A (initial ratification)
+Version change: 1.0.0 → 1.1.0
+Modified principles: N/A
 Added sections:
   - Core Principles (6): No Automated Testing, Code Quality & Clean Code,
     User Experience Consistency, Responsive Design, Minimal Dependencies,
@@ -147,6 +147,9 @@ principles above with package-specific constraints:
 
 - Pages live under `packages/web/src/app/`; route-specific UI in colocated
   `_components/` folders.
+- Frontend utilities that encode **domain/business rules** MUST live in
+  `packages/web/src/helpers/`; `packages/web/src/lib/` is reserved for
+  infrastructure (API client, auth, data-access, fetch, generic `utils`).
 - MUST use functional React components; prefer Server Components unless
   interactivity requires `"use client"`.
 - API communication MUST use Orval-generated client + `customFetch`; session
@@ -185,4 +188,4 @@ principles above with package-specific constraints:
   rules; reviewers MAY block on violations of NON-NEGOTIABLE principles.
 - Runtime development guidance: `docs/CODEBASE.md`, `AGENTS.md`.
 
-**Version**: 1.0.0 | **Ratified**: 2026-07-07 | **Last Amended**: 2026-07-07
+**Version**: 1.1.0 | **Ratified**: 2026-07-07 | **Last Amended**: 2026-07-17

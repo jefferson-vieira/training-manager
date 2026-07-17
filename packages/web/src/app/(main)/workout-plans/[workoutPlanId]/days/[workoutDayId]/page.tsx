@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 
 import { WorkoutDayCard } from '@/components/workout-day-card';
+import { getWorkoutDayTitle } from '@/helpers/workout-day';
 import { getWorkoutDay } from '@/lib/api/fetch-generated';
 
 import { CompleteWorkoutButton } from './_components/complete-workout-button';
@@ -13,10 +14,14 @@ type WorkoutDayPageProps = {
     workoutDayId: string;
     workoutPlanId: string;
   }>;
+  searchParams: Promise<{
+    from?: string;
+  }>;
 };
 
 export default async function WorkoutDayPage({
   params,
+  searchParams,
 }: Readonly<WorkoutDayPageProps>) {
   const { workoutDayId, workoutPlanId } = await params;
 
@@ -26,13 +31,17 @@ export default async function WorkoutDayPage({
     redirect('/');
   }
 
-  const { exercises, session } = workoutDay.data;
+  const { exercises, session, weekDay } = workoutDay.data;
+
+  const { from } = await searchParams;
+
+  const title = getWorkoutDayTitle(weekDay, from);
 
   const isInProgress = Boolean(session && !session.completedAt);
 
   return (
     <>
-      <WorkoutDayHeader />
+      <WorkoutDayHeader title={title} />
 
       <div className="flex flex-col gap-5 px-5 pb-5">
         <WorkoutDayCard

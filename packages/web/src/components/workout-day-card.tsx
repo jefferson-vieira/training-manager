@@ -4,24 +4,16 @@ import { Calendar, Dumbbell, Timer } from 'lucide-react';
 import Image from 'next/image';
 
 import type {
+  GetActiveWorkoutPlan200WorkoutDaysItem,
   GetHomeData200TodayWorkoutDay,
   GetWorkoutDay200,
-  GetWorkoutDay200WeekDay,
 } from '@/lib/api/fetch-generated';
 
+import { WEEKDAY_LABELS } from '@/helpers/workout-day';
 import { cn } from '@/lib/utils';
 
-const WEEKDAY_LABELS: Record<GetWorkoutDay200WeekDay, string> = {
-  FRIDAY: 'SEXTA',
-  MONDAY: 'SEGUNDA',
-  SATURDAY: 'SÁBADO',
-  SUNDAY: 'DOMINGO',
-  THURSDAY: 'QUINTA',
-  TUESDAY: 'TERÇA',
-  WEDNESDAY: 'QUARTA',
-};
-
 type WorkoutDayCardData =
+  | GetActiveWorkoutPlan200WorkoutDaysItem
   | GetWorkoutDay200
   | NonNullable<GetHomeData200TodayWorkoutDay>;
 
@@ -57,6 +49,7 @@ export function WorkoutDayCard({
           alt={name}
           className="pointer-events-none object-cover"
           fill
+          sizes="100vw"
           src={coverImageUrl}
         />
       )}

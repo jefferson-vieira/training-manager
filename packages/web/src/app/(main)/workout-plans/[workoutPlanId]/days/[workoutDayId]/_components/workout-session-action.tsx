@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { startWorkoutSessionAction } from '../actions';
 
 type WorkoutSessionActionsProps = {
-  session: GetWorkoutDay200Session;
+  session?: GetWorkoutDay200Session;
   workoutDayId: string;
   workoutPlanId: string;
 };
