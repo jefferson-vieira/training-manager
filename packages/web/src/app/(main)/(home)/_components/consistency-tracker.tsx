@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 
 import type { GetHomeData200ConsistencyByDay } from '@/lib/api/fetch-generated';
 
-import { ConsistencySquare } from './consistency-square';
+import { ConsistencySquare } from '@/components/consistency-square';
 
 const WEEKDAY_SHORT = ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'];
 

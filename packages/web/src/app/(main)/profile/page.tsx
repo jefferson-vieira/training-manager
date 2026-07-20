@@ -2,6 +2,7 @@ import { BicepsFlexed, Ruler, User, Weight } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
 import { Header } from '@/components/header';
+import { StatCard } from '@/components/stat-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getUser as getProfile } from '@/lib/api/fetch-generated';
 import {
@@ -12,7 +13,6 @@ import {
 } from '@/lib/format';
 
 import { LogoutButton } from './_components/logout-button';
-import { StatCard } from './_components/stat-card';
 
 export default async function ProfilePage() {
   const res = await getProfile();
@@ -60,20 +60,20 @@ export default async function ProfilePage() {
         <div className="grid w-full grid-cols-2 gap-3">
           <StatCard
             icon={Weight}
-            unit="Kg"
+            label="KG"
             value={formatWeight(weightInGrams)}
           />
           <StatCard
             icon={Ruler}
-            unit="Cm"
+            label="CM"
             value={formatHeight(heightInCentimeters)}
           />
           <StatCard
             icon={BicepsFlexed}
-            unit="Gc"
+            label="GC"
             value={formatBodyFat(bodyFatPercentage)}
           />
-          <StatCard icon={User} unit="Anos" value={formatAge(age)} />
+          <StatCard icon={User} label="Anos" value={formatAge(age)} />
         </div>
 
         <LogoutButton />

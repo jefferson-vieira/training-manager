@@ -12,9 +12,7 @@ export function BottomNav() {
       <NavLink href="/" icon={House} />
       <NavLink href="/workout-plan" icon={Calendar} />
       <ChatOpenButton />
-      <button className="p-3">
-        <ChartNoAxesColumn className="size-6 text-foreground" />
-      </button>
+      <NavLink href="/stats" icon={ChartNoAxesColumn} />
       <NavLink href="/profile" icon={UserRound} />
     </nav>
   );

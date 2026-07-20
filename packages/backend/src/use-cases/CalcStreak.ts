@@ -1,16 +1,19 @@
 import type { Dayjs } from 'dayjs';
 
 import dayjs from 'dayjs';
+import isToday from 'dayjs/plugin/isToday.js';
 
 import type { Prisma } from '../generated/prisma/client.js';
 
 import { WeekDay } from '../models/enums/WeekDay.js';
 
+dayjs.extend(isToday);
+
 interface InputDto {
   completedWorkoutSessions: Pick<Prisma.WorkoutSessionModel, 'startedAt'>[];
   fromDate: Dayjs;
   toDate: Dayjs;
-  workoutDays: Pick<Prisma.WorkoutDayModel, 'weekDay'>[];
+  workoutDays: Pick<Prisma.WorkoutDayModel, 'isRest' | 'weekDay'>[];
 }
 
 export class CalcWorkoutStreak {
@@ -20,7 +23,9 @@ export class CalcWorkoutStreak {
     toDate,
     workoutDays,
   }: InputDto) {
-    const planWeekDays = new Set(workoutDays.map(({ weekDay }) => weekDay));
+    const planWeekDays = new Set(
+      workoutDays.filter(({ isRest }) => !isRest).map(({ weekDay }) => weekDay),
+    );
 
     const completedDates = new Set(
       completedWorkoutSessions.map(({ startedAt }) =>
@@ -34,24 +39,22 @@ export class CalcWorkoutStreak {
 
     const streakRange = toDate.diff(fromDate, 'day');
 
-    for (let i = 0; i < streakRange; i++) {
+    for (let i = 0; i < streakRange; i++, day = day.subtract(1, 'day')) {
       const weekDay = WeekDay[day.day()];
 
       if (!planWeekDays.has(weekDay)) {
-        day = day.subtract(1, 'day');
-
         continue;
       }
 
       if (completedDates.has(day.format('YYYY-MM-DD'))) {
         streak++;
 
-        day = day.subtract(1, 'day');
-
         continue;
       }
 
-      streak = 0;
+      if (day.isToday()) {
+        continue;
+      }
 
       break;
     }

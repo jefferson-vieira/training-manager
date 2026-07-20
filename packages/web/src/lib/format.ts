@@ -22,6 +22,11 @@ export function formatBodyFat(
   return `${trimDecimal(bodyFatPercentage / 10, 1)}%`;
 }
 
+/** Conclusion rate on a 0–1 scale → whole-number percentage (0.64 → "64%"). */
+export function formatCompletionRate(rate: number): string {
+  return `${Math.round(rate * 100)}%`;
+}
+
 /** Height stored in centimeters → integer cm (168 → "168"). Unit ("Cm") is rendered separately. */
 export function formatHeight(
   heightInCentimeters: null | number | undefined,
@@ -29,6 +34,17 @@ export function formatHeight(
   if (isEmpty(heightInCentimeters)) return EMPTY_VALUE;
 
   return String(heightInCentimeters);
+}
+
+/** Total training time in seconds → hours and minutes ("115h40m", "0h00m"). */
+export function formatTotalTime(totalSeconds: number): string {
+  const totalMinutes = Math.floor(totalSeconds / 60);
+
+  const hours = Math.floor(totalMinutes / 60);
+
+  const minutes = totalMinutes % 60;
+
+  return `${hours}h${String(minutes).padStart(2, '0')}m`;
 }
 
 /** Weight stored in grams → kilograms (78500 → "78.5"). Unit ("Kg") is rendered separately. */

@@ -22,6 +22,7 @@ export class GetStats {
       include: {
         workoutDays: {
           select: {
+            isRest: true,
             weekDay: true,
           },
         },

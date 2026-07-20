@@ -47,9 +47,7 @@ export default async function HomePage() {
           <h2 className="font-heading text-lg font-semibold text-foreground">
             Consistência
           </h2>
-          <button className="font-heading text-xs text-primary">
-            Ver histórico
-          </button>
+          <LinkButton href="/stats">Ver histórico</LinkButton>
         </div>
 
         <div className="flex items-center gap-3">
