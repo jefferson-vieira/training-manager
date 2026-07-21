@@ -50,8 +50,9 @@ export function WorkoutSessionAction({
   if (!session) {
     return (
       <Button
-        className="font-heading min-h-11 shrink-0 rounded-full px-4 font-semibold"
+        className="font-heading rounded-full font-semibold"
         disabled={isPending}
+        size="xl"
         onClick={handleStart}
       >
         Iniciar treino
@@ -61,7 +62,7 @@ export function WorkoutSessionAction({
 
   if (session.completedAt) {
     return (
-      <Badge className="shrink-0 px-3 py-1.5 text-sm" variant="success">
+      <Badge className="px-3 py-1.5 text-sm" variant="success">
         <CircleCheckBig className="size-4" />
         Finalizado!
       </Badge>

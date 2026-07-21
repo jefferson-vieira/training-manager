@@ -5,9 +5,7 @@ import { Geist, Geist_Mono, Inter } from 'next/font/google';
 import './globals.css';
 import 'streamdown/styles.css';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
-import { Suspense } from 'react';
 
-import { Chat } from '@/components/chat';
 import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 
@@ -38,13 +36,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NuqsAdapter>
-          {children}
-
-          <Suspense>
-            <Chat />
-          </Suspense>
-        </NuqsAdapter>
+        <NuqsAdapter>{children}</NuqsAdapter>
 
         <Toaster />
       </body>

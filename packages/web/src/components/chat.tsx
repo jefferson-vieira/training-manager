@@ -1,206 +1,282 @@
 'use client';
 
+import type { KeyboardEvent, SubmitEvent } from 'react';
+
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
-import { ArrowUp, Sparkles, X } from 'lucide-react';
-import { parseAsBoolean, parseAsString, useQueryStates } from 'nuqs';
+import { ArrowUp, Sparkles, Square, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { Streamdown } from 'streamdown';
-import 'streamdown/styles.css';
 
+import {
+  Conversation,
+  ConversationContent,
+  ConversationScrollButton,
+} from '@/components/ai-elements/conversation';
+import {
+  Message,
+  MessageContent,
+  MessageResponse,
+} from '@/components/ai-elements/message';
+import { Suggestion, Suggestions } from '@/components/ai-elements/suggestion';
 import { Button } from '@/components/ui/button';
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer';
+import { Spinner } from '@/components/ui/spinner';
+import { Textarea } from '@/components/ui/textarea';
 import { env } from '@/config/env';
+import { cn } from '@/lib/utils';
 
-const SUGGESTED_MESSAGES = ['Monte meu plano de treino'];
+const GREETING =
+  'Olá! Sou sua IA personal. Como posso ajudar com seu treino hoje?';
+
+const SUGGESTIONS = [
+  'Alterar plano de treino',
+  'Mudar objetivo',
+  'Atualizar informações',
+];
 
 export function Chat() {
-  const [chatParams, setChatParams] = useQueryStates({
-    chat_initial_message: parseAsString,
-    chat_open: parseAsBoolean.withDefault(false),
-  });
+  const router = useRouter();
 
-  const { messages, sendMessage, status } = useChat({
+  const { error, messages, regenerate, sendMessage, status, stop } = useChat({
     transport: new DefaultChatTransport({
       api: `${env.NEXT_PUBLIC_API_URL}/api/ai`,
       credentials: 'include',
+      fetch: async (input, init) => {
+        const response = await fetch(input, init);
+
+        if (response.status === 401) {
+          router.push('/login');
+        }
+
+        return response;
+      },
     }),
   });
 
   const [input, setInput] = useState('');
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const initialMessageSentRef = useRef(false);
+
+  const hasCompletedResponse = useRef(false);
 
   useEffect(() => {
-    if (
-      chatParams.chat_open &&
-      chatParams.chat_initial_message &&
-      !initialMessageSentRef.current
-    ) {
-      initialMessageSentRef.current = true;
-      sendMessage({ text: chatParams.chat_initial_message });
-      setChatParams({ chat_initial_message: null });
+    if (status === 'ready' && messages.length > 0) {
+      hasCompletedResponse.current = true;
     }
-  }, [
-    chatParams.chat_open,
-    chatParams.chat_initial_message,
-    sendMessage,
-    setChatParams,
-  ]);
+  }, [status, messages.length]);
 
-  useEffect(() => {
-    if (!chatParams.chat_open) {
-      initialMessageSentRef.current = false;
-    }
-  }, [chatParams.chat_open]);
+  const isBusy = status === 'submitted' || status === 'streaming';
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  const lastMessage = messages.at(-1);
 
-  if (!chatParams.chat_open) return null;
+  const lastPart = lastMessage?.parts.at(-1);
 
-  const handleClose = () => {
-    setChatParams({ chat_initial_message: null, chat_open: false });
+  const isProcessing =
+    status === 'submitted' ||
+    (status === 'streaming' && lastPart != null && lastPart.type !== 'text');
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (nextOpen || !hasCompletedResponse.current) return;
+
+    router.refresh();
   };
 
-  const handleSend = () => {
-    const trimmed = input.trim();
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-    if (!trimmed) return;
-    sendMessage({ text: trimmed });
+    const text = input.trim();
+
+    if (!text || isBusy) return;
+
+    sendMessage({ text });
     setInput('');
   };
 
-  const handleSuggestion = (text: string) => {
-    sendMessage({ text });
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (
+      event.key !== 'Enter' ||
+      event.shiftKey ||
+      event.nativeEvent.isComposing
+    ) {
+      return;
     }
+
+    event.preventDefault();
+
+    event.currentTarget.form?.requestSubmit();
   };
 
-  const isStreaming = status === 'streaming';
-  const isLoading = status === 'submitted' || isStreaming;
+  const handleSuggestion = (suggestion: string) => {
+    if (isBusy) return;
+
+    sendMessage({ text: suggestion });
+  };
 
   return (
-    <div className="fixed inset-0 z-[60]">
-      <div
-        className="absolute inset-0 bg-foreground/30"
-        onClick={handleClose}
+    <Drawer showSwipeHandle onOpenChange={handleOpenChange}>
+      <DrawerTrigger
+        render={
+          <Button
+            aria-label="Abrir o Coach AI"
+            className="rounded-full"
+            size="icon-xl"
+          >
+            <Sparkles className="size-6" />
+          </Button>
+        }
       />
 
-      <div className="absolute inset-x-4 top-40 bottom-4 flex flex-col">
-        <div className="flex flex-1 flex-col overflow-hidden rounded-[20px] bg-background">
-          <div className="flex shrink-0 items-center justify-between border-b border-border p-5">
-            <div className="flex items-center gap-2">
-              <div className="flex items-center justify-center rounded-full border border-primary/8 bg-primary/8 p-3">
-                <Sparkles className="size-[18px] text-primary" />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <span className="font-heading text-base font-semibold text-foreground">
-                  Coach AI
-                </span>
-                <div className="flex items-center gap-1">
-                  <div className="bg-online size-2 rounded-full" />
-                  <span className="font-heading text-xs text-primary">
-                    Online
-                  </span>
-                </div>
-              </div>
+      <DrawerContent className="h-full">
+        <header className="flex items-center justify-between gap-2 border-b border-border p-5">
+          <div className="flex items-center gap-2">
+            <span className="flex items-center justify-center rounded-full bg-primary/10 p-3">
+              <Sparkles className="size-4.5 text-primary" />
+            </span>
+
+            <div className="flex flex-col gap-1.5">
+              <DrawerTitle className="text-base font-semibold text-foreground">
+                Coach AI
+              </DrawerTitle>
+
+              <span className="flex items-center gap-1 text-xs text-primary">
+                <span className="size-2 rounded-full bg-success" />
+                <span>Online</span>
+              </span>
             </div>
-            <Button onClick={handleClose} size="icon" variant="ghost">
-              <X className="size-6 text-foreground" />
-            </Button>
           </div>
 
-          <div className="flex-1 overflow-y-auto pb-5">
-            {messages.map((message) => (
-              <div
-                className={
-                  message.role === 'assistant'
-                    ? 'flex flex-col items-start pt-5 pr-[60px] pl-5'
-                    : 'flex flex-col items-end pt-5 pr-5 pl-[60px]'
-                }
-                key={message.id}
+          <DrawerClose
+            render={
+              <Button
+                aria-label="Fechar o Coach AI"
+                className="rounded-full"
+                size="icon-xl"
+                variant="ghost"
               >
-                <div
-                  className={
-                    message.role === 'assistant'
-                      ? 'rounded-xl bg-secondary p-3'
-                      : 'rounded-xl bg-primary p-3'
-                  }
-                >
-                  {message.role === 'assistant' ? (
-                    message.parts.map((part, index) =>
+                <X className="size-6" />
+              </Button>
+            }
+          />
+        </header>
+
+        <Conversation>
+          <ConversationContent>
+            <Message from="assistant">
+              <MessageContent className="max-w-prose">
+                {GREETING}
+              </MessageContent>
+            </Message>
+
+            {messages.map((message, index) => {
+              const isFailed =
+                error != null &&
+                message.role === 'user' &&
+                index === messages.length - 1;
+
+              return (
+                <Message key={message.id} from={message.role}>
+                  <MessageContent
+                    className={cn('max-w-prose', isFailed && 'opacity-60')}
+                  >
+                    {message.parts.map((part, partIndex) =>
                       part.type === 'text' ? (
-                        <Streamdown
-                          className="font-heading text-sm leading-relaxed text-foreground"
+                        <MessageResponse
+                          key={`${message.id}-${partIndex}`}
+                          animated
                           isAnimating={
-                            isStreaming &&
-                            messages[messages.length - 1]?.id === message.id
+                            status === 'streaming' &&
+                            message.role === 'assistant'
                           }
-                          key={index}
                         >
                           {part.text}
-                        </Streamdown>
+                        </MessageResponse>
                       ) : null,
-                    )
-                  ) : (
-                    <p className="font-heading text-sm leading-relaxed text-primary-foreground">
-                      {message.parts
-                        .filter((part) => part.type === 'text')
-                        .map(
-                          (part) =>
-                            (part as { text: string; type: 'text' }).text,
-                        )
-                        .join('')}
+                    )}
+                  </MessageContent>
+
+                  {isFailed && (
+                    <p className="ml-auto flex items-center gap-2 text-xs text-destructive">
+                      Não foi possível enviar.
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => regenerate()}
+                      >
+                        Tentar novamente
+                      </Button>
                     </p>
                   )}
-                </div>
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
+                </Message>
+              );
+            })}
 
-          <div className="flex shrink-0 flex-col gap-3">
-            {messages.length === 0 && (
-              <div className="flex gap-2.5 overflow-x-auto px-5">
-                {SUGGESTED_MESSAGES.map((suggestion) => (
-                  <button
-                    className="font-heading rounded-full bg-primary/10 px-4 py-2 text-sm whitespace-nowrap text-foreground"
-                    key={suggestion}
-                    onClick={() => handleSuggestion(suggestion)}
-                  >
-                    {suggestion}
-                  </button>
-                ))}
-              </div>
+            {isProcessing && (
+              <Message from="assistant">
+                <MessageContent className="flex-row items-center gap-2">
+                  <Spinner />
+                  Processando…
+                </MessageContent>
+              </Message>
             )}
+          </ConversationContent>
 
-            <div className="flex items-center gap-2 border-t border-border p-5">
-              <input
-                className="font-heading flex-1 rounded-full border border-border bg-secondary px-4 py-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Digite sua mensagem"
-                type="text"
-                value={input}
+          <ConversationScrollButton />
+        </Conversation>
+
+        {messages.length === 0 && (
+          <Suggestions className="px-5 py-3">
+            {SUGGESTIONS.map((suggestion) => (
+              <Suggestion
+                key={suggestion}
+                size="xl"
+                suggestion={suggestion}
+                onClick={handleSuggestion}
               />
-              <Button
-                className="size-[42px] shrink-0 rounded-full"
-                disabled={!input.trim() || isLoading}
-                onClick={handleSend}
-                size="icon"
-              >
-                <ArrowUp className="size-5" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            ))}
+          </Suggestions>
+        )}
+
+        <form
+          className="flex items-center gap-2 border-t border-border p-5"
+          onSubmit={handleSubmit}
+        >
+          <Textarea
+            className="min-h-11 flex-1 resize-none border-0 bg-muted px-4 py-3 text-sm shadow-none md:text-sm"
+            placeholder="Digite sua mensagem"
+            rows={1}
+            value={input}
+            onChange={(event) => setInput(event.currentTarget.value)}
+            onKeyDown={handleKeyDown}
+          />
+
+          {isBusy ? (
+            <Button
+              aria-label="Parar"
+              className="rounded-full"
+              size="icon-xl"
+              type="button"
+              onClick={stop}
+            >
+              <Square className="size-5" />
+            </Button>
+          ) : (
+            <Button
+              aria-label="Enviar mensagem"
+              className="rounded-full"
+              disabled={!input.trim()}
+              size="icon-xl"
+              type="submit"
+            >
+              <ArrowUp className="size-5" />
+            </Button>
+          )}
+        </form>
+      </DrawerContent>
+    </Drawer>
   );
 }

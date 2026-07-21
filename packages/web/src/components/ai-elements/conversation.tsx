@@ -2,8 +2,10 @@
 
 import type { ComponentProps } from 'react';
 
-import { StickToBottom } from 'use-stick-to-bottom';
+import { ArrowDown } from 'lucide-react';
+import { StickToBottom, useStickToBottomContext } from 'use-stick-to-bottom';
 
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export type ConversationProps = ComponentProps<typeof StickToBottom>;
@@ -31,3 +33,33 @@ export const ConversationContent = ({
     {...props}
   />
 );
+
+export type ConversationScrollButtonProps = ComponentProps<typeof Button>;
+
+export const ConversationScrollButton = ({
+  className,
+  ...props
+}: ConversationScrollButtonProps) => {
+  const { isAtBottom, scrollToBottom } = useStickToBottomContext();
+
+  if (isAtBottom) {
+    return null;
+  }
+
+  return (
+    <Button
+      aria-label="Ir para o final da conversa"
+      className={cn(
+        'absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full dark:bg-background dark:hover:bg-muted',
+        className,
+      )}
+      size="icon"
+      type="button"
+      variant="outline"
+      onClick={() => scrollToBottom()}
+      {...props}
+    >
+      <ArrowDown className="size-5" />
+    </Button>
+  );
+};
