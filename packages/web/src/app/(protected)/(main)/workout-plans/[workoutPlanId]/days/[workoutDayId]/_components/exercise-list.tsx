@@ -1,9 +1,10 @@
-import { CircleHelp, Zap } from 'lucide-react';
+import { Zap } from 'lucide-react';
 
 import type { GetWorkoutDay200ExercisesItem } from '@/lib/api/fetch-generated';
 
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+
+import { ExerciseHelpButton } from './exercise-help-button';
 
 type ExerciseListProps = {
   exercises: GetWorkoutDay200ExercisesItem[];
@@ -21,14 +22,8 @@ export function ExerciseList({ exercises }: Readonly<ExerciseListProps>) {
             <h3 className="font-heading text-base font-semibold text-foreground">
               {exercise.name}
             </h3>
-            <Button
-              aria-label="Ajuda sobre o exercício"
-              className="text-muted-foreground"
-              size="icon-sm"
-              variant="ghost"
-            >
-              <CircleHelp className="size-5" />
-            </Button>
+
+            <ExerciseHelpButton exerciseName={exercise.name} />
           </div>
 
           <div className="flex flex-wrap gap-1.5">

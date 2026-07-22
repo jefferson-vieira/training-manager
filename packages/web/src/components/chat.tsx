@@ -2,7 +2,6 @@
 
 import { Sparkles, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useCallback, useRef } from 'react';
 
 import { ChatPanel } from '@/components/chat-panel';
 import { Button } from '@/components/ui/button';
@@ -13,6 +12,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
+import { useCoachChat } from '@/hooks/use-coach-chat';
 
 const GREETINGS = [
   'Olá! Sou sua IA personal. Como posso ajudar com seu treino hoje?',
@@ -27,20 +27,25 @@ const SUGGESTIONS = [
 export function Chat() {
   const router = useRouter();
 
-  const hasCompletedResponse = useRef(false);
-
-  const handleResponseComplete = useCallback(() => {
-    hasCompletedResponse.current = true;
-  }, []);
+  const { drawerHandle, messages, status } = useCoachChat();
 
   const handleOpenChange = (nextOpen: boolean) => {
-    if (nextOpen || !hasCompletedResponse.current) return;
+    // Refresh server data only when closing an idle conversation that has
+    // messages: the coach may have changed data via tools, and refreshing
+    // mid-stream would abort the in-flight response.
+    if (nextOpen || status !== 'ready' || messages.length === 0) {
+      return;
+    }
 
     router.refresh();
   };
 
   return (
-    <Drawer showSwipeHandle onOpenChange={handleOpenChange}>
+    <Drawer
+      handle={drawerHandle}
+      showSwipeHandle
+      onOpenChange={handleOpenChange}
+    >
       <DrawerTrigger
         render={
           <Button
@@ -76,7 +81,6 @@ export function Chat() {
               Coach AI
             </DrawerTitle>
           }
-          onResponseComplete={handleResponseComplete}
         />
       </DrawerContent>
     </Drawer>

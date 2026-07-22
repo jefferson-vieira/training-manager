@@ -1,7 +1,12 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.0.0 → 1.1.0
+Version change: 1.1.0 → 1.2.0 (2026-07-22)
+Added: packages/web structure rules — React contexts in `src/contexts/`
+(one file per context with provider + trivial accessor), logic hooks in
+`src/hooks/` (`use-<name>.ts`). Templates unaffected.
+
+Previous change: 1.0.0 → 1.1.0
 Modified principles: N/A
 Added sections:
   - Core Principles (6): No Automated Testing, Code Quality & Clean Code,
@@ -150,6 +155,14 @@ principles above with package-specific constraints:
 - Frontend utilities that encode **domain/business rules** MUST live in
   `packages/web/src/helpers/`; `packages/web/src/lib/` is reserved for
   infrastructure (API client, auth, data-access, fetch, generic `utils`).
+- React contexts MUST live in `packages/web/src/contexts/` — one file per
+  context containing `createContext`, the provider, and the trivial context
+  accessor hook (e.g. `coach-context.tsx`). Contexts MUST NOT live in
+  `components/`.
+- Custom hooks with logic MUST live in `packages/web/src/hooks/`, one file per
+  hook named `use-<name>.ts` (e.g. `use-coach-chat.ts`). A hook that merely
+  exposes its own context stays with that context; anything beyond that belongs
+  in `hooks/`.
 - MUST use functional React components; prefer Server Components unless
   interactivity requires `"use client"`.
 - API communication MUST use Orval-generated client + `customFetch`; session
@@ -188,4 +201,4 @@ principles above with package-specific constraints:
   rules; reviewers MAY block on violations of NON-NEGOTIABLE principles.
 - Runtime development guidance: `docs/CODEBASE.md`, `AGENTS.md`.
 
-**Version**: 1.1.0 | **Ratified**: 2026-07-07 | **Last Amended**: 2026-07-17
+**Version**: 1.2.0 | **Ratified**: 2026-07-07 | **Last Amended**: 2026-07-22

@@ -6,7 +6,7 @@ type HomeLayoutProps = {
   children: ReactNode;
 };
 
-export default function HomeLayout({ children }: HomeLayoutProps) {
+export default function HomeLayout({ children }: Readonly<HomeLayoutProps>) {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       {children}

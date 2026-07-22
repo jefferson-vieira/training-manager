@@ -215,7 +215,16 @@ function useDrawer() {
   return context;
 }
 
+// Imperative handle for opening/closing an uncontrolled Drawer from outside its
+// tree (pass to `Drawer`'s `handle` prop and call `handle.open(null)`).
+const createDrawerHandle = DrawerPrimitive.createHandle;
+
+type DrawerHandle<Payload = unknown> = DrawerPrimitive.Handle<Payload>;
+
+export type { DrawerHandle };
+
 export {
+  createDrawerHandle,
   Drawer,
   DrawerClose,
   DrawerContent,

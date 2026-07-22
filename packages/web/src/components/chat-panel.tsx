@@ -2,11 +2,8 @@
 
 import type { KeyboardEvent, ReactNode, SubmitEvent } from 'react';
 
-import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
 import { ArrowUp, Sparkles, Square } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import {
   Conversation,
@@ -22,49 +19,22 @@ import { Suggestion, Suggestions } from '@/components/ai-elements/suggestion';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
-import { env } from '@/config/env';
+import { isYouTubeUrl } from '@/helpers/link';
+import { useCoachChat } from '@/hooks/use-coach-chat';
 import { cn } from '@/lib/utils';
 
 interface Props {
   action?: ReactNode;
   greetings: string[];
-  onResponseComplete?: () => void;
   suggestions: string[];
   title: ReactNode;
 }
 
-export function ChatPanel({
-  action,
-  greetings,
-  onResponseComplete,
-  suggestions,
-  title,
-}: Props) {
-  const router = useRouter();
-
-  const { error, messages, regenerate, sendMessage, status, stop } = useChat({
-    transport: new DefaultChatTransport({
-      api: `${env.NEXT_PUBLIC_API_URL}/api/ai`,
-      credentials: 'include',
-      fetch: async (input, init) => {
-        const response = await fetch(input, init);
-
-        if (response.status === 401) {
-          router.push('/login');
-        }
-
-        return response;
-      },
-    }),
-  });
+export function ChatPanel({ action, greetings, suggestions, title }: Props) {
+  const { error, messages, regenerate, sendMessage, status, stop } =
+    useCoachChat();
 
   const [input, setInput] = useState('');
-
-  useEffect(() => {
-    if (status === 'ready' && messages.length > 0) {
-      onResponseComplete?.();
-    }
-  }, [status, messages.length, onResponseComplete]);
 
   const isBusy = status === 'submitted' || status === 'streaming';
 
@@ -139,10 +109,9 @@ export function ChatPanel({
           ))}
 
           {messages.map((message, index) => {
-            const isFailed =
-              error != null &&
-              message.role === 'user' &&
-              index === messages.length - 1;
+            const isLast = index === messages.length - 1;
+
+            const isFailed = error != null && message.role === 'user' && isLast;
 
             return (
               <Message key={message.id} from={message.role}>
@@ -153,10 +122,18 @@ export function ChatPanel({
                     part.type === 'text' ? (
                       <MessageResponse
                         key={`${message.id}-${partIndex}`}
-                        animated
+                        animated={{
+                          stagger: 0,
+                        }}
                         isAnimating={
-                          status === 'streaming' && message.role === 'assistant'
+                          status === 'streaming' &&
+                          message.role === 'assistant' &&
+                          isLast
                         }
+                        linkSafety={{
+                          enabled: true,
+                          onLinkCheck: isYouTubeUrl,
+                        }}
                       >
                         {part.text}
                       </MessageResponse>

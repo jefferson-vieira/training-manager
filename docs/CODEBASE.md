@@ -107,10 +107,12 @@ Comportamento definido em `SYSTEM_PROMPT` no `.env` do backend (`packages/backen
 
 Fluxo na home: se `getHomeData()` retorna ≠ 200 → redirect para `/onboarding` (sem plano ativo).
 
-### `lib/` vs `helpers/`
+### `lib/` vs `helpers/` vs `contexts/` vs `hooks/`
 
 - `packages/web/src/lib/` — **infraestrutura**: client de API (`api/`), auth, `dal.ts`, `fetch.ts`, `utils.ts`.
 - `packages/web/src/helpers/` — **utilitários de regra de negócio/domínio** (ex.: `workout-day.ts` com `WEEKDAY_LABELS` e a regra de título por origem). Lógica de domínio sai de componentes e vai para cá.
+- `packages/web/src/contexts/` — **contextos React**: `createContext` + provider + acessor trivial do contexto no mesmo arquivo (ex.: `coach-context.tsx` com `CoachProvider` e `useCoach`). Todo contexto novo deve morar aqui, não em `components/`.
+- `packages/web/src/hooks/` — **hooks customizados com lógica** (ex.: `use-coach-chat.ts`, que compõe `useChat` do AI SDK com o contexto do coach). Hooks que fazem mais do que expor um contexto vão para cá, um arquivo por hook (`use-<nome>.ts`).
 
 ### Chat global
 
