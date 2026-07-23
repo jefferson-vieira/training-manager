@@ -1,15 +1,18 @@
 import { Flame } from 'lucide-react';
 import Image from 'next/image';
 
+import { cn } from '@/lib/utils';
+
 type StreakBannerProps = {
   streak: number;
 };
 
 export function StreakBanner({ streak }: StreakBannerProps) {
-  const src =
-    streak > 0
-      ? '/progress-streak-banner.png'
-      : '/progress-streak-banner-neutral.png';
+  const hasStreak = streak > 0;
+
+  const src = hasStreak
+    ? '/progress-streak-banner.png'
+    : '/progress-streak-banner-neutral.png';
 
   return (
     <div className="relative flex flex-col items-center gap-6 overflow-hidden rounded-xl px-5 py-10">
@@ -24,7 +27,12 @@ export function StreakBanner({ streak }: StreakBannerProps) {
 
       <div className="relative flex flex-col items-center gap-3">
         <div className="rounded-full border border-white/15 bg-white/15 p-3 backdrop-blur-xs">
-          <Flame className="size-8 text-white" />
+          <Flame
+            className={cn(
+              'size-8 fill-white text-white',
+              hasStreak && 'fill-streak text-streak',
+            )}
+          />
         </div>
 
         <div className="flex flex-col items-center gap-1 text-white">

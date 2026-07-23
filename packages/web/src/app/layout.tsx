@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { Geist, Geist_Mono, Inter } from 'next/font/google';
+import { Geist, Geist_Mono, Inter, Inter_Tight } from 'next/font/google';
 
 import './globals.css';
 import 'streamdown/styles.css';
@@ -10,6 +10,11 @@ import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
+
+const interTight = Inter_Tight({
+  subsets: ['latin'],
+  variable: '--font-heading',
+});
 
 const geistSans = Geist({
   subsets: ['latin'],
@@ -32,7 +37,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className={cn('font-sans', inter.variable)} lang="pt-BR">
+    <html
+      className={cn('font-sans', inter.variable, interTight.variable)}
+      lang="pt-BR"
+    >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

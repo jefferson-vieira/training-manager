@@ -54,8 +54,8 @@ export default async function HomePage() {
           <div className="flex-1 rounded-xl border border-border p-5">
             <ConsistencyTracker consistencyByDay={consistencyByDay} />
           </div>
-          <div className="bg-streak flex items-center gap-2 self-stretch rounded-xl px-5 py-2">
-            <Flame className="text-streak-foreground size-5" />
+          <div className="flex items-center gap-2 self-stretch rounded-xl bg-streak/8 px-5 py-2">
+            <Flame className="size-5 fill-streak text-streak" />
             <span className="font-heading text-base font-semibold text-foreground">
               {workoutStreak}
             </span>
