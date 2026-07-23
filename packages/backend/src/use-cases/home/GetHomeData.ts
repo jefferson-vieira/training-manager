@@ -15,7 +15,7 @@ export class GetHomeData {
   async execute(dto: InputDto) {
     const today = dayjs();
 
-    const workoutPlan = await prisma.workoutPlan.findFirst({
+    const workoutPlans = await prisma.workoutPlan.findMany({
       include: {
         workoutDays: {
           include: {
@@ -28,10 +28,11 @@ export class GetHomeData {
         },
       },
       where: {
-        isActive: true,
         userId: dto.userId,
       },
     });
+
+    const workoutPlan = workoutPlans.find(({ isActive }) => isActive);
 
     if (!workoutPlan) {
       throw new NotFoundError('Active workout plan not found');
@@ -52,7 +53,9 @@ export class GetHomeData {
           lte: weekEnd.toDate(),
         },
         workoutDay: {
-          workoutPlanId: workoutPlan.id,
+          workoutPlan: {
+            userId: dto.userId,
+          },
         },
       },
     });
@@ -87,8 +90,8 @@ export class GetHomeData {
     const workoutStreak = new CalcWorkoutStreak().execute({
       completedWorkoutSessions,
       fromDate: weekStart,
-      toDate: weekEnd,
-      workoutDays: workoutPlan.workoutDays,
+      toDate: today,
+      workoutPlans,
     });
 
     const todayWorkoutDay = workoutPlan.workoutDays.find(

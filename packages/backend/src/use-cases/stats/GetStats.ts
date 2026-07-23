@@ -18,8 +18,10 @@ export class GetStats {
 
     const toDate = dayjs(dto.to).endOf('day');
 
-    const workoutPlan = await prisma.workoutPlan.findFirst({
-      include: {
+    const workoutPlans = await prisma.workoutPlan.findMany({
+      select: {
+        createdAt: true,
+        isActive: true,
         workoutDays: {
           select: {
             isRest: true,
@@ -28,12 +30,13 @@ export class GetStats {
         },
       },
       where: {
-        isActive: true,
         userId: dto.userId,
       },
     });
 
-    if (!workoutPlan) {
+    const hasActivePlan = workoutPlans.some(({ isActive }) => isActive);
+
+    if (!hasActivePlan) {
       throw new NotFoundError('Active workout plan not found');
     }
 
@@ -48,7 +51,9 @@ export class GetStats {
           lte: toDate.toDate(),
         },
         workoutDay: {
-          workoutPlanId: workoutPlan.id,
+          workoutPlan: {
+            userId: dto.userId,
+          },
         },
       },
     });
@@ -94,7 +99,7 @@ export class GetStats {
       completedWorkoutSessions,
       fromDate,
       toDate,
-      workoutDays: workoutPlan.workoutDays,
+      workoutPlans,
     });
 
     return {

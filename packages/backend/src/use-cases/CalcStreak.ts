@@ -13,6 +13,10 @@ interface InputDto {
   completedWorkoutSessions: Pick<Prisma.WorkoutSessionModel, 'startedAt'>[];
   fromDate: Dayjs;
   toDate: Dayjs;
+  workoutPlans: WorkoutPlanDto[];
+}
+
+interface WorkoutPlanDto extends Pick<Prisma.WorkoutPlanModel, 'createdAt'> {
   workoutDays: Pick<Prisma.WorkoutDayModel, 'isRest' | 'weekDay'>[];
 }
 
@@ -21,11 +25,18 @@ export class CalcWorkoutStreak {
     completedWorkoutSessions,
     fromDate,
     toDate,
-    workoutDays,
+    workoutPlans,
   }: InputDto) {
-    const planWeekDays = new Set(
-      workoutDays.filter(({ isRest }) => !isRest).map(({ weekDay }) => weekDay),
-    );
+    const plansByRecency = workoutPlans
+      .map(({ createdAt, workoutDays }) => ({
+        createdAt: dayjs(createdAt),
+        weekDays: new Set(
+          workoutDays
+            .filter(({ isRest }) => !isRest)
+            .map(({ weekDay }) => weekDay),
+        ),
+      }))
+      .sort((a, b) => b.createdAt.valueOf() - a.createdAt.valueOf());
 
     const completedDates = new Set(
       completedWorkoutSessions.map(({ startedAt }) =>
@@ -40,15 +51,24 @@ export class CalcWorkoutStreak {
     const streakRange = toDate.diff(fromDate, 'day');
 
     for (let i = 0; i < streakRange; i++, day = day.subtract(1, 'day')) {
-      const weekDay = WeekDay[day.day()];
-
-      if (!planWeekDays.has(weekDay)) {
-        continue;
-      }
-
       if (completedDates.has(day.format('YYYY-MM-DD'))) {
         streak++;
 
+        continue;
+      }
+
+      // The plan in effect on a past day is the latest one created by then
+      const plan = plansByRecency.find(
+        ({ createdAt }) => !createdAt.isAfter(day, 'day'),
+      );
+
+      if (!plan) {
+        break;
+      }
+
+      const weekDay = WeekDay[day.day()];
+
+      if (!plan.weekDays.has(weekDay)) {
         continue;
       }
 
