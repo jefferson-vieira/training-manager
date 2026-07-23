@@ -33,13 +33,18 @@ export const aiRoutes = async (app: App) => {
           createWorkoutPlan: tool({
             description:
               'Cria um novo plano de treino completo para o usuário.',
-            execute: (input) => {
+            execute: async (input) => {
               const createWorkoutPlan = new CreateWorkoutPlan();
 
-              return createWorkoutPlan.execute({
+              const workoutPlan = await createWorkoutPlan.execute({
                 ...input,
                 userId,
               });
+
+              return {
+                homeUrl: env.CLIENT_ORIGIN,
+                workoutPlan,
+              };
             },
             inputSchema: CreateWorkoutPlanRequest,
           }),
