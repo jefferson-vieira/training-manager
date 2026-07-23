@@ -1,13 +1,10 @@
 import { Goal } from 'lucide-react';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { HeaderBanner } from '@/components/header-banner';
 import { Badge } from '@/components/ui/badge';
-import { WorkoutDayCard } from '@/components/workout-day-card';
+import { WorkoutCard } from '@/components/workout-card';
 import { getActiveWorkoutPlan } from '@/lib/api/fetch-generated';
-
-import { WorkoutRestCard } from './_components/workout-rest-card';
 
 export default async function WorkoutPlanPage() {
   const workoutPlan = await getActiveWorkoutPlan();
@@ -33,22 +30,13 @@ export default async function WorkoutPlanPage() {
       </HeaderBanner>
 
       <div className="flex flex-col gap-3 p-5">
-        {workoutDays.map((workoutDay) => {
-          if (workoutDay.isRest) {
-            return (
-              <WorkoutRestCard key={workoutDay.id} workoutDay={workoutDay} />
-            );
-          }
-
-          return (
-            <Link
-              key={workoutDay.id}
-              href={`/workout-plans/${id}/days/${workoutDay.id}`}
-            >
-              <WorkoutDayCard workoutDay={workoutDay} />
-            </Link>
-          );
-        })}
+        {workoutDays.map((workoutDay) => (
+          <WorkoutCard
+            key={workoutDay.id}
+            href={`/workout-plans/${id}/days/${workoutDay.id}`}
+            workoutDay={workoutDay}
+          />
+        ))}
       </div>
     </>
   );

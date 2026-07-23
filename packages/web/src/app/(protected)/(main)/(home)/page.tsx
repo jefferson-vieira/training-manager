@@ -1,10 +1,9 @@
 import { Flame } from 'lucide-react';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { HeaderBanner } from '@/components/header-banner';
 import { LinkButton } from '@/components/ui/link';
-import { WorkoutDayCard } from '@/components/workout-day-card';
+import { WorkoutCard } from '@/components/workout-card';
 import { HOME_ORIGIN } from '@/helpers/workout-day';
 import { getHomeData } from '@/lib/api/fetch-generated';
 import { getUser } from '@/lib/dal';
@@ -73,11 +72,10 @@ export default async function HomePage() {
             <LinkButton href="/workout-plan">Ver treinos</LinkButton>
           </div>
 
-          <Link
+          <WorkoutCard
             href={`/workout-plans/${todayWorkoutDay.workoutPlanId}/days/${todayWorkoutDay.id}?from=${HOME_ORIGIN}`}
-          >
-            <WorkoutDayCard workoutDay={todayWorkoutDay} />
-          </Link>
+            workoutDay={todayWorkoutDay}
+          />
         </div>
       )}
     </>

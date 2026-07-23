@@ -1,12 +1,19 @@
 import { Calendar, Zap } from 'lucide-react';
 
-import type { GetActiveWorkoutPlan200WorkoutDaysItem } from '@/lib/api/fetch-generated';
+import type {
+  GetActiveWorkoutPlan200WorkoutDaysItem,
+  GetHomeData200TodayWorkoutDay,
+} from '@/lib/api/fetch-generated';
 
 import { Badge } from '@/components/ui/badge';
 import { WEEKDAY_LABELS } from '@/helpers/workout-day';
 
+type WorkoutRestCardData =
+  | GetActiveWorkoutPlan200WorkoutDaysItem
+  | NonNullable<GetHomeData200TodayWorkoutDay>;
+
 type WorkoutRestCardProps = {
-  workoutDay: GetActiveWorkoutPlan200WorkoutDaysItem;
+  workoutDay: WorkoutRestCardData;
 };
 
 export function WorkoutRestCard({
