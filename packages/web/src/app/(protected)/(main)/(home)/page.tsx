@@ -1,7 +1,8 @@
-import { Flame } from 'lucide-react';
+import { Flame, Moon } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
 import { HeaderBanner } from '@/components/header-banner';
+import { Badge } from '@/components/ui/badge';
 import { LinkButton } from '@/components/ui/link';
 import { WorkoutCard } from '@/components/workout-card';
 import { HOME_ORIGIN } from '@/helpers/workout-day';
@@ -21,6 +22,8 @@ export default async function HomePage() {
 
   const userName = user.name.split(' ')[0];
 
+  const isRestDay = !todayWorkoutDay || todayWorkoutDay.isRest;
+
   return (
     <>
       <HeaderBanner src="/home-banner.jpg">
@@ -30,14 +33,27 @@ export default async function HomePage() {
               Olá, {userName}
             </h1>
             <p className="font-heading text-sm leading-[1.15] text-background/70">
-              Bora treinar hoje?
+              {isRestDay
+                ? 'Vamos descansar e recuperar as energias!'
+                : 'Bora treinar hoje?'}
             </p>
           </div>
-          <div className="rounded-full bg-primary px-4 py-2">
-            <span className="font-heading text-sm font-semibold text-primary-foreground">
+
+          {isRestDay ? (
+            <Badge className="border-0 bg-background/16 py-1.5 text-background uppercase backdrop-blur-sm">
+              <Moon />
+              Descanso
+            </Badge>
+          ) : (
+            <LinkButton
+              className="rounded-full"
+              href={`/workout-plans/${todayWorkoutDay.workoutPlanId}/days/${todayWorkoutDay.id}?from=${HOME_ORIGIN}`}
+              size="xl"
+              variant="default"
+            >
               Bora!
-            </span>
-          </div>
+            </LinkButton>
+          )}
         </div>
       </HeaderBanner>
 
