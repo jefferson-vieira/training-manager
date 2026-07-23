@@ -24,7 +24,7 @@ export function WorkoutDayHeader({ title }: Readonly<WorkoutDayHeaderProps>) {
         <ChevronLeft className="size-6" />
       </Button>
 
-      <h1 className="font-heading mx-auto text-lg font-semibold text-foreground">
+      <h1 className="mx-auto font-heading text-lg font-semibold text-foreground">
         {title}
       </h1>
     </header>

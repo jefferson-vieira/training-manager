@@ -73,7 +73,7 @@ export function ConsistencyGrid({
             {WEEKDAY_LABELS.map((weekday) => (
               <span
                 key={weekday}
-                className="font-heading flex h-5 items-center text-xs leading-[1.4] text-muted-foreground"
+                className="flex h-5 items-center font-heading text-xs leading-[1.4] text-muted-foreground"
               >
                 {weekday}
               </span>

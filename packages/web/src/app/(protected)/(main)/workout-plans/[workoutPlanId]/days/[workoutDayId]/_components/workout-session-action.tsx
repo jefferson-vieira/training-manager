@@ -50,7 +50,7 @@ export function WorkoutSessionAction({
   if (!session) {
     return (
       <Button
-        className="font-heading rounded-full font-semibold"
+        className="rounded-full font-heading font-semibold"
         disabled={isPending}
         size="xl"
         onClick={handleStart}

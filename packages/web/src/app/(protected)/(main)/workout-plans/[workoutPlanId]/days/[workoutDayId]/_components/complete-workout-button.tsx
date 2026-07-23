@@ -40,7 +40,7 @@ export function CompleteWorkoutButton({
 
   return (
     <Button
-      className="font-heading sticky bottom-24 z-40 min-h-12 w-full rounded-full font-semibold"
+      className="sticky bottom-24 z-40 min-h-12 w-full rounded-full font-heading font-semibold"
       loading={isPending}
       variant="outline"
       onClick={handleComplete}
