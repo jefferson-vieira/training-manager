@@ -1,6 +1,5 @@
 import type { UIMessage } from 'ai';
 
-import { google } from '@ai-sdk/google';
 import {
   convertToModelMessages,
   createUIMessageStreamResponse,
@@ -16,6 +15,7 @@ import type { App } from '../lib/fastify.js';
 import { env } from '../config/env.js';
 import { CreateWorkoutPlanRequest } from '../dtos/CreateWorkoutPlanRequest.js';
 import { UpsertUserProfileRequest } from '../dtos/UpsertUserProfileRequest.js';
+import { languageModel } from '../lib/ai.js';
 import { getSession } from '../lib/auth.js';
 import { GetUser } from '../use-cases/user/GetUser.js';
 import { UpsertUserProfile } from '../use-cases/user/UpsertUserProfile.js';
@@ -88,9 +88,10 @@ export const aiRoutes = async (app: App) => {
       };
 
       const result = streamText({
+        abortSignal: AbortSignal.timeout(120_000),
         instructions: env.SYSTEM_PROMPT,
         messages: await convertToModelMessages(messages),
-        model: google('gemini-2.5-flash'),
+        model: languageModel,
         stopWhen: isStepCount(10),
         tools,
       });

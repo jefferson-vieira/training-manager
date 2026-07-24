@@ -1,6 +1,6 @@
 # Guia da Base de Código — training-manager (Fit.ai)
 
-Monorepo npm workspaces com dois pacotes: **backend** (API Fastify + Prisma) e **web** (Next.js). O produto é o **Fit.ai** — app de treino com planos personalizados, acompanhamento de consistência/streak e um **Coach IA** (Gemini) que cria planos e coleta perfil do usuário.
+Monorepo npm workspaces com dois pacotes: **backend** (API Fastify + Prisma) e **web** (Next.js). O produto é o **Fit.ai** — app de treino com planos personalizados, acompanhamento de consistência/streak e um **Coach IA** (provedor de LLM configurável: Ollama no dev, Gemini em produção) que cria planos e coleta perfil do usuário.
 
 ## Estrutura do repositório
 
@@ -83,7 +83,7 @@ Colunas no banco usam **snake_case** (`@map`).
 
 ### IA — `packages/backend/src/routes/ai.routes.ts`
 
-Endpoint `POST /api/ai` com **Vercel AI SDK** + Gemini (`gemini-2.5-flash`). A IA usa tools que chamam os mesmos use-cases da API:
+Endpoint `POST /api/ai` com **Vercel AI SDK**. O provedor/modelo de LLM é configurável por variáveis de ambiente — `LLM_PROVIDER` (`ollama` no dev local, `google` em produção) e `LLM_MODEL` — resolvidos em `lib/ai.ts` (`OLLAMA_BASE_URL` aponta para o servidor Ollama local; padrões: `ollama` → `gemma3`, `google` → `gemini-2.5-flash`). A IA usa tools que chamam os mesmos use-cases da API:
 
 - `getUser`, `upsertUserProfile`
 - `getWorkoutPlans`, `createWorkoutPlan`
@@ -189,5 +189,5 @@ Node: **v24.14.0** (`.nvmrc`).
 | Frontend | Next.js 16, React 19, Tailwind, shadcn, AI SDK |
 | Backend | Fastify 5, Zod, Prisma 7, PostgreSQL |
 | Auth | better-auth (Google OAuth + email/senha) |
-| IA | Google Gemini 2.5 Flash via AI SDK |
+| IA | AI SDK com provedor configurável: Ollama (dev) / Google Gemini 2.5 Flash (prod) |
 | Contratos | OpenAPI → Orval → client tipado no frontend |
