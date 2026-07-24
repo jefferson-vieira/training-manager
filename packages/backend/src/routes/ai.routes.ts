@@ -1,7 +1,14 @@
 import type { UIMessage } from 'ai';
 
 import { google } from '@ai-sdk/google';
-import { convertToModelMessages, stepCountIs, streamText, tool } from 'ai';
+import {
+  convertToModelMessages,
+  createUIMessageStreamResponse,
+  isStepCount,
+  streamText,
+  tool,
+  toUIMessageStream,
+} from 'ai';
 import z from 'zod';
 
 import type { App } from '../lib/fastify.js';
@@ -24,70 +31,73 @@ export const aiRoutes = async (app: App) => {
 
       const { messages } = request.body as { messages: UIMessage[] };
 
+      const tools = {
+        createWorkoutPlan: tool({
+          description: 'Cria um novo plano de treino completo para o usuário.',
+          execute: async (input) => {
+            const createWorkoutPlan = new CreateWorkoutPlan();
+
+            const workoutPlan = await createWorkoutPlan.execute({
+              ...input,
+              userId,
+            });
+
+            return {
+              homeUrl: env.CLIENT_ORIGIN,
+              workoutPlan,
+            };
+          },
+          inputSchema: CreateWorkoutPlanRequest,
+        }),
+        getUser: tool({
+          description:
+            'Busca os dados de treino do usuário autenticado (peso, altura, idade, % gordura). Retorna um erro com o código NOT_FOUND_ERROR se não houver dados cadastrados.',
+          execute: async () => {
+            const getUserTrainData = new GetUser();
+
+            return getUserTrainData.execute({
+              userId,
+            });
+          },
+          inputSchema: z.strictObject({}),
+        }),
+        getWorkoutPlans: tool({
+          description:
+            'Lista todos os planos de treino do usuário autenticado.',
+          execute: async () => {
+            const listWorkoutPlans = new GetWorkoutPlans();
+
+            return listWorkoutPlans.execute({
+              userId,
+            });
+          },
+          inputSchema: z.strictObject({}),
+        }),
+        upsertUserProfile: tool({
+          description: 'Atualiza os dados de perfil do usuário autenticado.',
+          execute: async (input) => {
+            const upsertUserProfile = new UpsertUserProfile();
+
+            return upsertUserProfile.execute({
+              ...input,
+              userId,
+            });
+          },
+          inputSchema: UpsertUserProfileRequest,
+        }),
+      };
+
       const result = streamText({
+        instructions: env.SYSTEM_PROMPT,
         messages: await convertToModelMessages(messages),
         model: google('gemini-2.5-flash'),
-        stopWhen: stepCountIs(10),
-        system: env.SYSTEM_PROMPT,
-        tools: {
-          createWorkoutPlan: tool({
-            description:
-              'Cria um novo plano de treino completo para o usuário.',
-            execute: async (input) => {
-              const createWorkoutPlan = new CreateWorkoutPlan();
-
-              const workoutPlan = await createWorkoutPlan.execute({
-                ...input,
-                userId,
-              });
-
-              return {
-                homeUrl: env.CLIENT_ORIGIN,
-                workoutPlan,
-              };
-            },
-            inputSchema: CreateWorkoutPlanRequest,
-          }),
-          getUser: tool({
-            description:
-              'Busca os dados de treino do usuário autenticado (peso, altura, idade, % gordura). Retorna um erro com o código NOT_FOUND_ERROR se não houver dados cadastrados.',
-            execute: async () => {
-              const getUserTrainData = new GetUser();
-
-              return getUserTrainData.execute({
-                userId,
-              });
-            },
-            inputSchema: z.strictObject({}),
-          }),
-          getWorkoutPlans: tool({
-            description:
-              'Lista todos os planos de treino do usuário autenticado.',
-            execute: async () => {
-              const listWorkoutPlans = new GetWorkoutPlans();
-
-              return listWorkoutPlans.execute({
-                userId,
-              });
-            },
-            inputSchema: z.strictObject({}),
-          }),
-          upsertUserProfile: tool({
-            description: 'Atualiza os dados de perfil do usuário autenticado.',
-            execute: async (input) => {
-              const upsertUserProfile = new UpsertUserProfile();
-
-              return upsertUserProfile.execute({
-                ...input,
-                userId,
-              });
-            },
-            inputSchema: UpsertUserProfileRequest,
-          }),
-        },
+        stopWhen: isStepCount(10),
+        tools,
       });
 
-      const response = result.toUIMessageStreamResponse();
+      const stream = toUIMessageStream({ stream: result.stream, tools });
+
+      const response = createUIMessageStreamResponse({ stream });
 
       reply.status(response.status);
 
