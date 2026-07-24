@@ -87,10 +87,26 @@ export const aiRoutes = async (app: App) => {
         }),
       };
 
+      // O round-trip de "thinking" do Gemini (thoughtSignature) pode reenviar
+      // parts de texto vazios no histórico; eles não batem com nenhum formato de
+      // ModelMessage e derrubam o streamText com AI_InvalidPromptError. Removemos
+      // parts de texto vazios e mensagens que ficarem sem conteúdo.
+      const modelMessages = (await convertToModelMessages(messages)).filter(
+        (message) => {
+          if (!Array.isArray(message.content)) return true;
+
+          message.content = message.content.filter(
+            (part) => part.type !== 'text' || Boolean(part.text?.trim()),
+          ) as typeof message.content;
+
+          return message.content.length > 0;
+        },
+      );
+
       const result = streamText({
         abortSignal: AbortSignal.timeout(120_000),
         instructions: env.SYSTEM_PROMPT,
-        messages: await convertToModelMessages(messages),
+        messages: modelMessages,
         model: languageModel,
         stopWhen: isStepCount(10),
         tools,
