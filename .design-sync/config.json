@@ -1,0 +1,91 @@
+{
+  "projectId": "5631d6e0-1e64-4eeb-8b0c-0b995b30e5f8",
+  "shape": "package",
+  "pkg": "web",
+  "globalName": "TrainingManagerDS",
+  "srcDir": "src/components",
+  "tsconfig": "tsconfig.design-sync.json",
+  "overrides": {
+    "Drawer": { "cardMode": "single", "primaryStory": "Open" },
+    "Tooltip": { "cardMode": "single", "primaryStory": "Open" },
+    "HeaderBanner": { "cardMode": "column" }
+  },
+  "cssEntry": ".ds-css/compiled.css",
+  "extraEntries": ["./.ds-shim/ds-globals.ts"],
+  "extraFonts": ["./.ds-fonts/fonts.css"],
+  "readmeHeader": ".design-sync/conventions.md",
+  "dtsPropsFor": {
+    "Badge": "/** Visual tone. */\n  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'success';\n  children?: React.ReactNode;\n  className?: string;",
+
+    "Button": "/** Visual tone. */\n  variant?: 'default' | 'destructive' | 'ghost' | 'link' | 'outline' | 'secondary';\n  /** `icon*` sizes render a square control for a lone icon. */\n  size?: 'default' | 'lg' | 'sm' | 'xl' | 'xs' | 'icon' | 'icon-lg' | 'icon-sm' | 'icon-xl' | 'icon-xs';\n  /** Appends a Spinner and disables the button. */\n  loading?: boolean;\n  disabled?: boolean;\n  type?: 'button' | 'submit' | 'reset';\n  onClick?: React.MouseEventHandler<HTMLButtonElement>;\n  /** Base UI polymorphism — render as another element instead of `<button>`. */\n  render?: React.ReactElement;\n  children?: React.ReactNode;\n  className?: string;",
+
+    "Spinner": "/** Sized with `size-*`; spins via `animate-spin`. */\n  className?: string;",
+
+    "Input": "type?: React.HTMLInputTypeAttribute;\n  placeholder?: string;\n  value?: string;\n  defaultValue?: string;\n  disabled?: boolean;\n  readOnly?: boolean;\n  required?: boolean;\n  /** Switches the control to destructive styling. */\n  'aria-invalid'?: boolean;\n  onChange?: React.ChangeEventHandler<HTMLInputElement>;\n  className?: string;",
+
+    "Textarea": "placeholder?: string;\n  value?: string;\n  defaultValue?: string;\n  rows?: number;\n  disabled?: boolean;\n  readOnly?: boolean;\n  required?: boolean;\n  'aria-invalid'?: boolean;\n  onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;\n  /** Grows with its content (`field-sizing-content`); min height is 4rem. */\n  className?: string;",
+
+    "LinkButton": "href: string;\n  /** Defaults to `link`, unlike Button. */\n  variant?: 'default' | 'destructive' | 'ghost' | 'link' | 'outline' | 'secondary';\n  size?: 'default' | 'lg' | 'sm' | 'xl' | 'xs' | 'icon' | 'icon-lg' | 'icon-sm' | 'icon-xl' | 'icon-xs';\n  target?: string;\n  children?: React.ReactNode;\n  className?: string;",
+
+    "Avatar": "size?: 'default' | 'lg' | 'sm';\n  /** Compose with AvatarImage / AvatarFallback / AvatarBadge. */\n  children?: React.ReactNode;\n  className?: string;",
+
+    "Drawer": "open?: boolean;\n  defaultOpen?: boolean;\n  onOpenChange?: (open: boolean) => void;\n  /** Renders a dimmed backdrop and traps focus. Default `true`. */\n  modal?: boolean;\n  /** Edge the drawer enters from. Default `'down'`. */\n  swipeDirection?: 'down' | 'up' | 'left' | 'right';\n  snapPoints?: Array<number | string>;\n  /** Shows the grab handle inside the popup. */\n  showSwipeHandle?: boolean;\n  /** Compose with DrawerTrigger / DrawerContent / DrawerHeader / DrawerTitle / DrawerDescription / DrawerFooter / DrawerClose. */\n  children?: React.ReactNode;",
+
+    "ScrollArea": "/** Constrain with a `max-h-*`/`h-*` class or the scrollbar never appears. */\n  children?: React.ReactNode;\n  className?: string;",
+
+    "Tooltip": "open?: boolean;\n  defaultOpen?: boolean;\n  onOpenChange?: (open: boolean) => void;\n  /** Compose with TooltipTrigger + TooltipContent, inside a TooltipProvider. */\n  children?: React.ReactNode;",
+
+    "Toaster": "position?: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';\n  theme?: 'light' | 'dark' | 'system';\n  richColors?: boolean;\n  closeButton?: boolean;\n  expand?: boolean;\n  duration?: number;\n  /** Mount once near the app root; fire toasts with sonner's `toast()`. */\n  className?: string;",
+
+    "StatCard": "/** A lucide-react icon component. */\n  icon: React.ComponentType<{ className?: string }>;\n  /** Caption under the value, e.g. `'Treinos na semana'`. */\n  label: string;\n  /** Pre-formatted — the card does no number formatting. */\n  value: string;",
+
+    "ConsistencySquare": "/** Filled square — the day's workout was finished. */\n  completed: boolean;\n  /** Outlined square — the current day, not yet finished. */\n  isToday: boolean;\n  /** Tinted square — started but not completed. */\n  started: boolean;",
+
+    "HeaderBanner": "/** Cover image URL; rendered full-bleed behind a dark gradient. */\n  src: string;\n  /** Overlaid at the bottom of the banner. */\n  children: React.ReactNode;",
+
+    "NavLink": "href: string;\n  /** A lucide-react icon component; tinted `text-primary` on the active route. */\n  icon: React.ComponentType<{ className?: string }>;",
+
+    "WorkoutDayCard": "workoutDay: {\n    name: string;\n    weekDay: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';\n    estimatedDurationInSeconds: number;\n    coverImageUrl?: string | null;\n    /** Supply this or `exercises` — the card counts whichever is present. */\n    exercisesCount?: number;\n    exercises?: unknown[];\n  };\n  /** Slot at the bottom-right, typically a Button. */\n  action?: React.ReactNode;\n  className?: string;",
+
+    "WorkoutRestCard": "workoutDay: {\n    name: string;\n    weekDay: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';\n  };",
+
+    "WorkoutCard": "/** Destination for a training day; rest days render unlinked. */\n  href: string;\n  workoutDay: {\n    name: string;\n    weekDay: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';\n    /** Switches between WorkoutRestCard and WorkoutDayCard. */\n    isRest: boolean;\n    estimatedDurationInSeconds?: number;\n    coverImageUrl?: string | null;\n    exercisesCount?: number;\n  };"
+  },
+  "componentSrcMap": {
+    "Conversation": null,
+    "ConversationContent": null,
+    "ConversationScrollButton": null,
+    "Message": null,
+    "MessageContent": null,
+    "MessageResponse": null,
+    "Suggestion": null,
+    "Suggestions": null,
+
+    "Chat": null,
+    "ChatPanel": null,
+    "Header": null,
+
+    "AvatarBadge": null,
+    "AvatarFallback": null,
+    "AvatarGroup": null,
+    "AvatarGroupCount": null,
+    "AvatarImage": null,
+
+    "DrawerClose": null,
+    "DrawerContent": null,
+    "DrawerDescription": null,
+    "DrawerFooter": null,
+    "DrawerHeader": null,
+    "DrawerOverlay": null,
+    "DrawerPortal": null,
+    "DrawerSwipeHandle": null,
+    "DrawerTitle": null,
+    "DrawerTrigger": null,
+
+    "ScrollBar": null,
+
+    "TooltipContent": null,
+    "TooltipProvider": null,
+    "TooltipTrigger": null
+  }
+}

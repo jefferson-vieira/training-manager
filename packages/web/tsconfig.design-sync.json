@@ -1,0 +1,18 @@
+// Used only by the design-sync converter (cfg.tsconfig).
+// The converter reads compilerOptions.paths straight out of this file and does
+// NOT follow `extends`, so every alias the bundle needs is inlined here —
+// including the @/* alias copied from tsconfig.json.
+// Do not add a "//" JSON key: the converter's comment stripper mangles it and
+// silently falls back to no aliasing at all.
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "next/image": ["./.ds-shim/next-image.tsx"],
+      "next/link": ["./.ds-shim/next-link.tsx"],
+      "next/navigation": ["./.ds-shim/next-navigation.ts"]
+    }
+  }
+}

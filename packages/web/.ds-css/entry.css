@@ -1,0 +1,66 @@
+/* design-sync Tailwind compile entry.
+   globals.css is a Tailwind 4 SOURCE file; the design-sync bundle needs real
+   compiled CSS, so this entry pins the scan set explicitly. Automatic source
+   detection is keyed to this file's directory, which is empty by design —
+   without these @source globs the build emits tokens and no utilities.
+   The previews glob is what keeps authored preview layout classes alive. */
+@import '../src/app/globals.css';
+
+/* The app sets these via next/font/google in the root layout, so globals.css
+   never defines them and `font-sans`/`font-heading` would resolve to nothing
+   here. The families are shipped by cfg.extraFonts (.ds-fonts/fonts.css). */
+:root {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Tailwind only emits utilities it SEES. The scan set below covers this repo,
+   but the design agent composing new screens from this system will reach for
+   utilities no existing file happens to use — and those would ship with no CSS
+   at all. This safelist pins the vocabulary the conventions header advertises,
+   so anything documented actually resolves in a rendered design. */
+@source inline("{bg,text,border,ring,fill,stroke,outline}-{background,foreground,card,card-foreground,popover,popover-foreground,primary,primary-foreground,secondary,secondary-foreground,muted,muted-foreground,accent,accent-foreground,destructive,success,success-foreground,streak,border,input,ring}");
+@source inline("{bg,text,border,ring,fill}-{primary,secondary,muted,accent,destructive,success,streak,foreground,background,border}/{5,8,10,16,20,25,30,40,50,60,70,75,80,90}");
+@source inline("font-{sans,heading,mono}");
+@source inline("text-{xs,sm,base,lg,xl,2xl,3xl,4xl,5xl}");
+@source inline("font-{normal,medium,semibold,bold}");
+@source inline("leading-{none,tight,snug,normal,relaxed,loose}");
+@source inline("{text-left,text-center,text-right,uppercase,lowercase,capitalize,truncate,text-balance,text-pretty}");
+@source inline("rounded{,-none,-sm,-md,-lg,-xl,-2xl,-3xl,-4xl,-full}");
+@source inline("rounded-{t,b,l,r,tl,tr,bl,br}-{sm,md,lg,xl,2xl,3xl,full}");
+@source inline("{p,px,py,pt,pb,pl,pr,m,mx,my,mt,mb,gap,gap-x,gap-y}-{0,0.5,1,1.5,2,2.5,3,3.5,4,5,6,7,8,10,12,14,16,20,24}");
+@source inline("{w,h,size,min-w,min-h,max-w,max-h}-{0,1,2,3,4,5,6,7,8,9,10,11,12,14,16,20,24,32,40,48,56,64,72,80,96,px,full,fit,auto,screen,dvh}");
+@source inline("max-w-{xs,sm,md,lg,xl,2xl,3xl,4xl,5xl,6xl,7xl,prose,none}");
+@source inline("{flex,inline-flex,grid,inline-grid,block,inline-block,inline,hidden,contents}");
+@source inline("flex-{row,row-reverse,col,col-reverse,wrap,nowrap,1,auto,initial,none}");
+@source inline("{shrink,grow}{,-0}");
+@source inline("items-{start,center,end,baseline,stretch}");
+@source inline("justify-{start,center,end,between,around,evenly}");
+@source inline("{self,justify-self}-{start,center,end,stretch,auto}");
+@source inline("content-{start,center,end,between,around,evenly}");
+@source inline("grid-cols-{1,2,3,4,5,6,7,8,9,10,11,12,none}");
+@source inline("grid-rows-{1,2,3,4,5,6,none}");
+@source inline("col-span-{1,2,3,4,5,6,7,8,9,10,11,12,full}");
+@source inline("row-span-{1,2,3,4,5,6,full}");
+@source inline("{relative,absolute,fixed,sticky,static}");
+@source inline("{inset,top,bottom,left,right}-{0,1,2,3,4,5,6,8,auto,full}");
+@source inline("z-{0,10,20,30,40,50,auto}");
+@source inline("border{,-0,-2,-4,-8}");
+@source inline("border-{t,b,l,r,x,y}{,-0,-2,-4}");
+@source inline("shadow{,-2xs,-xs,-sm,-md,-lg,-xl,-2xl,-none}");
+@source inline("opacity-{0,5,10,20,25,30,40,50,60,70,75,80,90,95,100}");
+@source inline("{overflow,overflow-x,overflow-y}-{auto,hidden,clip,visible,scroll}");
+@source inline("object-{contain,cover,fill,none,scale-down}");
+@source inline("{space-x,space-y}-{0,1,2,3,4,5,6,8}");
+@source inline("{transition,transition-all,transition-colors,transition-opacity,transition-transform}");
+@source inline("{cursor-pointer,cursor-default,cursor-not-allowed,select-none,pointer-events-none}");
+@source inline("{sr-only,not-sr-only,antialiased,backdrop-blur-sm,backdrop-blur}");
+@source inline("{sm,md,lg,xl}:{flex,grid,hidden,block,flex-row,flex-col}");
+@source inline("{sm,md,lg,xl}:grid-cols-{1,2,3,4,5,6}");
+@source inline("{hover,focus,focus-visible,active,disabled}:{bg,text,border}-{primary,secondary,muted,accent,destructive,foreground,background}");
+@source inline("dark:{bg,text,border}-{background,foreground,card,popover,primary,secondary,muted,accent,destructive,border,input}");
+
+@source '../src/components/**/*.tsx';
+@source '../src/helpers/**/*.ts';
+@source '../src/app/**/*.tsx';
+@source '../../../.design-sync/previews/**/*.tsx';
