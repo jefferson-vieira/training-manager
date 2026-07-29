@@ -2,6 +2,7 @@ import z from 'zod';
 
 import type { App } from '../lib/fastify.js';
 
+import { CreateWorkoutPlanRequest } from '../dtos/CreateWorkoutPlanRequest.js';
 import { GetWorkoutDayResponse } from '../dtos/GetWorkoutDayResponse.js';
 import { GetWorkoutPlanResponse } from '../dtos/GetWorkoutPlanResponse.js';
 import { SessionAlreadyStartedError } from '../errors/SessionAlreadyStartedError.js';
@@ -16,7 +17,6 @@ import { GetWorkoutDay } from '../use-cases/workout-plan/GetWorkoutDay.js';
 import { GetWorkoutPlan } from '../use-cases/workout-plan/GetWorkoutPlan.js';
 import { GetWorkoutPlans } from '../use-cases/workout-plan/GetWorkoutPlans.js';
 import { StartWorkoutSession } from '../use-cases/workout-plan/StartWorkoutSession.js';
-import { CreateWorkoutPlanRequest } from './../dtos/CreateWorkoutPlanRequest.js';
 
 export const workoutPlanRoutes = async (app: App) => {
   app.get('/', {

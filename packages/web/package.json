@@ -13,6 +13,7 @@
   "dependencies": {
     "@ai-sdk/react": "4.0.40",
     "@base-ui/react": "1.6.0",
+    "@hookform/resolvers": "5.5.7",
     "ai": "7.0.37",
     "better-auth": "1.5.1",
     "class-variance-authority": "0.7.1",
@@ -24,6 +25,7 @@
     "nuqs": "2.8.9",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-hook-form": "7.83.0",
     "shadcn": "4.0.2",
     "sonner": "2.0.7",
     "streamdown": "2.5.0",
@@ -44,6 +46,7 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-perfectionist": "5.6.0",
     "eslint-plugin-prettier": "5.5.5",
+    "eslint-plugin-zod": "4.9.0",
     "husky": "9.1.7",
     "lint-staged": "16.3.2",
     "orval": "8.5.3",

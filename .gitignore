@@ -150,3 +150,6 @@ ds-bundle/
 .design-sync/learnings/
 .design-sync/node_modules
 packages/web/.ds-css/compiled.css
+
+# macOS
+.DS_Store

@@ -1,7 +1,12 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.1.0 → 1.2.0 (2026-07-22)
+Version change: 1.2.0 → 1.3.0 (2026-07-29)
+Added: Principle II — asynchronous errors handled with `try/catch` (never a
+chained `.catch()`). Principle III — icons next to text inside `Button` must
+declare `data-icon="inline-start" | "inline-end"`. Templates unaffected.
+
+Previous change: 1.1.0 → 1.2.0 (2026-07-22)
 Added: packages/web structure rules — React contexts in `src/contexts/`
 (one file per context with provider + trivial accessor), logic hooks in
 `src/hooks/` (`use-<name>.ts`). Templates unaffected.
@@ -59,6 +64,9 @@ reintroduced via a future constitutional amendment when explicitly requested.
   merge.
 - Business logic MUST NOT live in route handlers or React components — delegate
   to use-cases (backend) or dedicated hooks/utilities (frontend).
+- Asynchronous errors MUST be handled with `try/catch`, never with a chained
+  `.catch()`. The `catch` block MUST return immediately (guard clause) so the
+  happy path stays last, unindented, at the function's base level.
 - Generated files (`packages/backend/src/generated/`,
   `packages/web/src/lib/api/fetch-generated/`) MUST NOT be edited manually.
 
@@ -74,6 +82,11 @@ maintainable as features grow.
   (then add a token).
 - Interaction patterns (buttons, forms, loading, errors, empty states) MUST match
   established pages — especially home, login, and onboarding flows.
+- Icons rendered next to text inside `Button` MUST declare
+  `data-icon="inline-start"` (icon before the text) or `data-icon="inline-end"`
+  (icon after it) — the `size` variants rely on `has-data-[icon=…]` selectors to
+  trim the padding on the icon's side. Icon-only sizes (`icon`, `icon-xl`, …)
+  MUST NOT carry the attribute.
 - The global Coach IA overlay (`packages/web/src/components/chat.tsx`) MUST
   behave consistently across all routes.
 - Copy, iconography, and feedback tone MUST stay coherent with the Fit.ai brand.
@@ -201,4 +214,4 @@ principles above with package-specific constraints:
   rules; reviewers MAY block on violations of NON-NEGOTIABLE principles.
 - Runtime development guidance: `docs/CODEBASE.md`, `AGENTS.md`.
 
-**Version**: 1.2.0 | **Ratified**: 2026-07-07 | **Last Amended**: 2026-07-22
+**Version**: 1.3.0 | **Ratified**: 2026-07-07 | **Last Amended**: 2026-07-29

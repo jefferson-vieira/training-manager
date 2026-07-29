@@ -2,6 +2,8 @@
 
 import { ChatPanel } from '@/components/chat-panel';
 
+import { SignOutButton } from './_components/sign-out-button';
+
 const GREETINGS = [
   'Bem-vindo ao FIT.AI! 🎉',
   'O app que vai transformar a forma como você treina. Aqui você monta seu plano de treino personalizado, acompanha sua evolução com estatísticas detalhadas e conta com uma IA disponível 24h para te guiar em cada exercício.',
@@ -15,6 +17,7 @@ export default function OnboardingPage() {
   return (
     <main className="flex h-dvh flex-col">
       <ChatPanel
+        action={<SignOutButton />}
         greetings={GREETINGS}
         suggestions={SUGGESTIONS}
         title={

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import type { HomeSchema } from './../../schemas/HomeSchema.js';
+import type { HomeSchema } from '../../schemas/HomeSchema.js';
 
 import { NotFoundError } from '../../errors/NotFoundError.js';
 import { prisma } from '../../lib/db.js';

@@ -24,6 +24,19 @@ export const auth = betterAuth({
     enabled: true,
   },
   plugins: [openAPI()],
+  rateLimit: {
+    customRules: {
+      '/sign-in/email': {
+        max: env.AUTH_RATE_LIMIT_MAX,
+        window: env.AUTH_RATE_LIMIT_WINDOW,
+      },
+    },
+    enabled: true,
+    storage: 'memory',
+  },
+  session: {
+    expiresIn: env.AUTH_SESSION_EXPIRES_IN,
+  },
   socialProviders: {
     google: {
       clientId: env.GOOGLE_CLIENT_ID,

@@ -66,6 +66,13 @@ app.after(() => {
           if (value) headers.append(key, value.toString());
         });
 
+        // Rebuilding the request drops the socket, so better-auth's rate
+        // limiter has no client address to bucket on. A proxy-provided header
+        // wins, keeping the real client IP in production.
+        if (!headers.has('x-forwarded-for')) {
+          headers.set('x-forwarded-for', request.ip);
+        }
+
         const req = new Request(url.toString(), {
           headers,
           method: request.method,

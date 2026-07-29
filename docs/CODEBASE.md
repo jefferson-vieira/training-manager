@@ -96,6 +96,16 @@ Comportamento definido em `SYSTEM_PROMPT` no `.env` do backend (`packages/backen
 - Google OAuth + email/senha habilitado
 - Cookie prefix: `training-manager`
 - `getSession()` usado nas rotas para exigir autenticação
+- **Sessão** — `AUTH_SESSION_EXPIRES_IN` (segundos, padrão `2592000` = 30 dias).
+  Vale quando o login é feito com "Manter conectado"; desmarcado, o better-auth
+  omite o `Max-Age` e o cookie morre ao fechar o navegador.
+- **Limite de tentativas** — `rateLimit` embutido do better-auth, com
+  `enabled: true` explícito (o padrão é `false` fora de produção) e storage em
+  memória. A regra de `/sign-in/email` vem de `AUTH_RATE_LIMIT_MAX` (padrão
+  `10`) e `AUTH_RATE_LIMIT_WINDOW` (padrão `300` segundos). O agrupamento é por
+  origem: o handler catch-all de `/api/auth/*` em `index.ts` repassa
+  `x-forwarded-for` a partir de `request.ip` — sem isso o `Request` reconstruído
+  não carrega IP nenhum e o limite viraria global.
 
 ## Arquitetura do frontend
 

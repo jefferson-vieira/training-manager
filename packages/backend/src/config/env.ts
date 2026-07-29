@@ -2,6 +2,13 @@ import 'dotenv/config';
 import { z } from 'zod';
 
 const baseEnvSchema = z.object({
+  AUTH_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(10),
+  AUTH_RATE_LIMIT_WINDOW: z.coerce.number().int().positive().default(300),
+  AUTH_SESSION_EXPIRES_IN: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(60 * 60 * 24 * 30),
   BETTER_AUTH_URL: z.url(),
   CLIENT_ORIGIN: z.url(),
   DATABASE_URL: z.string(),

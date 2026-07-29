@@ -12,7 +12,7 @@ import {
   formatWeight,
 } from '@/lib/format';
 
-import { LogoutButton } from './_components/logout-button';
+import { SignOutButton } from './_components/sign-out-button';
 
 export default async function ProfilePage() {
   const res = await getProfile();
@@ -76,7 +76,7 @@ export default async function ProfilePage() {
           <StatCard icon={User} label="Anos" value={formatAge(age)} />
         </div>
 
-        <LogoutButton />
+        <SignOutButton />
       </div>
     </>
   );

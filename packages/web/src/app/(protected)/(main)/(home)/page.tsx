@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 
 import { HeaderBanner } from '@/components/header-banner';
 import { Badge } from '@/components/ui/badge';
-import { LinkButton } from '@/components/ui/link';
+import { Link } from '@/components/ui/link';
 import { WorkoutCard } from '@/components/workout-card';
 import { HOME_ORIGIN } from '@/helpers/workout-day';
 import { getHomeData } from '@/lib/api/fetch-generated';
@@ -45,14 +45,14 @@ export default async function HomePage() {
               Descanso
             </Badge>
           ) : (
-            <LinkButton
+            <Link
               className="rounded-full"
               href={`/workout-plans/${todayWorkoutDay.workoutPlanId}/days/${todayWorkoutDay.id}?from=${HOME_ORIGIN}`}
               size="xl"
               variant="default"
             >
               Bora!
-            </LinkButton>
+            </Link>
           )}
         </div>
       </HeaderBanner>
@@ -62,7 +62,7 @@ export default async function HomePage() {
           <h2 className="font-heading text-lg font-semibold text-foreground">
             Consistência
           </h2>
-          <LinkButton href="/stats">Ver histórico</LinkButton>
+          <Link href="/stats">Ver histórico</Link>
         </div>
 
         <div className="flex items-center gap-3">
@@ -85,7 +85,7 @@ export default async function HomePage() {
               Treino de Hoje
             </h2>
 
-            <LinkButton href="/workout-plan">Ver treinos</LinkButton>
+            <Link href="/workout-plan">Ver treinos</Link>
           </div>
 
           <WorkoutCard
