@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-
 import { NotFoundError } from '../../errors/NotFoundError.js';
 import { prisma } from '../../lib/db.js';
 
@@ -14,30 +12,16 @@ export class GetUser {
         id: true,
         image: true,
         name: true,
-        profile: {
-          omit: {
-            id: true,
-            userId: true,
-          },
-        },
       },
       where: {
         id: dto.userId,
       },
     });
 
-    if (!user?.profile) {
+    if (!user) {
       throw new NotFoundError('User not found');
     }
 
-    return {
-      ...user,
-      ...user.profile,
-      age: this.calcAge(user.profile.birthdate),
-    };
-  }
-
-  private calcAge(birthdate: Date) {
-    return dayjs().diff(dayjs(birthdate), 'year');
+    return user;
   }
 }

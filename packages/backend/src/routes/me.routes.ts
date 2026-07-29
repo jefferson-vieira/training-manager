@@ -3,16 +3,16 @@ import type { App } from '../lib/fastify.js';
 import { getSession } from '../lib/auth.js';
 import { ErrorSchema } from '../schemas/ErrorSchema.js';
 import { UserSchema } from '../schemas/UserSchema.js';
-import { GetUser } from '../use-cases/user/GetUser.js';
+import { GetUserWithProfile } from '../use-cases/user/GetUserWithProfile.js';
 
 export const meRoutes = async (app: App) => {
   app.get('/', {
     handler: async (request, reply) => {
       const session = await getSession(request, reply);
 
-      const getUser = new GetUser();
+      const getUserWithProfile = new GetUserWithProfile();
 
-      const result = await getUser.execute({
+      const result = await getUserWithProfile.execute({
         userId: session.user.id,
       });
 

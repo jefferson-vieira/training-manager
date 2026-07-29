@@ -18,6 +18,7 @@ import { UpsertUserProfileRequest } from '../dtos/UpsertUserProfileRequest.js';
 import { languageModel } from '../lib/ai.js';
 import { getSession } from '../lib/auth.js';
 import { GetUser } from '../use-cases/user/GetUser.js';
+import { GetUserProfile } from '../use-cases/user/GetUserProfile.js';
 import { UpsertUserProfile } from '../use-cases/user/UpsertUserProfile.js';
 import { CreateWorkoutPlan } from '../use-cases/workout-plan/CreateWorkoutPlan.js';
 import { GetWorkoutPlans } from '../use-cases/workout-plan/GetWorkoutPlans.js';
@@ -51,11 +52,23 @@ export const aiRoutes = async (app: App) => {
         }),
         getUser: tool({
           description:
-            'Busca os dados de treino do usuário autenticado (peso, altura, idade, % gordura). Retorna um erro com o código NOT_FOUND_ERROR se não houver dados cadastrados.',
+            'Busca os dados de conta do usuário autenticado (id, nome e foto de perfil).',
           execute: async () => {
-            const getUserTrainData = new GetUser();
+            const getUser = new GetUser();
 
-            return getUserTrainData.execute({
+            return getUser.execute({
+              userId,
+            });
+          },
+          inputSchema: z.strictObject({}),
+        }),
+        getUserProfile: tool({
+          description:
+            'Busca os dados de treino do usuário autenticado (peso em gramas, altura em centímetros, data de nascimento, idade e % de gordura de 0 a 1000). Retorna um erro com o código NOT_FOUND_ERROR quando o usuário ainda não tem dados cadastrados.',
+          execute: async () => {
+            const getUserProfile = new GetUserProfile();
+
+            return getUserProfile.execute({
               userId,
             });
           },
