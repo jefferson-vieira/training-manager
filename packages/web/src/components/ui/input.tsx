@@ -18,12 +18,10 @@ const inputVariants = cva(
   },
 );
 
-function Input({
-  className,
-  size = 'lg',
-  type,
-  ...props
-}: Omit<InputPrimitive.Props, 'size'> & VariantProps<typeof inputVariants>) {
+export type InputProps = Omit<InputPrimitive.Props, 'size'> &
+  VariantProps<typeof inputVariants>;
+
+function Input({ className, size = 'lg', type, ...props }: InputProps) {
   return (
     <InputPrimitive
       className={cn(inputVariants({ className, size }))}

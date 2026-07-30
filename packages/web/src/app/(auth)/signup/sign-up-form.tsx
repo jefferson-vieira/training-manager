@@ -11,6 +11,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 
 import { MIN_PASSWORD_LENGTH } from './schema';
 import { useSignUpForm } from './use-sign-up-form';
@@ -86,7 +87,7 @@ export function SignUpForm() {
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="signup-password">Senha</FieldLabel>
 
-              <Input
+              <PasswordInput
                 {...field}
                 aria-describedby={
                   fieldState.invalid
@@ -97,7 +98,6 @@ export function SignUpForm() {
                 autoComplete="new-password"
                 id="signup-password"
                 placeholder="••••••••"
-                type="password"
               />
 
               {fieldState.invalid ? (

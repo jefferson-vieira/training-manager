@@ -11,6 +11,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 
 import { useSignInForm } from './use-sign-in-form';
 
@@ -56,7 +57,7 @@ export function SignInForm() {
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="signin-password">Senha</FieldLabel>
 
-              <Input
+              <PasswordInput
                 {...field}
                 aria-describedby={
                   fieldState.invalid ? 'signin-password-error' : undefined
@@ -65,7 +66,6 @@ export function SignInForm() {
                 autoComplete="current-password"
                 id="signin-password"
                 placeholder="••••••••"
-                type="password"
               />
 
               {fieldState.invalid && (
