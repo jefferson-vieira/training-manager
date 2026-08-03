@@ -11,6 +11,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { Link } from '@/components/ui/link';
 import { PasswordInput } from '@/components/ui/password-input';
 
 import { useSignInForm } from './use-sign-in-form';
@@ -95,9 +96,9 @@ export function SignInForm() {
                 Manter conectado
               </FieldLabel>
 
-              <span className="text-xs text-muted-foreground select-none">
+              <Link className="text-xs" href="/forgot-password">
                 Esqueci minha senha
-              </span>
+              </Link>
             </Field>
           )}
         />

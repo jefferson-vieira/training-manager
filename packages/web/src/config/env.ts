@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as z from 'zod';
 
 const envSchema = z.object({
   NEXT_PUBLIC_API_URL: z.url(),

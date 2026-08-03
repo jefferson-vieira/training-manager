@@ -25,8 +25,11 @@ export function ExternalLink({
   return (
     <a
       className={cn(
-        buttonVariants({ className, variant: 'link' }),
-        'inline h-auto p-0 text-[length:inherit] whitespace-normal',
+        buttonVariants({
+          className,
+          size: 'inherit',
+          variant: 'link',
+        }),
       )}
       data-slot="link"
       rel="noopener noreferrer"
@@ -39,7 +42,7 @@ export function ExternalLink({
 export function Link<T extends string>({
   className,
   href,
-  size,
+  size = 'inherit',
   variant = 'link',
   ...props
 }: Readonly<LinkProps<T>>) {
@@ -51,7 +54,6 @@ export function Link<T extends string>({
           size,
           variant,
         }),
-        'inline h-auto p-0 text-[length:inherit] whitespace-normal',
       )}
       href={href}
       {...props}

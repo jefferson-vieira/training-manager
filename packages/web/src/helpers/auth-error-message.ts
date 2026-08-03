@@ -16,6 +16,9 @@ const FALLBACK = 'Não foi possível continuar. Tente de novo em instantes.';
 // which e-mails have accounts.
 const MESSAGE_BY_CODE = {
   INVALID_EMAIL_OR_PASSWORD: 'E-mail ou senha incorretos.',
+  INVALID_TOKEN: 'Este link não é mais válido. Solicite um novo.',
+  PASSWORD_TOO_LONG: 'A senha é longa demais. Use no máximo 128 caracteres.',
+  PASSWORD_TOO_SHORT: 'A senha precisa ter pelo menos 8 caracteres.',
   USER_ALREADY_EXISTS: 'Esse e-mail já está em uso. Tente entrar.',
   USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL:
     'Esse e-mail já está em uso. Tente entrar.',

@@ -1,7 +1,15 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.2.0 → 1.3.0 (2026-07-29)
+Version change: 1.3.0 → 1.4.0 (2026-07-30)
+Modified: Monorepo Package Rules (packages/web) — hooks com lógica passam a ser
+posicionados por escopo: compartilhados entre rotas em `src/hooks/`, específicos
+de uma rota colocados na pasta da rota, com gatilho objetivo de promoção (ser
+importado por outra rota). Regulariza `login/use-sign-in-form.ts` e
+`signup/use-sign-up-form.ts`, que já seguiam a colocação. A proibição de hooks
+em `components/` permanece intacta. Templates unaffected.
+
+Previous change: 1.2.0 → 1.3.0 (2026-07-29)
 Added: Principle II — asynchronous errors handled with `try/catch` (never a
 chained `.catch()`). Principle III — icons next to text inside `Button` must
 declare `data-icon="inline-start" | "inline-end"`. Templates unaffected.
@@ -172,10 +180,16 @@ principles above with package-specific constraints:
   context containing `createContext`, the provider, and the trivial context
   accessor hook (e.g. `coach-context.tsx`). Contexts MUST NOT live in
   `components/`.
-- Custom hooks with logic MUST live in `packages/web/src/hooks/`, one file per
-  hook named `use-<name>.ts` (e.g. `use-coach-chat.ts`). A hook that merely
-  exposes its own context stays with that context; anything beyond that belongs
-  in `hooks/`.
+- Custom hooks with logic MUST live in one file per hook named `use-<name>.ts`,
+  placed by scope:
+  - **Shared across routes** → `packages/web/src/hooks/` (e.g.
+    `use-coach-chat.ts`, `use-sign-out.ts`).
+  - **Specific to a single route** → colocated in that route's folder (e.g.
+    `app/(auth)/login/use-sign-in-form.ts`). A route-specific hook MUST NOT be
+    imported by another route; the moment it is, it moves to `src/hooks/`.
+  - A hook that merely exposes its own context stays with that context.
+
+  Hooks MUST NOT live in `components/` under any circumstance.
 - MUST use functional React components; prefer Server Components unless
   interactivity requires `"use client"`.
 - API communication MUST use Orval-generated client + `customFetch`; session
@@ -214,4 +228,4 @@ principles above with package-specific constraints:
   rules; reviewers MAY block on violations of NON-NEGOTIABLE principles.
 - Runtime development guidance: `docs/CODEBASE.md`, `AGENTS.md`.
 
-**Version**: 1.3.0 | **Ratified**: 2026-07-07 | **Last Amended**: 2026-07-29
+**Version**: 1.4.0 | **Ratified**: 2026-07-07 | **Last Amended**: 2026-07-30

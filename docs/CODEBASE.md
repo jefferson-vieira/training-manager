@@ -107,6 +107,65 @@ Comportamento definido em `SYSTEM_PROMPT` no `.env` do backend (`packages/backen
   `x-forwarded-for` a partir de `request.ip` — sem isso o `Request` reconstruído
   não carrega IP nenhum e o limite viraria global.
 
+### Recuperação de senha
+
+Telas em `packages/web/src/app/(auth)/forgot-password/` e `reset-password/`.
+Todo o fluxo passa pelos endpoints que o better-auth já expõe em `/api/auth/*`,
+consumidos pelo `authClient` — **não há rota REST nova nem Orval a regenerar**, e
+os tokens usam o model `Verification` existente (identifier
+`reset-password:<token>`).
+
+Três desvios do comportamento padrão do better-auth, todos deliberados:
+
+- **Contas sem senha não recebem link.** O `requestPasswordReset` envia para
+  qualquer usuário existente, e o `resetPassword` *cria* uma credencial quando
+  não há nenhuma — o que transformaria o fluxo em "defina uma senha para sua
+  conta Google". `SendPasswordResetEmail` consulta `Account` com
+  `providerId = 'credential'` e não envia nada quando não existe. A resposta HTTP
+  é idêntica nos dois casos (antienumeração).
+- **Tokens anteriores são invalidados por nós.** O better-auth cria uma linha de
+  verificação por token e nunca remove as antigas. Pior: o
+  `deleteVerificationByIdentifier` usa `prisma.verification.delete({ where: {
+  identifier } })`, e como `identifier` **não é único** no schema, o Prisma
+  rejeita a chamada e o adapter engole o erro — ou seja, **nem o uso único
+  funcionaria sozinho**. `InvalidatePreviousResetTokens` (um `deleteMany`) roda
+  no `sendResetPassword` (preservando o token novo) e no `onPasswordReset` (sem
+  preservar nenhum), garantindo uso único e "só o link mais recente vale".
+- **Limite em duas dimensões.** O `rateLimit` do better-auth só agrupa por
+  origem; `lib/password-reset-rate-limit.ts` acrescenta um contador por endereço
+  de e-mail (`PASSWORD_RESET_RATE_LIMIT_MAX` / `_WINDOW`), consumido **sempre**,
+  exista conta ou não — contar só endereços reais faria o próprio `429` revelar
+  quais existem.
+
+### E-mail — `packages/backend/src/lib/email.ts` e `src/emails/`
+
+- `EMAIL_PROVIDER` (`console` | `resend`) é uma união discriminada em
+  `config/env.ts`, no mesmo molde de `LLM_PROVIDER`. Em `console` a mensagem vai
+  para o log, sem rede e sem `RESEND_API_KEY` — é o modo de desenvolvimento.
+- `sendEmail()` **nunca lança**: uma falha de envio não pode transformar a
+  confirmação neutra num erro que revele se o endereço tem conta. ⚠️ O SDK do
+  Resend **devolve `{ data, error }` em vez de lançar**, então o código precisa
+  do `try/catch` (rede) **e** da checagem de `error` (API).
+- Templates são funções TypeScript que devolvem `{ subject, html, text }`, com
+  HTML de tabelas e estilos inline vindo do design. React Email foi avaliado e
+  recusado: traria `react` + `react-dom` a um backend Fastify sem React para
+  gerar o mesmo HTML que o design já entrega.
+- A logo do e-mail é **PNG** (Gmail e Outlook removem SVG em e-mail) e vem de
+  `EMAIL_LOGO_URL`, uma URL pública e absoluta — os clientes baixam a imagem por
+  um proxy próprio, então nada servido em `localhost` chega ao destinatário. O
+  `alt="FIT.AI"` cobre o caso de a imagem ser bloqueada.
+- **A marca não pode ir como texto corrido.** `.ai` é um TLD real, então os
+  detectores de URL do Gmail, Apple Mail e Outlook transformam "FIT.AI" em link
+  para um domínio de terceiros. Todo texto visível usa `BRAND_HTML` (`html.ts`),
+  que separa o ponto num `<span>` — os detectores casam o padrão dentro de um
+  único nó de texto, e a quebra desfaz o casamento sem alterar o que o leitor vê
+  ou copia. `DATA_DETECTORS_RESET` cobre o Apple Mail, que estiliza o que detecta
+  mesmo quando não linka. `<title>`, `alt` e preheader ficam com a string
+  literal: atributo não aceita markup, e o preheader é `display:none`.
+- `emails/password-changed.ts` não aceita URL de redefinição no tipo de entrada:
+  um aviso de "sua senha mudou" que carregasse um link capaz de trocar a senha
+  anularia o próprio propósito.
+
 ## Arquitetura do frontend
 
 ### Comunicação com a API
