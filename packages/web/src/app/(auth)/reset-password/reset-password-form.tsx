@@ -13,6 +13,7 @@ import {
 import { Link } from '@/components/ui/link';
 import { PasswordInput } from '@/components/ui/password-input';
 
+import { AuthHeading } from '../_components/auth-heading';
 import { MIN_PASSWORD_LENGTH } from './schemas';
 import { useResetPasswordForm } from './use-reset-password-form';
 
@@ -25,15 +26,10 @@ export function ResetPasswordForm({ token }: Readonly<ResetPasswordFormProps>) {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col items-center gap-2.5 text-center lg:items-start lg:gap-1.5 lg:text-left">
-        <h1 className="font-heading text-lg leading-tight font-semibold text-foreground lg:text-2xl">
-          Nova senha
-        </h1>
-
-        <p className="text-sm leading-normal text-muted-foreground">
-          Crie uma nova senha para sua conta.
-        </p>
-      </div>
+      <AuthHeading
+        description="Crie uma nova senha para sua conta."
+        title="Nova senha"
+      />
 
       <form noValidate onSubmit={handleSubmit}>
         <FieldGroup className="gap-4">

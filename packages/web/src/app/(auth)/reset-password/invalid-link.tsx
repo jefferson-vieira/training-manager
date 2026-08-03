@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { FieldDescription } from '@/components/ui/field';
 import { Link } from '@/components/ui/link';
 
+import { AuthHeading } from '../_components/auth-heading';
+
 export function InvalidLink() {
   return (
     <div className="flex flex-col items-center gap-5 text-center">
@@ -12,16 +14,11 @@ export function InvalidLink() {
         <Link2Off className="size-6.5 text-destructive lg:size-7.5" />
       </div>
 
-      <div className="flex flex-col gap-2">
-        <h1 className="font-heading text-lg leading-tight font-semibold text-foreground lg:text-2xl">
-          Link não é mais válido
-        </h1>
-
-        <p className="max-w-80 text-sm leading-normal text-muted-foreground">
-          Este link expirou ou já foi utilizado. Solicite um novo para redefinir
-          sua senha.
-        </p>
-      </div>
+      <AuthHeading
+        description="Este link expirou ou já foi utilizado. Solicite um novo para redefinir sua senha."
+        title="Link não é mais válido"
+        variant="center"
+      />
 
       <Button
         className="w-full"

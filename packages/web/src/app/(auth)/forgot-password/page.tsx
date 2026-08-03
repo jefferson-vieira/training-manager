@@ -14,6 +14,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Link } from '@/components/ui/link';
 
+import { AuthHeading } from '../_components/auth-heading';
 import { CheckYourEmail } from './check-your-email';
 import { useForgotPasswordForm } from './use-forgot-password-form';
 
@@ -48,15 +49,10 @@ export default function ForgotPasswordPage() {
             initial={{ opacity: 0, transform: 'translateY(-20px)' }}
             transition={transition}
           >
-            <div className="flex flex-col items-center gap-2.5 text-center lg:items-start lg:gap-1.5 lg:text-left">
-              <h1 className="font-heading text-lg leading-tight font-semibold text-foreground lg:text-2xl">
-                Recuperar senha
-              </h1>
-
-              <p className="text-sm leading-normal text-muted-foreground">
-                Informe seu e-mail para receber o link de redefinição.
-              </p>
-            </div>
+            <AuthHeading
+              description="Informe seu e-mail para receber o link de redefinição."
+              title="Recuperar senha"
+            />
 
             <form noValidate onSubmit={handleSubmit}>
               <FieldGroup className="gap-4">

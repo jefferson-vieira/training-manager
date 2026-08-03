@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { FieldDescription } from '@/components/ui/field';
 
 import { Link } from '../../../components/ui/link';
+import { AuthHeading } from '../_components/auth-heading';
 
 type CheckYourEmailProps = {
   onTryAnotherEmailClick: () => void;
@@ -18,15 +19,11 @@ export function CheckYourEmail({
         <MailCheck className="size-6.5 text-primary lg:size-7.5" />
       </div>
 
-      <div className="flex flex-col gap-2">
-        <h1 className="font-heading text-lg leading-tight font-semibold text-foreground lg:text-2xl">
-          Verifique seu e-mail
-        </h1>
-
-        <p className="max-w-80 text-sm leading-normal text-muted-foreground">
-          Enviamos um link de redefinição de senha para o seu e-mail.
-        </p>
-      </div>
+      <AuthHeading
+        description="Enviamos um link de redefinição de senha para o seu e-mail."
+        title="Verifique seu e-mail"
+        variant="center"
+      />
 
       <Link className="w-full" href="/login" size="xl" variant="outline">
         Voltar ao login

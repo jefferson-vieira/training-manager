@@ -1,21 +1,17 @@
 import { FieldDescription, FieldSeparator } from '@/components/ui/field';
 import { Link } from '@/components/ui/link';
 
+import { AuthHeading } from '../_components/auth-heading';
 import { GoogleAuthButton } from '../_components/google-auth-button';
 import { SignInForm } from './sign-in-form';
 
 export default function LoginPage() {
   return (
     <div className="flex flex-col gap-8">
-      <div className="hidden flex-col gap-1.5 lg:flex">
-        <h1 className="font-heading text-2xl leading-tight font-semibold text-foreground">
-          Bem-vindo
-        </h1>
-
-        <p className="text-sm text-muted-foreground">
-          Faça login para acessar seu treino.
-        </p>
-      </div>
+      <AuthHeading
+        description="Faça login para acessar seu treino."
+        title="Bem-vindo"
+      />
 
       <div className="flex flex-col gap-6">
         <SignInForm />
