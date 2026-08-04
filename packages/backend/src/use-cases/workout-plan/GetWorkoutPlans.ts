@@ -13,12 +13,24 @@ export class GetWorkoutPlans {
         workoutDays: {
           include: {
             exercises: {
+              omit: {
+                createdAt: true,
+                updatedAt: true,
+              },
               orderBy: {
                 order: 'asc',
               },
             },
           },
+          omit: {
+            createdAt: true,
+            updatedAt: true,
+          },
         },
+      },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
       },
       orderBy: {
         createdAt: 'desc',

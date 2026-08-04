@@ -20,6 +20,9 @@ export class UpsertUserProfile {
       },
     });
 
-    return userProfile;
+    return {
+      ...userProfile,
+      birthdate: userProfile.birthdate.toISOString(),
+    };
   }
 }

@@ -2,7 +2,6 @@ import type z from 'zod';
 
 import type { CreateWorkoutPlanRequest } from '../../dtos/CreateWorkoutPlanRequest.js';
 
-import { NotFoundError } from '../../errors/NotFoundError.js';
 import { prisma } from '../../lib/db.js';
 
 interface InputDto extends z.infer<typeof CreateWorkoutPlanRequest> {
@@ -43,26 +42,29 @@ export class CreateWorkoutPlan {
             })),
           },
         },
-      });
-
-      const workoutPlan = await tx.workoutPlan.findUnique({
         include: {
           workoutDays: {
             include: {
-              exercises: true,
+              exercises: {
+                omit: {
+                  createdAt: true,
+                  updatedAt: true,
+                },
+              },
+            },
+            omit: {
+              createdAt: true,
+              updatedAt: true,
             },
           },
         },
-        where: {
-          id: createdWorkoutPlan.id,
+        omit: {
+          createdAt: true,
+          updatedAt: true,
         },
       });
 
-      if (!workoutPlan) {
-        throw new NotFoundError('Workout plan not found');
-      }
-
-      return workoutPlan;
+      return createdWorkoutPlan;
     });
   }
 }
