@@ -4,7 +4,7 @@ import type { GetStatsResponse } from '../../dtos/GetStatsResponse.js';
 
 import { NotFoundError } from '../../errors/NotFoundError.js';
 import { prisma } from '../../lib/db.js';
-import { CalcWorkoutStreak } from '../CalcStreak.js';
+import { ReadWorkoutStreak } from '../streak/ReadWorkoutStreak.js';
 
 interface InputDto {
   from: string;
@@ -95,19 +95,18 @@ export class GetStats {
       0,
     );
 
-    const workoutStreak = new CalcWorkoutStreak().execute({
-      completedWorkoutSessions,
-      fromDate,
-      toDate,
-      workoutPlans,
-    });
+    const { currentStreak, longestStreak } =
+      await new ReadWorkoutStreak().execute({
+        userId: dto.userId,
+      });
 
     return {
       completedWorkoutsCount,
       conclusionRate,
       consistencyByDay,
       totalTimeInSeconds,
-      workoutStreak,
+      workoutStreak: currentStreak,
+      workoutStreakRecord: longestStreak,
     };
   }
 }

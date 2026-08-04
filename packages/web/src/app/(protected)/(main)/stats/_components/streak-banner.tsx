@@ -1,13 +1,15 @@
-import { Flame } from 'lucide-react';
+import { Flame, Trophy } from 'lucide-react';
 import Image from 'next/image';
 
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 type StreakBannerProps = {
+  record: number;
   streak: number;
 };
 
-export function StreakBanner({ streak }: StreakBannerProps) {
+export function StreakBanner({ record, streak }: StreakBannerProps) {
   const hasStreak = streak > 0;
 
   const src = hasStreak
@@ -43,6 +45,11 @@ export function StreakBanner({ streak }: StreakBannerProps) {
             Sequência Atual
           </span>
         </div>
+
+        <Badge className="border-transparent bg-white/12 py-1.25 font-heading text-white uppercase backdrop-blur-xs">
+          <Trophy />
+          Recorde: {record} {record === 1 ? 'dia' : 'dias'}
+        </Badge>
       </div>
     </div>
   );

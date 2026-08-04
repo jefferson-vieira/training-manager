@@ -5,7 +5,7 @@ import type { HomeSchema } from '../../schemas/HomeSchema.js';
 import { NotFoundError } from '../../errors/NotFoundError.js';
 import { prisma } from '../../lib/db.js';
 import { WeekDay } from '../../models/enums/WeekDay.js';
-import { CalcWorkoutStreak } from '../CalcStreak.js';
+import { ReadWorkoutStreak } from '../streak/ReadWorkoutStreak.js';
 
 interface InputDto {
   userId: string;
@@ -83,15 +83,8 @@ export class GetHomeData {
       };
     }
 
-    const completedWorkoutSessions = weekSessions.filter(
-      ({ completedAt }) => completedAt,
-    );
-
-    const workoutStreak = new CalcWorkoutStreak().execute({
-      completedWorkoutSessions,
-      fromDate: weekStart,
-      toDate: today,
-      workoutPlans,
+    const { currentStreak } = await new ReadWorkoutStreak().execute({
+      userId: dto.userId,
     });
 
     const todayWorkoutDay = workoutPlan.workoutDays.find(
@@ -105,7 +98,7 @@ export class GetHomeData {
         ...todayWorkoutDay,
         exercisesCount: todayWorkoutDay._count.exercises,
       },
-      workoutStreak,
+      workoutStreak: currentStreak,
     };
   }
 }

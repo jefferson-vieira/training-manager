@@ -29,6 +29,7 @@ export default async function ProgressPage() {
     consistencyByDay,
     totalTimeInSeconds,
     workoutStreak,
+    workoutStreakRecord,
   } = stats.data;
 
   return (
@@ -36,7 +37,7 @@ export default async function ProgressPage() {
       <Header />
 
       <div className="px-5">
-        <StreakBanner streak={workoutStreak} />
+        <StreakBanner record={workoutStreakRecord} streak={workoutStreak} />
       </div>
 
       <div className="flex flex-col gap-3 p-5">

@@ -1,12 +1,14 @@
+import { WeekDay as PrismaWeekDay } from '../../generated/prisma/enums.js';
+
 /* eslint-disable perfectionist/sort-objects */
 export const WeekDay = {
-  0: 'SUNDAY',
-  1: 'MONDAY',
-  2: 'TUESDAY',
-  3: 'WEDNESDAY',
-  4: 'THURSDAY',
-  5: 'FRIDAY',
-  6: 'SATURDAY',
+  0: PrismaWeekDay.SUNDAY,
+  1: PrismaWeekDay.MONDAY,
+  2: PrismaWeekDay.TUESDAY,
+  3: PrismaWeekDay.WEDNESDAY,
+  4: PrismaWeekDay.THURSDAY,
+  5: PrismaWeekDay.FRIDAY,
+  6: PrismaWeekDay.SATURDAY,
 
   SUNDAY: 0,
   MONDAY: 1,

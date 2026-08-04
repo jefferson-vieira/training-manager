@@ -1,5 +1,6 @@
 import { NotFoundError } from '../../errors/NotFoundError.js';
 import { prisma } from '../../lib/db.js';
+import { ApplyWorkoutCompletionToStreak } from '../streak/ApplyWorkoutCompletionToStreak.js';
 
 interface InputDto {
   sessionId: string;
@@ -44,18 +45,28 @@ export class CompleteWorkoutSession {
       throw new NotFoundError('Workout session not found');
     }
 
-    const updatedWorkoutSession = await prisma.workoutSession.update({
-      data: {
-        completedAt: new Date(),
-      },
-      select: {
-        completedAt: true,
-        id: true,
-        startedAt: true,
-      },
-      where: {
-        id: dto.sessionId,
-      },
+    const updatedWorkoutSession = await prisma.$transaction(async (tx) => {
+      const session = await tx.workoutSession.update({
+        data: {
+          completedAt: new Date(),
+        },
+        select: {
+          completedAt: true,
+          id: true,
+          startedAt: true,
+        },
+        where: {
+          id: dto.sessionId,
+        },
+      });
+
+      await new ApplyWorkoutCompletionToStreak().execute({
+        client: tx,
+        startedAt: session.startedAt,
+        userId: dto.userId,
+      });
+
+      return session;
     });
 
     return {
