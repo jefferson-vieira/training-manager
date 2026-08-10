@@ -21,7 +21,7 @@ import { StartWorkoutSession } from '../use-cases/workout-plan/StartWorkoutSessi
 export const workoutPlanRoutes = async (app: App) => {
   app.get('/', {
     handler: async (request, reply) => {
-      const session = await getSession(request, reply);
+      const session = await getSession(request);
 
       const getWorkoutPlans = new GetWorkoutPlans();
 
@@ -49,7 +49,7 @@ export const workoutPlanRoutes = async (app: App) => {
 
   app.get('/active', {
     handler: async (request, reply) => {
-      const session = await getSession(request, reply);
+      const session = await getSession(request);
 
       const getActiveWorkoutPlan = new GetActiveWorkoutPlan();
 
@@ -74,7 +74,7 @@ export const workoutPlanRoutes = async (app: App) => {
 
   app.get('/:workoutPlanId', {
     handler: async (request, reply) => {
-      const session = await getSession(request, reply);
+      const session = await getSession(request);
 
       const getWorkoutPlan = new GetWorkoutPlan();
 
@@ -103,7 +103,7 @@ export const workoutPlanRoutes = async (app: App) => {
 
   app.post('/', {
     handler: async (request, reply) => {
-      const session = await getSession(request, reply);
+      const session = await getSession(request);
 
       const createWorkoutPlan = new CreateWorkoutPlan();
 
@@ -131,7 +131,7 @@ export const workoutPlanRoutes = async (app: App) => {
 
   app.get('/:workoutPlanId/days/:workoutDayId', {
     handler: async (request, reply) => {
-      const session = await getSession(request, reply);
+      const session = await getSession(request);
 
       const getWorkoutDay = new GetWorkoutDay();
 
@@ -163,7 +163,7 @@ export const workoutPlanRoutes = async (app: App) => {
   app.post('/:workoutPlanId/days/:workoutDayId/sessions', {
     handler: async (request, reply) => {
       try {
-        const session = await getSession(request, reply);
+        const session = await getSession(request);
 
         const startWorkoutSession = new StartWorkoutSession();
 
@@ -208,7 +208,7 @@ export const workoutPlanRoutes = async (app: App) => {
 
   app.patch('/:workoutPlanId/days/:workoutDayId/sessions/:sessionId/complete', {
     handler: async (request, reply) => {
-      const session = await getSession(request, reply);
+      const session = await getSession(request);
 
       const completeWorkoutSession = new CompleteWorkoutSession();
 

@@ -10,7 +10,7 @@ import { GetStats } from '../use-cases/stats/GetStats.js';
 export const statsRoutes = async (app: App) => {
   app.get('/', {
     handler: async (request, reply) => {
-      const session = await getSession(request, reply);
+      const session = await getSession(request);
 
       const getStats = new GetStats();
 

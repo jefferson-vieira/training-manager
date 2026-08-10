@@ -26,7 +26,7 @@ import { GetWorkoutPlans } from '../use-cases/workout-plan/GetWorkoutPlans.js';
 export const aiRoutes = async (app: App) => {
   app.post('/', {
     handler: async (request, reply) => {
-      const session = await getSession(request, reply);
+      const session = await getSession(request);
 
       const userId = session.user.id;
 

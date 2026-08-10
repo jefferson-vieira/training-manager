@@ -1,4 +1,4 @@
-import type { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
@@ -7,6 +7,7 @@ import { fromNodeHeaders } from 'better-auth/node';
 import { openAPI } from 'better-auth/plugins';
 
 import { env } from '../config/env.js';
+import { UnauthorizedError } from '../errors/UnauthorizedError.js';
 import { InvalidatePreviousResetTokens } from '../use-cases/auth/InvalidatePreviousResetTokens.js';
 import { SendPasswordChangedEmail } from '../use-cases/auth/SendPasswordChangedEmail.js';
 import { SendPasswordResetEmail } from '../use-cases/auth/SendPasswordResetEmail.js';
@@ -155,25 +156,24 @@ export const auth = betterAuth({
     google: {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
+      // Do not enable user-info overriding here. Removing a profile photo sets
+      // `user.image` to null, which is exactly what a provider sync reads as
+      // "empty, fill it" — the removal would silently undo itself on the next
+      // Google sign-in, with no second removal able to make it stick. If sync
+      // is ever needed for name or email, `image` must be excluded.
       prompt: 'select_account',
     },
   },
   trustedOrigins: [env.CLIENT_ORIGIN],
 });
 
-export const getSession = async (
-  request: FastifyRequest,
-  reply: FastifyReply,
-) => {
+export const getSession = async (request: FastifyRequest) => {
   const session = await auth.api.getSession({
     headers: fromNodeHeaders(request.headers),
   });
 
   if (!session) {
-    return reply.status(401).send({
-      code: 'UNAUTHORIZED',
-      error: 'Unauthorized',
-    });
+    throw new UnauthorizedError();
   }
 
   return session;

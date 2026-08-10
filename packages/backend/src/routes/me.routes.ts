@@ -8,7 +8,7 @@ import { GetUserWithProfile } from '../use-cases/user/GetUserWithProfile.js';
 export const meRoutes = async (app: App) => {
   app.get('/', {
     handler: async (request, reply) => {
-      const session = await getSession(request, reply);
+      const session = await getSession(request);
 
       const getUserWithProfile = new GetUserWithProfile();
 

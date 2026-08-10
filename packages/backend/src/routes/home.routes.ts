@@ -8,7 +8,7 @@ import { GetHomeData } from '../use-cases/home/GetHomeData.js';
 export const homeRoutes = (app: App) => {
   app.get('/', {
     handler: async (request, reply) => {
-      const session = await getSession(request, reply);
+      const session = await getSession(request);
 
       const getHomeData = new GetHomeData();
 
