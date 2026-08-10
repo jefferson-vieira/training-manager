@@ -14,6 +14,11 @@ const baseEnvSchema = z.object({
     .int()
     .positive()
     .default(60 * 60 * 24 * 30),
+  AVATAR_MAX_BYTES: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(2 * 1024 * 1024),
   BETTER_AUTH_URL: z.url(),
   CLIENT_ORIGIN: z.url(),
   DATABASE_URL: z.string(),
@@ -33,6 +38,12 @@ const baseEnvSchema = z.object({
     .positive()
     .default(900),
   PORT: z.coerce.number(),
+  SUPABASE_S3_ACCESS_KEY_ID: z.string().min(1),
+  SUPABASE_S3_BUCKET: z.string().min(1),
+  SUPABASE_S3_ENDPOINT: z.url(),
+  SUPABASE_S3_REGION: z.string().min(1),
+  SUPABASE_S3_SECRET_ACCESS_KEY: z.string().min(1),
+  SUPABASE_URL: z.url(),
   SYSTEM_PROMPT: z.string(),
 });
 

@@ -49,6 +49,7 @@ app.register(scalar, {
 
 app.register(cors, {
   credentials: true,
+  methods: ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT'],
   origin: [env.BETTER_AUTH_URL, env.CLIENT_ORIGIN],
 });
 
