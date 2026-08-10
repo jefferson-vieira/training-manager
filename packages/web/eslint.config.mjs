@@ -44,6 +44,7 @@ const eslintConfig = defineConfig([
   perfectionist.configs['recommended-natural'],
   {
     rules: {
+      'no-useless-rename': 'error',
       'perfectionist/sort-jsx-props': [
         'error',
         {
@@ -69,6 +70,7 @@ const eslintConfig = defineConfig([
     'build/**',
     'next-env.d.ts',
     'src/lib/api/fetch-generated/index.ts',
+    'src/lib/api/query-generated/index.ts',
   ]),
 ]);
 

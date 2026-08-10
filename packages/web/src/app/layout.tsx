@@ -9,6 +9,8 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 
+import Providers from './providers';
+
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 const interTight = Inter_Tight({
@@ -44,7 +46,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NuqsAdapter>{children}</NuqsAdapter>
+        <NuqsAdapter>
+          <Providers>{children}</Providers>
+        </NuqsAdapter>
 
         <Toaster />
       </body>

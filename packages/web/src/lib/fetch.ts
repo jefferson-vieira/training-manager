@@ -12,7 +12,8 @@ export const customFetch = async <T>(url: string, options: RequestInit) => {
     },
   });
 
-  const data = (await response.json()) as T;
+  const data =
+    response.status === 204 ? undefined : ((await response.json()) as T);
 
   return {
     data,
