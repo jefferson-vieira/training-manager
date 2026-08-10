@@ -10,12 +10,12 @@ function Avatar({
   size = 'default',
   ...props
 }: AvatarPrimitive.Root.Props & {
-  size?: 'default' | 'lg' | 'sm';
+  size?: 'default' | 'lg' | 'sm' | 'xl';
 }) {
   return (
     <AvatarPrimitive.Root
       className={cn(
-        'group/avatar relative flex size-8 shrink-0 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten',
+        'group/avatar relative flex size-8 shrink-0 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 data-[size=xl]:size-13 dark:after:mix-blend-lighten',
         className,
       )}
       data-size={size}
@@ -33,6 +33,7 @@ function AvatarBadge({ className, ...props }: React.ComponentProps<'span'>) {
         'group-data-[size=sm]/avatar:size-2 group-data-[size=sm]/avatar:[&>svg]:hidden',
         'group-data-[size=default]/avatar:size-2.5 group-data-[size=default]/avatar:[&>svg]:size-2',
         'group-data-[size=lg]/avatar:size-3 group-data-[size=lg]/avatar:[&>svg]:size-2',
+        'group-data-[size=xl]/avatar:size-3.75 group-data-[size=xl]/avatar:[&>svg]:size-2.5',
         className,
       )}
       data-slot="avatar-badge"
