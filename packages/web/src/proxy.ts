@@ -1,5 +1,7 @@
-import { getSessionCookie } from 'better-auth/cookies';
+import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
+
+import { authClient } from '@/lib/auth';
 
 const publicRoutes = new Set([
   '/forgot-password',
@@ -13,15 +15,17 @@ export async function proxy(request: NextRequest) {
 
   const isPublicRoute = publicRoutes.has(path);
 
-  const sessionCookie = getSessionCookie(request, {
-    cookiePrefix: 'training-manager',
+  const session = await authClient.getSession({
+    fetchOptions: {
+      headers: await headers(),
+    },
   });
 
-  if (!isPublicRoute && !sessionCookie) {
+  if (!isPublicRoute && !session.data?.user) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  if (isPublicRoute && sessionCookie && request.nextUrl.pathname !== '/') {
+  if (isPublicRoute && session.data?.user && request.nextUrl.pathname !== '/') {
     return NextResponse.redirect(new URL('/', request.nextUrl));
   }
 
